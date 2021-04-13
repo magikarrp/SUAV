@@ -33,36 +33,29 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                // FireBase Setup
                 // Retrieve a getInstance from database so we can write to it. Then we get a reference from out tree in database.
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("Pins");
 
                 // Get data and place it in the helper class
-                String hello = text.getText().toString();
-                writeDatabaseHelper writeHelper = new writeDatabaseHelper(hello);
+                String testUserID = "111101";
+                String testLocation = "17.36.3723";
+                String testDate = "12.06.2020";
+                String testName = text.getText().toString();
+                writeDatabaseHelper writeHelper = new writeDatabaseHelper(testUserID, testName, testLocation, testDate);
                 // Write to database
-                reference.setValue(writeHelper);
+                reference.child(testUserID).setValue(writeHelper);
 
                 // Read from database
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // This method is called once with the initial value and again
-                        // whenever data at this location is updated.
-                        String value = dataSnapshot.getValue(String.class);
-                        Log.d(TAG, "Value is: " + value);
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
-                        Log.w(TAG, "Failed to read value.", error.toException());
-                    }
+
             }
         });
-
     }
-
-
-
 }
+
+
+

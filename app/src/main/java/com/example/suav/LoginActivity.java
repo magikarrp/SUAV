@@ -66,36 +66,36 @@ public class LoginActivity extends AppCompatActivity {
         // create post request to airmap authentication api
         StringRequest request = new StringRequest(Request.Method.POST, getString(R.string.airmap_auth_url),
 
-                // response handler
-                response -> {
-                    // update ui
-                    txtAuthResult.setText("Login Successful");
-                    edtAuthEmail.setText("");
-                    edtAuthPassword.setText("");
+            // response handler
+            response -> {
+                // update ui
+                txtAuthResult.setText("Login Successful");
+                edtAuthEmail.setText("");
+                edtAuthPassword.setText("");
 
-                    // try to parse response as json object
-                    try {
-                        JSONObject res = new JSONObject(response);
-                        String accessToken = res.getString("access_token");
-                        // set auth/access token
-                        AirMap.setAuthToken(accessToken);
-                    } catch (JSONException e) {
-                        Log.e("JSON ERROR ===>", "START");
-                        e.printStackTrace();
-                        Log.e("JSON ERROR ===>", "END");
-                    }
-                    Log.e("AUTH SUCCESS ===>", response.toString());
-                },
-
-                // error handler
-                error -> {
-                    txtAuthResult.setText("Uh oh, something went wrong.");
-                    edtAuthEmail.setText("");
-                    edtAuthPassword.setText("");
-                    Log.e("AUTH ERROR ===>", "START");
-                    error.printStackTrace();
-                    Log.e("AUTH ERROR ===>", "END");
+                // try to parse response as json object
+                try {
+                    JSONObject res = new JSONObject(response);
+                    String accessToken = res.getString("access_token");
+                    // set auth/access token
+                    AirMap.setAuthToken(accessToken);
+                } catch (JSONException e) {
+                    Log.e("JSON ERROR ===>", "START");
+                    e.printStackTrace();
+                    Log.e("JSON ERROR ===>", "END");
                 }
+                Log.e("AUTH SUCCESS ===>", response.toString());
+            },
+
+            // error handler
+            error -> {
+                txtAuthResult.setText("Uh oh, something went wrong.");
+                edtAuthEmail.setText("");
+                edtAuthPassword.setText("");
+                Log.e("AUTH ERROR ===>", "START");
+                error.printStackTrace();
+                Log.e("AUTH ERROR ===>", "END");
+            }
 
         ) {
 

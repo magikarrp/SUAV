@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="408dp"
+        android:layout_height="669dp"
+        tools:layout_editor_absoluteX="2dp"
+        tools:layout_editor_absoluteY="61dp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLAN FLIGHT"
+        tools:layout_editor_absoluteX="253dp"
+        tools:layout_editor_absoluteY="667dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOC ICON"
+        tools:layout_editor_absoluteX="11dp"
+        tools:layout_editor_absoluteY="672dp" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PIN ICON"
+        tools:layout_editor_absoluteX="14dp"
+        tools:layout_editor_absoluteY="608dp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EVENT ICON"
+        tools:layout_editor_absoluteX="11dp"
+        tools:layout_editor_absoluteY="542dp" />
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WEATHER ICON"
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="478dp" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MENU"
+        tools:layout_editor_absoluteX="308dp"
+        tools:layout_editor_absoluteY="11dp" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Search Location"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="6dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

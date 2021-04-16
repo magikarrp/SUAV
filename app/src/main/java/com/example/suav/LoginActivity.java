@@ -7,6 +7,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -79,6 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                     String accessToken = res.getString("access_token");
                     // set auth/access token
                     AirMap.setAuthToken(accessToken);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
                 } catch (JSONException e) {
                     Log.e("JSON ERROR ===>", "START");
                     e.printStackTrace();

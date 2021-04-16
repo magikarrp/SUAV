@@ -1,5 +1,6 @@
 package com.example.suav;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
     private Button btn;
+    private Button pinPrivacy;
     private TextView text;
 
     @Override
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 reference = rootNode.getReference("Pins");
 
                 // Get data and place it in the helper class
-                String testUserID = "111101";
+                String testUserID = "111001";
                 String testLocation = "17.36.3723";
                 String testDate = "12.06.2020";
                 String testName = text.getText().toString();
@@ -49,11 +53,25 @@ public class MainActivity extends AppCompatActivity {
                 // Write to database
                 reference.child(testUserID).setValue(writeHelper);
 
-                // Read from database
+                // Read from database by using .get() for AddonCompleteListener method
 
+                reference.child("Pins").child(testUserID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        }
+                        else {
+                            Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                        }
+                    }
+                });
 
             }
-        });
+        }
+
+
+        );
     }
 }
 

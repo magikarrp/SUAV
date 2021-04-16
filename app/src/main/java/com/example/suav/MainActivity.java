@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 // FireBase Setup
                 // Retrieve a getInstance from database so we can write to it. Then we get a reference from out tree in database.
                 rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("Pins");
+                reference = rootNode.getReference().child("Pins").child("111001");
 
                 // Get data and place it in the helper class
                 String testUserID = "111001";
@@ -55,15 +55,22 @@ public class MainActivity extends AppCompatActivity {
 
                 // Read from database by using .get() for AddonCompleteListener method
 
-                reference.child("Pins").child(testUserID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                reference.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (!task.isSuccessful()) {
-                            Log.e("firebase", "Error getting data", task.getException());
-                        }
-                        else {
-                            Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                        }
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // This method is called once with the initial value and again
+                        // whenever data at this location is updated.
+                        // We are reading data from our variable reference .child path
+                        //String value = dataSnapshot.child("Pins").getValue().toString();
+                        String loc = dataSnapshot.child("location").getValue().toString();
+                        Log.d("firebase", "Value is: " + loc);
+                        text.setText(loc);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w("firebase", "Failed to read value.", error.toException());
                     }
                 });
 

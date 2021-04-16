@@ -2,11 +2,14 @@ package com.example.suav;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.airmap.airmapsdk.models.pilot.AirMapPilot;
+import com.airmap.airmapsdk.models.shapes.AirMapPolygon;
 import com.airmap.airmapsdk.networking.services.AirMap;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -77,14 +80,19 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     JSONObject res = new JSONObject(response);
                     String accessToken = res.getString("access_token");
+                    Log.i("Response: ", res.toString());
                     // set auth/access token
                     AirMap.setAuthToken(accessToken);
+                    Log.i("UserID: ", AirMap.getUserId());
                 } catch (JSONException e) {
                     Log.e("JSON ERROR ===>", "START");
                     e.printStackTrace();
                     Log.e("JSON ERROR ===>", "END");
                 }
                 Log.e("AUTH SUCCESS ===>", response.toString());
+
+                Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
+                startActivity(goToPlanning);
             },
 
             // error handler
@@ -104,8 +112,8 @@ public class LoginActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("grant_type", "password");
                 params.put("client_id", getString(R.string.airmap_client_id));
-                params.put("username", edtAuthEmail.getText().toString());
-                params.put("password", edtAuthPassword.getText().toString());
+                params.put("username", "jamespel@bu.edu");//edtAuthEmail.getText().toString());
+                params.put("password", "CS501airmap*");//edtAuthPassword.getText().toString());
                 params.put("scope", "openid");
                 return params;
             }

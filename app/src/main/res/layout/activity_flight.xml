@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/edtAltitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.574"
+        app:layout_constraintStart_toStartOf="@+id/txtTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.161" />
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Flight Planning"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
+    <TextView
+        android:id="@+id/txtDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtTitle"
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toStartOf="@+id/txtAltitude"
+        app:layout_constraintTop_toBottomOf="@+id/txtAltitude"
+        app:layout_constraintVertical_bias="0.184" />
+
+    <TextView
+        android:id="@+id/txtStartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Time"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtTitle"
+        app:layout_constraintHorizontal_bias="0.077"
+        app:layout_constraintStart_toStartOf="@+id/txtAltitude"
+        app:layout_constraintTop_toBottomOf="@+id/txtDate"
+        app:layout_constraintVertical_bias="0.248" />
+
+    <TextView
+        android:id="@+id/txtEndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Time"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtTitle"
+        app:layout_constraintHorizontal_bias="0.107"
+        app:layout_constraintStart_toStartOf="@+id/txtAltitude"
+        app:layout_constraintTop_toBottomOf="@+id/txtDate"
+        app:layout_constraintVertical_bias="0.562" />
+
+    <TextView
+        android:id="@+id/txtAltitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Maximum Altitude"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtTitle"
+        app:layout_constraintHorizontal_bias="0.101"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.172" />
+
+    <TimePicker
+        android:id="@+id/timePickerStart"
+        android:layout_width="252dp"
+        android:layout_height="115dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/datePicker"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="@+id/datePicker"
+        app:layout_constraintTop_toBottomOf="@+id/datePicker"
+        app:layout_constraintVertical_bias="0.084" />
+
+    <TimePicker
+        android:id="@+id/timePickerEnd"
+        android:layout_width="252dp"
+        android:layout_height="115dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/timePickerStart"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="@+id/timePickerStart"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerStart"
+        app:layout_constraintVertical_bias="0.153" />
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="245dp"
+        android:layout_height="119dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/edtAltitude"
+        app:layout_constraintHorizontal_bias="0.68"
+        app:layout_constraintStart_toStartOf="@+id/edtAltitude"
+        app:layout_constraintTop_toBottomOf="@+id/edtAltitude"
+        app:layout_constraintVertical_bias="0.055" />
+
+    <Button
+        android:id="@+id/btnCreatePlan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="createPlan"
+        android:text="Create Plan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.729"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerEnd" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,6 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     // airmap auth
     private AirMapPilot user;
     private RequestQueue rq;
+    private String authToken;
+    private String refreshToken;
 
     // views
     private EditText edtAuthEmail;
@@ -75,20 +77,31 @@ public class LoginActivity extends AppCompatActivity {
                 edtAuthEmail.setText("");
                 edtAuthPassword.setText("");
 
-                // try to parse response as json object
+                // try to handle response
                 try {
+
+                    // parse out values
                     JSONObject res = new JSONObject(response);
-                    String accessToken = res.getString("access_token");
+                    authToken = res.getString("access_token");
+                    refreshToken = res.getString("refresh_token");
+
+                    // TODO: save to persistent storage
+
                     // set auth/access token
-                    AirMap.setAuthToken(accessToken);
+                    AirMap.setAuthToken(authToken);
+
+                    // log
+                    Log.e("AUTH SUCCESS ===>", response.toString());
+
+                    // start main
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
+
                 } catch (JSONException e) {
                     Log.e("JSON ERROR ===>", "START");
                     e.printStackTrace();
                     Log.e("JSON ERROR ===>", "END");
                 }
-                Log.e("AUTH SUCCESS ===>", response.toString());
             },
 
             // error handler
@@ -96,9 +109,9 @@ public class LoginActivity extends AppCompatActivity {
                 txtAuthResult.setText("Uh oh, something went wrong.");
                 edtAuthEmail.setText("");
                 edtAuthPassword.setText("");
-                Log.e("AUTH ERROR ===>", "START");
+                Log.e("AUTH LOGIN ERROR ===>", "START");
                 error.printStackTrace();
-                Log.e("AUTH ERROR ===>", "END");
+                Log.e("AUTH LOGIN ERROR ===>", "END");
             }
 
         ) {
@@ -122,7 +135,58 @@ public class LoginActivity extends AppCompatActivity {
 
     // refresh the auth token so the users session does not expire
     private void refresh() {
-        // TODO
+
+        // create post request to airmap authentication api
+        StringRequest request = new StringRequest(Request.Method.POST, getString(R.string.airmap_auth_url),
+
+                // response handler
+                response -> {
+
+                    // try to handle response
+                    try {
+
+                        // parse out values
+                        JSONObject res = new JSONObject(response);
+                        authToken = res.getString("access_token");
+                        refreshToken = res.getString("refresh_token");
+
+                        // TODO: save to persistent storage
+
+                        // set auth/access token
+                        AirMap.setAuthToken(authToken);
+
+                        // log
+                        Log.e("AUTH REFRESH SUCCESS ===>", response);
+
+                    } catch (JSONException e) {
+                        Log.e("JSON ERROR ===>", "START");
+                        e.printStackTrace();
+                        Log.e("JSON ERROR ===>", "END");
+                    }
+                },
+
+                // error handler
+                error -> {
+                    Log.e("AUTH REFRESH ERROR ===>", "START");
+                    error.printStackTrace();
+                    Log.e("AUTH REFRESH ERROR ===>", "END");
+                }
+
+        ) {
+
+            // create post parameters required by airmap for authentication
+            @Override public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("grant_type", "refresh_token");
+                params.put("client_id", getString(R.string.airmap_client_id));
+                params.put("refresh_token", refreshToken);
+                return params;
+            }
+
+        };
+
+        // add request to queue so volley will send it
+        rq.add(request);
     }
 
 }

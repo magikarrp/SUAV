@@ -92,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e("AUTH SUCCESS ===>", response.toString());
 
                 Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
+                goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
                 startActivity(goToPlanning);
             },
 

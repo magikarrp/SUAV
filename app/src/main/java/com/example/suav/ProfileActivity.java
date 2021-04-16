@@ -1,38 +1,47 @@
 package com.example.suav;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.airmap.airmapsdk.AirMapException;
 import com.airmap.airmapsdk.models.Coordinate;
-import com.airmap.airmapsdk.models.flight.AirMapFlightBriefing;
-import com.airmap.airmapsdk.models.rules.AirMapRule;
+import com.airmap.airmapsdk.models.flight.AirMapFlightPlan;
+import com.airmap.airmapsdk.models.pilot.AirMapPilot;
+import com.airmap.airmapsdk.models.rules.AirMapRuleset;
 import com.airmap.airmapsdk.models.shapes.AirMapPolygon;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.services.AirMap;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-public class FlightBriefing extends Activity {
+import static com.airmap.airmapsdk.models.shapes.AirMapGeometry.getGeoJSONFromGeometry;
 
-    ListView lstRules;
+public class ProfileActivity extends Activity {
 
+    EditText edtFirstName;
+    TextView txtFirstName;
 
+    // Must receive auth token from bundle
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_briefing);
+        setContentView(R.layout.activity_profile);
 
-        lstRules = (ListView) findViewById(R.id.lstRules);
+        txtFirstName = (TextView) findViewById(R.id.txtFirstName);
+        edtFirstName = (EditText) findViewById(R.id.edtFirstName);
 
         Bundle bundle = getIntent().getExtras();
 
@@ -45,31 +54,19 @@ public class FlightBriefing extends Activity {
             Log.i("New init", AirMap.getUserId());
         }
 
-        String flightPlanID = bundle.getString("PlanID");
-
-        AirMap.getFlightBrief(flightPlanID, new AirMapCallback<AirMapFlightBriefing>() {
+        AirMap.getPilot(new AirMapCallback<AirMapPilot>() {
             @Override
-            protected void onSuccess(AirMapFlightBriefing response) {
-                ArrayList<String> ruleList = new ArrayList<>();
-
-                for(AirMapRule rule : response.getRulesets().get(0).getRules()) {
-                    String ruleString = rule.getShortText();
-
-                    ruleString += "   -   " + rule.getStatus().toString();
-                    ruleList.add(ruleString);
-                }
-
-                ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, ruleList);
-
-                lstRules.setAdapter(listAdapter);
+            protected void onSuccess(AirMapPilot response) {
+                edtFirstName.setText(response.getFirstName());
             }
 
             @Override
             protected void onError(AirMapException e) {
-                Log.e("Airmap Briefing Error: ", e.toString());
-                Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Flight Briefing API, please try again later", Toast.LENGTH_LONG).show();
+                Log.e("Airmap error", e.toString());
+                Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Pilot API, please try again later", Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
     @Override
@@ -89,4 +86,5 @@ public class FlightBriefing extends Activity {
 
         super.onSaveInstanceState(outState);
     }
+
 }

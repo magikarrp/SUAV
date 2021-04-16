@@ -49,11 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 String testLocation = "17.36.3723";
                 String testDate = "12.06.2020";
                 String testName = text.getText().toString();
+
+                // WRITE to database
                 writeDatabaseHelper writeHelper = new writeDatabaseHelper(testUserID, testName, testLocation, testDate);
-                // Write to database
                 reference.child(testUserID).setValue(writeHelper);
 
-                // Read from database by using .get() for AddonCompleteListener method
+                // READ from database by using .get() for AddonCompleteListener method
 
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError error) {
-                        // Failed to read value
+                        // Failed to read value if we cannot grab value
                         Log.w("firebase", "Failed to read value.", error.toException());
                     }
                 });

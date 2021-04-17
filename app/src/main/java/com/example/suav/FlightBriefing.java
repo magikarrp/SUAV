@@ -1,31 +1,38 @@
 package com.example.suav;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.airmap.airmapsdk.AirMapException;
-import com.airmap.airmapsdk.models.Coordinate;
 import com.airmap.airmapsdk.models.flight.AirMapFlightBriefing;
+import com.airmap.airmapsdk.models.flight.AirMapFlightPlan;
 import com.airmap.airmapsdk.models.rules.AirMapRule;
-import com.airmap.airmapsdk.models.shapes.AirMapPolygon;
+import com.airmap.airmapsdk.models.rules.AirMapRuleset;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.services.AirMap;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FlightBriefing extends Activity {
 
-    ListView lstRules;
+    private ListView lstRules;
+    private Button btnBack, btnSubmit;
+
+    private List<AirMapRuleset> rulesets;
+    private boolean viewingRulesets;
+    private String flightPlanID;
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,12 @@ public class FlightBriefing extends Activity {
         setContentView(R.layout.activity_briefing);
 
         lstRules = (ListView) findViewById(R.id.lstRules);
+        btnBack = (Button) findViewById(R.id.btnBack);
+        btnSubmit = (Button) findViewById(R.id.btnSubmit);
+
+        deactivateButtons();
+
+        viewingRulesets = true;
 
         Bundle bundle = getIntent().getExtras();
 
@@ -42,26 +55,52 @@ public class FlightBriefing extends Activity {
                 AirMap.setAuthToken(bundle.getString("AuthToken"));
             else
                 AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
-            Log.i("New init", AirMap.getUserId());
+        }
+
+        if(bundle != null) {
+            flightPlanID = bundle.getString("PlanID");
         }
 
         String flightPlanID = bundle.getString("PlanID");
 
+        lstRules.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // Only accept input to this list if we have received the rulesets and they are currently displayed
+                if( viewingRulesets && rulesets.size() > 0) {
+                    // Flip to false because we are now viewing rules of a given ruleset
+                    viewingRulesets = false;
+
+                    AirMapRuleset ruleset = rulesets.get(position);
+
+                    ArrayList<String> ruleList = new ArrayList<>();
+                    ArrayList<String> violationsList = new ArrayList<>();
+                    for(AirMapRule rule : ruleset.getRules()) {
+                        String rulestring = rule.getShortText();
+
+                        if(rule.getStatus() == AirMapRule.Status.Conflicting) {
+                            rulestring += ("\n\n - Violated");
+                        } else {
+                            rulestring += ("\n\n - Followed");
+                        }
+                        ruleList.add(rulestring);
+                    }
+
+                    ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, ruleList);
+
+                    lstRules.setAdapter(listAdapter);
+
+                    activateButtons();
+                }
+            }
+        });
+
         AirMap.getFlightBrief(flightPlanID, new AirMapCallback<AirMapFlightBriefing>() {
             @Override
             protected void onSuccess(AirMapFlightBriefing response) {
-                ArrayList<String> ruleList = new ArrayList<>();
-
-                for(AirMapRule rule : response.getRulesets().get(0).getRules()) {
-                    String ruleString = rule.getShortText();
-
-                    ruleString += "   -   " + rule.getStatus().toString();
-                    ruleList.add(ruleString);
-                }
-
-                ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, ruleList);
-
-                lstRules.setAdapter(listAdapter);
+                rulesets = response.getRulesets();
+                viewRulesets();
             }
 
             @Override
@@ -72,20 +111,121 @@ public class FlightBriefing extends Activity {
         });
     }
 
+    public void backToRulesets(View v) {
+        viewRulesets();
+    }
+
+    private void viewRulesets() {
+        ArrayList<String> ruleList = new ArrayList<>();
+        ArrayList<String> violationList = new ArrayList<>();
+
+        for(int i = 0; i < rulesets.size(); i++) {
+            AirMapRuleset ruleset = rulesets.get(i);
+
+            // Get the number of rules violations in each ruleset
+
+
+            // Ruleset names not displaying, so we will clean up the IDs to be more readable
+            String ruleString = ruleset.getId();
+            ruleString = ruleString.replace("usa", "USA");
+            ruleString = ruleString.replace("_", " ");
+
+            // Capitalize the first letter of each word
+            for(int j = 0; j < ruleString.length()-1; j++) {
+                char c = ruleString.charAt(j);
+                if (c == ' ') {
+                    // Replace the character after a space with a capital letter
+                    ruleString = ruleString.substring(0, j + 1) + Character.toUpperCase(ruleString.charAt(j + 1)) + ruleString.substring(j + 2);
+                }
+            }
+
+            int violationCount = 0;
+            for(AirMapRule rule : ruleset.getRules()) {
+                if(rule.getStatus() == AirMapRule.Status.Conflicting)
+                    violationCount++;
+            }
+            ruleString += "\n\n Violations: " + violationCount;
+
+            ruleList.add(ruleString);
+        }
+
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, ruleList);
+
+        lstRules.setAdapter(listAdapter);
+
+        viewingRulesets = true;
+        deactivateButtons();
+    }
+
+    private void activateButtons() {
+        btnBack.setAlpha(1);
+        btnBack.setClickable(true);
+    }
+
+    private void deactivateButtons() {
+        btnBack.setAlpha(0);
+        btnBack.setClickable(false);
+    }
+
+    public void submitPlan(View v) {
+        if(rulesets.size() > 0) {
+            AirMap.submitFlightPlan(flightPlanID, new AirMapCallback<AirMapFlightPlan>() {
+                @Override
+                protected void onSuccess(AirMapFlightPlan response) {
+                    Log.i("Submission Success!", "Flight id: " + response.getFlightId());
+                    Toast.makeText(getApplicationContext(), "Successfully submitted flight " + response.getFlightId(), Toast.LENGTH_SHORT).show();
+
+                    // Go back to main page
+                    Intent goToMainActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                    goToMainActivity.putExtra("AuthToken", AirMap.getAuthToken());
+                    startActivity(goToMainActivity);
+                }
+
+                @Override
+                protected void onError(AirMapException e) {
+                    Log.e("Submission Failure", e.toString());
+                    Toast.makeText(getApplicationContext(), "Failed to submit flight, " +e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        viewingRulesets = savedInstanceState.getBoolean("viewingRulesets");
+        if(viewingRulesets) {
+            deactivateButtons();
+        } else {
+            activateButtons();
+        }
+
+        ArrayList<String> listEntries = savedInstanceState.getStringArrayList("listEntries");
+
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, listEntries);
+        lstRules.setAdapter(listAdapter);
+
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
             AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
-            Log.i("Restore Init", AirMap.getUserId());
         }
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString("AuthToken", AirMap.getAuthToken());
+        outState.putBoolean("viewingRulesets", viewingRulesets);
+
+        ArrayList<String> listEntries = new ArrayList<>();
+        for(int i = 0; i < lstRules.getAdapter().getCount(); i++) {
+            listEntries.add(lstRules.getAdapter().getItem(i).toString());
+        }
+
+        outState.putStringArrayList("listEntries", listEntries);
+
+
 
         super.onSaveInstanceState(outState);
     }

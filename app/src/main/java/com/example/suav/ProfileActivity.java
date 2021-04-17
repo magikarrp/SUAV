@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,8 +33,11 @@ import static com.airmap.airmapsdk.models.shapes.AirMapGeometry.getGeoJSONFromGe
 
 public class ProfileActivity extends Activity {
 
-    EditText edtFirstName;
-    TextView txtFirstName;
+    EditText edtFirstName, edtLastName, edtUserName, edtEmail;
+    TextView txtFirstName, txtLastName, txtUserName, txtEmail;
+    Button btnSave;
+
+    AirMapPilot pilot;
 
     // Must receive auth token from bundle
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +45,14 @@ public class ProfileActivity extends Activity {
         setContentView(R.layout.activity_profile);
 
         txtFirstName = (TextView) findViewById(R.id.txtFirstName);
+        txtLastName = (TextView) findViewById(R.id.txtLastName);
+        txtUserName = (TextView) findViewById(R.id.txtUserName);
+        txtEmail = (TextView) findViewById(R.id.txtEmail);
         edtFirstName = (EditText) findViewById(R.id.edtFirstName);
+        edtLastName = (EditText) findViewById(R.id.edtLastName);
+        edtUserName = (EditText) findViewById(R.id.edtUserName);
+        edtEmail = (EditText) findViewById(R.id.edtEmail);
+        btnSave = (Button) findViewById(R.id.btnSave);
 
         Bundle bundle = getIntent().getExtras();
 
@@ -57,7 +68,8 @@ public class ProfileActivity extends Activity {
         AirMap.getPilot(new AirMapCallback<AirMapPilot>() {
             @Override
             protected void onSuccess(AirMapPilot response) {
-                edtFirstName.setText(response.getFirstName());
+                pilot = response;
+                putPilotInfoInTexts();
             }
 
             @Override
@@ -67,6 +79,38 @@ public class ProfileActivity extends Activity {
             }
         });
 
+    }
+
+    private void putPilotInfoInTexts() {
+        edtFirstName.setText(pilot.getFirstName());
+        edtLastName.setText(pilot.getLastName());
+        edtEmail.setText(pilot.getEmail());
+        edtUserName.setText(pilot.getUsername());
+    }
+
+    private void updatePilotInfoFromTexts() {
+        pilot.setFirstName(edtFirstName.getText().toString());
+        pilot.setLastName(edtLastName.getText().toString());
+        pilot.setEmail(edtEmail.getText().toString());
+        pilot.setUsername(edtUserName.getText().toString());
+    }
+
+    public void saveChanges(View v) {
+        this.updatePilotInfoFromTexts();
+        AirMap.updatePilot(pilot, new AirMapCallback<AirMapPilot>() {
+            @Override
+            protected void onSuccess(AirMapPilot response) {
+                pilot = response;
+                putPilotInfoInTexts();
+                Toast.makeText(getApplicationContext(), "Information Updated!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected void onError(AirMapException e) {
+                Log.e("Airmap error", e.toString());
+                Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Pilot API, please try again later", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

@@ -84,8 +84,13 @@ public class FlightPlanning extends Activity {
                 ArrayList<String> rulesetIds = new ArrayList<>();
 
                 for(AirMapRuleset ruleset : response) {
-                    rulesetIds.add(ruleset.getId());
+                    // Select the required rulesets in the area
+                    if(ruleset.getType() == AirMapRuleset.Type.Required)
+                        rulesetIds.add(ruleset.getId());
                 }
+
+                if(rulesetIds.isEmpty())
+                    rulesetIds.add(response.get(0).getId());
 
                 // We now need to register a flight plan with airmap so that they have it in their system
                 // We can construct this plan from the user's input to the activity

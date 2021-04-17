@@ -132,12 +132,18 @@ public class FlightPlanning extends Activity {
                                 goToBriefing.putExtra("AuthToken", AirMap.getAuthToken());
                                 Log.i("Airmap Success ", response.toString());
 
-                                // Write to FireBase
+                                // Write to FireBase Database
                                 rootNode = FirebaseDatabase.getInstance();
                                 reference = rootNode.getReference("Pins");
+                                String flightID = response.getFlightId();
 
-                                writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDate, endDate, takeoffCoordinate, maxAltitude);
-                                reference.child(response.getFlightId()).setValue(writeHelper);
+                                //Test to see if flightID is null and edtAltitude is null
+                                Log.i("testSuccess ", flightID);
+                                Log.i("testSuccess ", edtAltitude.getText().toString());
+
+
+                                writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDate, endDate, takeoffCoordinate, edtAltitude.getText().toString());
+                                reference.child("testUSERID").setValue(writeHelper);
                                 startActivity(goToBriefing);
                             }
 

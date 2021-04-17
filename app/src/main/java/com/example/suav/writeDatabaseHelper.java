@@ -6,15 +6,18 @@ import java.util.Date;
 
 public class writeDatabaseHelper {
 
-    FlightPlanning userID;
     Date startDate;
+    Date endDate;
+    Coordinate takeOffCoordinate;
+    String maxAltitude;
 
-    public Date getStartDate() {
-        return startDate;
-    }
+    public writeDatabaseHelper(Date startDate, Date endDate, Coordinate takeoffCoordinate, String maxAltitude) {
 
-    public void setStartDate(Date startDate) {
+        this.endDate = endDate;
         this.startDate = startDate;
+        this.takeOffCoordinate = takeoffCoordinate;
+        this.maxAltitude = maxAltitude;
+
     }
 
     public Date getEndDate() {
@@ -25,45 +28,31 @@ public class writeDatabaseHelper {
         this.endDate = endDate;
     }
 
-    public Coordinate getTakeoffCoordinate() {
-        return takeoffCoordinate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setTakeoffCoordinate(Coordinate takeoffCoordinate) {
-        this.takeoffCoordinate = takeoffCoordinate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public float getMaxAltitude() {
-        return maxAltitude;
+    public Coordinate getTakeOffCoordinate() {
+        return takeOffCoordinate;
     }
 
-    public void setMaxAltitude(float maxAltitude) {
+    public void setTakeOffCoordinate(Coordinate takeOffCoordinate) {
+        this.takeOffCoordinate = takeOffCoordinate;
+    }
+
+    public String getMaxAltitude() {
+        return this.maxAltitude;
+    }
+
+    public void setMaxAltitude(String maxAltitude) {
         this.maxAltitude = maxAltitude;
     }
 
-    Date endDate;
-    Coordinate takeoffCoordinate;
-    float maxAltitude;
 
-    public writeDatabaseHelper(Date startDate, Date endDate, Coordinate takeoffCoordinate, float maxAltitude) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-
-    }
-
-    public writeDatabaseHelper() {
-    }
-
-    public writeDatabaseHelper(String text) {
-    }
-
-    public FlightPlanning getUserID() {
-        return userID;
-    }
-
-    public void setUserID(FlightPlanning userID) {
-        this.userID = userID;
-    }
 
 
 

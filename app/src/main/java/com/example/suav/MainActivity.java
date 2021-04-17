@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
                 // FireBase Setup
                 // Retrieve a getInstance from database so we can write to it. Then we get a reference from out tree in database.
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("Pins");
-                reference = rootNode.getReference().child("Pins").child("111001");
+                //rootNode = FirebaseDatabase.getInstance();
+                //reference = rootNode.getReference("Pins");
+                //reference = rootNode.getReference().child("Pins").child("111001");
 
 
                 // READ from database by using .get() for AddonCompleteListener method
@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
                         // whenever data at this location is updated.
                         // We are reading data from our variable reference .child path
                         //String value = dataSnapshot.child("Pins").getValue().toString();
-                        String loc = dataSnapshot.child("location").getValue().toString();
-                        Log.d("firebase", "Value is: " + loc);
-                        text.setText(loc);
+                        //String loc = dataSnapshot.child("location").getValue().toString();
+                        //Log.d("firebase", "Value is: " + loc);
+                        //text.setText(loc);
                     }
 
                     @Override

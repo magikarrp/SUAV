@@ -1,38 +1,71 @@
 package com.example.suav;
 
+import com.airmap.airmapsdk.models.Coordinate;
+
+import java.util.Date;
+
 public class writeDatabaseHelper {
 
-    String text;
-    String userID;
-    String location;
-    String date;
+    FlightPlanning userID;
+    Date startDate;
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Coordinate getTakeoffCoordinate() {
+        return takeoffCoordinate;
+    }
+
+    public void setTakeoffCoordinate(Coordinate takeoffCoordinate) {
+        this.takeoffCoordinate = takeoffCoordinate;
+    }
+
+    public float getMaxAltitude() {
+        return maxAltitude;
+    }
+
+    public void setMaxAltitude(float maxAltitude) {
+        this.maxAltitude = maxAltitude;
+    }
+
+    Date endDate;
+    Coordinate takeoffCoordinate;
+    float maxAltitude;
+
+    public writeDatabaseHelper(Date startDate, Date endDate, Coordinate takeoffCoordinate, float maxAltitude) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+
+    }
 
     public writeDatabaseHelper() {
     }
 
-    public writeDatabaseHelper(String userID, String name, String location, String date) {
-        this.date = date;
-        this.location = location;
-        this.text = name;
-    }
-
     public writeDatabaseHelper(String text) {
-        this.text = text;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public FlightPlanning getUserID() {
+        return userID;
     }
 
-    public String getText() {
-        return this.text;
+    public void setUserID(FlightPlanning userID) {
+        this.userID = userID;
     }
 
-    public String getLocation() {
-        return location;
-    }
 
-    public java.lang.String getDate() {
-        return date;
-    }
+
+
 }

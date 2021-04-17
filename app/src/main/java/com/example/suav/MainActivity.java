@@ -46,9 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 String testLocation = "17.36.3723";
                 String testDate = "12.06.2020";
                 String testName = text.getText().toString();
-                writeDatabaseHelper writeHelper = new writeDatabaseHelper(testUserID, testName, testLocation, testDate);
                 // Write to database
-                reference.child(testUserID).setValue(writeHelper);
 
                 // Read from database
 

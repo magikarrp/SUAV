@@ -22,6 +22,12 @@ import com.airmap.airmapsdk.models.rules.AirMapRuleset;
 import com.airmap.airmapsdk.models.shapes.AirMapPolygon;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.services.AirMap;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +43,8 @@ public class FlightPlanning extends Activity {
     Coordinate takeoffCoordinate;
     DatePicker datePicker;
     TimePicker timePickerStart, timePickerEnd;
+    private FirebaseDatabase rootNode;
+    private DatabaseReference reference;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +131,13 @@ public class FlightPlanning extends Activity {
                                 goToBriefing.putExtra("PlanID", response.getPlanId());
                                 goToBriefing.putExtra("AuthToken", AirMap.getAuthToken());
                                 Log.i("Airmap Success ", response.toString());
+
+                                // Write to FireBase
+                                rootNode = FirebaseDatabase.getInstance();
+                                reference = rootNode.getReference("Pins");
+
+                                writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDate, endDate, takeoffCoordinate, maxAltitude);
+                                reference.child(response.getFlightId()).setValue(writeHelper);
                                 startActivity(goToBriefing);
                             }
 

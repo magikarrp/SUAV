@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                     setEnabled(false);
 
                     // start main
-                    Intent goToPlanning = new Intent(getApplication(), ProfileActivity.class);
+                    Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
                     goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
                     startActivity(goToPlanning);
 
@@ -194,8 +194,8 @@ public class LoginActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("grant_type", "password");
                 params.put("client_id", getString(R.string.airmap_client_id));
-                params.put("username", "jamespel@bu.edu");//edtAuthEmail.getText().toString());
-                params.put("password", "CS501airmap*");//edtAuthPassword.getText().toString());
+                params.put("username", edtAuthEmail.getText().toString());
+                params.put("password", edtAuthPassword.getText().toString());
                 params.put("scope", "openid");
                 return params;
             }
@@ -239,8 +239,9 @@ public class LoginActivity extends AppCompatActivity {
                         setEnabled(false);
 
                         // start main
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
+                        goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
+                        startActivity(goToPlanning);
 
                     } catch (JSONException e) {
                         // error handler for json parsing

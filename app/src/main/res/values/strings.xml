@@ -7,4 +7,7 @@
     <string name="auth_password_hint">Password</string>
     <string name="auth_msg_hint"></string>
     <string name="auth_instructions">Login With AirMap</string>
+    <string name="auth_preference_file_key">com.example.suav.AUTH_PREFERENCE_FILE_KEY</string>
+    <string name="auth_success">Login successful.</string>
+    <string name="auth_error">Something went wrong. Please try again.</string>
 </resources>

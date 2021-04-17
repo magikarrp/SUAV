@@ -46,19 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 reference = rootNode.getReference("Pins");
                 reference = rootNode.getReference().child("Pins").child("111001");
 
-                // Get data and place it in the helper class
-                String testUserID = "111101"
-                String testLocation = "17.36.3723";
-                String testDate = "12.06.2020";
-                String testName = text.getText().toString();
-
-                // Write to database
-
-
-                // WRITE to database
-                writeDatabaseHelper writeHelper = new writeDatabaseHelper(testUserID, testName, testLocation, testDate);
-                reference.child(testUserID).setValue(writeHelper);
-
 
                 // READ from database by using .get() for AddonCompleteListener method
                 // Read from database

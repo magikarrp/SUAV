@@ -1,26 +1,23 @@
 package com.example.suav;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.airmap.airmapsdk.models.pilot.AirMapPilot;
 import com.airmap.airmapsdk.networking.services.AirMap;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // set up volley request queue
         rq = Volley.newRequestQueue(this);
+
+        // only allow portrait mode
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // initialize views
         edtAuthEmail = (EditText) findViewById(R.id.edtAuthEmail);

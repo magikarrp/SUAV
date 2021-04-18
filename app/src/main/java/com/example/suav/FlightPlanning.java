@@ -218,14 +218,16 @@ public class FlightPlanning extends AppCompatActivity {
             switch(item.getItemId()) {
                 case R.id.fp_menu_weather:
                     // GO TO WEATHER
-                    Log.e("FP MENU ===>", "WEATHER ON CLICK");
+                    Intent toWeather = new Intent(FlightPlanning.this, WeatherActivity.class);
+                    startActivity(toWeather);
                     return true;
                 case R.id.fp_menu_profile:
                     // GO TO PROFILE
-                    Intent i = new Intent(FlightPlanning.this, ProfileActivity.class);
-                    startActivity(i);
+                    Intent toProfile = new Intent(FlightPlanning.this, ProfileActivity.class);
+                    startActivity(toProfile);
                     return true;
                 default:
+                    // Should not happen
                     return true;
             }
         });

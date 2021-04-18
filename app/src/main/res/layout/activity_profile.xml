@@ -38,7 +38,9 @@
                 android:id="@+id/txtFirstName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/profile_firstname" />
+                android:text="@string/profile_firstname"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/flllr03"
@@ -65,7 +67,9 @@
                 android:id="@+id/txtLastName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/profile_lastname" />
+                android:text="@string/profile_lastname"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/flllr01"
@@ -92,7 +96,9 @@
                 android:id="@+id/txtUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/profile_username" />
+                android:text="@string/profile_username"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/flllr00"
@@ -119,7 +125,9 @@
                 android:id="@+id/txtEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/profile_email" />
+                android:text="@string/profile_email"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/flllr02"

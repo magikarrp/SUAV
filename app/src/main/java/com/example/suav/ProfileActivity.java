@@ -156,7 +156,7 @@ public class ProfileActivity extends Activity {
     private void initMenu() {
         Toolbar t = (Toolbar) findViewById(R.id.profile_toolbar);
         t.setTitle(getString(R.string.profile_menu_title));
-        t.inflateMenu(R.menu.profile_menu);
+        t.inflateMenu(R.menu.default_menu);
     }
 
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 
 import com.airmap.airmapsdk.AirMapException;
 import com.airmap.airmapsdk.models.AirMapWeather;
@@ -30,6 +31,8 @@ public class WeatherActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
 
+        initMenu(); // sets up the menu for this activity
+
         txtCondition = (TextView) findViewById(R.id.txtCondition);
         txtTemperature = (TextView) findViewById(R.id.txtTemperature);
         txtPrecip = (TextView) findViewById(R.id.txtPrecip);
@@ -39,8 +42,6 @@ public class WeatherActivity extends Activity {
         pgrsWeatherLoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
         pgrsWeatherLoad.setVisibility(View.GONE);
 
-
-
         // Get a start and end time for the user's flight
         Date startTime = new Date();
         Date endTime = new Date(startTime.getTime() + (4 * 60 * 60 * 1000));
@@ -49,7 +50,7 @@ public class WeatherActivity extends Activity {
 
         // Get coordinate from previous activity
         Coordinate coordinate;
-        if(bundle.getString("coordinate_long") != null) {
+        if(bundle != null && bundle.getString("coordinate_long") != null) {
             try {
                 coordinate = new Coordinate(Double.parseDouble(bundle.getString("coordinate_long")), Double.parseDouble(bundle.getString("coordinate_lat")));
             } catch (Exception e) {
@@ -128,5 +129,12 @@ public class WeatherActivity extends Activity {
 
         super.onSaveInstanceState(outState);
     }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.weather_toolbar);
+        t.setTitle(getString(R.string.weather_menu_title));
+        t.inflateMenu(R.menu.default_menu);
+    }
+
 }
 

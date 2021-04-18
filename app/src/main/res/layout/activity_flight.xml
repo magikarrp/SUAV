@@ -30,13 +30,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
@@ -45,7 +45,9 @@
                     android:layout_height="wrap_content"
                     android:labelFor="@id/edtAltitude"
                     android:text="@string/planning_altitude"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtUnits"
@@ -63,7 +65,7 @@
 
             <EditText
                 android:id="@+id/edtAltitude"
-                android:layout_width="245dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:ems="10"
@@ -73,7 +75,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -81,7 +83,9 @@
                 android:id="@+id/txtDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/planning_date" />
+                android:text="@string/planning_date"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/flllr01"
@@ -92,7 +96,7 @@
 
             <DatePicker
                 android:id="@+id/datePicker"
-                android:layout_width="250dp"
+                android:layout_width="225dp"
                 android:layout_height="120dp"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner" />
@@ -101,34 +105,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txtEndTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/planning_etime" />
-
-            <LinearLayout
-                android:id="@+id/flllr02"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal" />
-
-            <TimePicker
-                android:id="@+id/timePickerEnd"
-                android:layout_width="250dp"
-                android:layout_height="120dp"
-                android:timePickerMode="spinner" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -136,7 +113,9 @@
                 android:id="@+id/txtStartTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/planning_stime" />
+                android:text="@string/planning_stime"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/flllr04"
@@ -147,7 +126,36 @@
 
             <TimePicker
                 android:id="@+id/timePickerStart"
-                android:layout_width="250dp"
+                android:layout_width="225dp"
+                android:layout_height="120dp"
+                android:timePickerMode="spinner" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtEndTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/planning_etime"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/flllr02"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+
+            <TimePicker
+                android:id="@+id/timePickerEnd"
+                android:layout_width="225dp"
                 android:layout_height="120dp"
                 android:timePickerMode="spinner" />
         </LinearLayout>

@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 
 import com.airmap.airmapsdk.AirMapException;
 import com.airmap.airmapsdk.models.flight.AirMapFlightBriefing;
@@ -29,7 +30,7 @@ import java.util.List;
 public class FlightBriefing extends Activity {
 
     private ListView lstRules;
-    private Button btnBack, btnSubmit;
+    private Button  btnSubmit;
     private ProgressBar pgrsAPILoad;
 
     private List<AirMapRuleset> rulesets;
@@ -40,8 +41,9 @@ public class FlightBriefing extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_briefing);
 
+        initMenu(); // setup menu
+
         lstRules = (ListView) findViewById(R.id.lstRules);
-        btnBack = (Button) findViewById(R.id.btnBack);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
         // Include a loading bar since the API calls may take some time
         pgrsAPILoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
@@ -172,14 +174,14 @@ public class FlightBriefing extends Activity {
 
     /* Displays the back button that returns user to ruleset view */
     private void activateButtons() {
-        btnBack.setAlpha(1);
-        btnBack.setClickable(true);
+        //btnBack.setAlpha(1);
+        //btnBack.setClickable(true);
     }
 
     /* Hides the back button that returns user to ruleset view */
     private void deactivateButtons() {
-        btnBack.setAlpha(0);
-        btnBack.setClickable(false);
+        //btnBack.setAlpha(0);
+        //btnBack.setClickable(false);
     }
 
     /* Submits flight plan to airmap */
@@ -257,4 +259,11 @@ public class FlightBriefing extends Activity {
         outState.putString("flightID", flightPlanID);
         super.onSaveInstanceState(outState);
     }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.briefing_toolbar);
+        t.setTitle(getString(R.string.briefing_menu_title));
+        t.inflateMenu(R.menu.default_menu);
+    }
+
 }

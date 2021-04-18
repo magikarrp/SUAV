@@ -1,24 +1,28 @@
 <resources>
     <string name="app_name">SUAV</string>
-    <string name="airmap_client_id">04ac7eed-c654-4c5a-867b-6d68291dec4a</string>
-    <string name="airmap_auth_url">https://auth.airmap.com/realms/airmap/protocol/openid-connect/token</string>
+
+    <!-- Login / Auth values -->
+    <string name="auth_preference_file_key">com.example.suav.AUTH_PREFERENCE_FILE_KEY</string>
     <string name="login_button_text">Login</string>
     <string name="auth_email_hint">Email</string>
     <string name="auth_password_hint">Password</string>
     <string name="auth_msg_hint"></string>
     <string name="auth_instructions">Login With AirMap</string>
-    <string name="auth_preference_file_key">com.example.suav.AUTH_PREFERENCE_FILE_KEY</string>
     <string name="auth_success">Login successful.</string>
     <string name="auth_error">Something went wrong. Please try again.</string>
 
     <!-- Menus -->
     <string name="fp_menu_title">Flight Planning</string>
     <string name="profile_menu_title">Pilot Profile</string>
+    <string name="weather_menu_title">Check The Skies</string>
+    <string name="briefing_menu_title">Flight Briefing</string>
     <string name="menu_weather_txt">Weather</string>
     <string name="menu_profile_txt">Profile</string>
 
     <!-- Airmap values -->
     <string name="airmap_error">Airmap Error: </string>
+    <string name="airmap_client_id">04ac7eed-c654-4c5a-867b-6d68291dec4a</string>
+    <string name="airmap_auth_url">https://auth.airmap.com/realms/airmap/protocol/openid-connect/token</string>
 
     <!-- Briefing Activity -->
     <string name="briefing_title">Flight Briefing</string>
@@ -35,7 +39,7 @@
     <!-- Planning Activity -->
     <string name="planning_title">Flight Planning</string>
     <string name="planning_submit">Create Plan</string>
-    <string name="planning_altitude">Maximum Altitude</string>
+    <string name="planning_altitude">Max. Altitude</string>
     <string name="planning_units">(meters)</string>
     <string name="planning_date">Date</string>
     <string name="planning_stime">Start Time</string>

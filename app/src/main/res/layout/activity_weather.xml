@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/pgrsWeatherLoad"
+        android:id="@+id/pgrsPlanLoad"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="142dp"
         android:layout_height="142dp"

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -37,12 +38,13 @@ import static com.airmap.airmapsdk.models.shapes.AirMapGeometry.getGeoJSONFromGe
 
 public class FlightPlanning extends Activity {
 
-    TextView txtTitle;
-    EditText edtAltitude;
-    AirMapPolygon polygon;
-    Coordinate takeoffCoordinate;
-    DatePicker datePicker;
-    TimePicker timePickerStart, timePickerEnd;
+    private TextView txtTitle;
+    private EditText edtAltitude;
+    private AirMapPolygon polygon;
+    private Coordinate takeoffCoordinate;
+    private DatePicker datePicker;
+    private TimePicker timePickerStart, timePickerEnd;
+    private ProgressBar pgrsPlanLoad;
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
 
@@ -55,16 +57,19 @@ public class FlightPlanning extends Activity {
         datePicker = (DatePicker) findViewById(R.id.datePicker);
         timePickerStart = (TimePicker) findViewById(R.id.timePickerStart);
         timePickerEnd = (TimePicker) findViewById(R.id.timePickerEnd);
+        pgrsPlanLoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
+
+        pgrsPlanLoad.setVisibility(View.GONE);
 
         Bundle bundle = getIntent().getExtras();
 
+        // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
             if(savedInstanceState == null)
                 AirMap.setAuthToken(bundle.getString("AuthToken"));
             else
                 AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
-            Log.i("New init", AirMap.getUserId());
         }
 
         // If we don't get any information from the previous activity, set default values
@@ -79,21 +84,25 @@ public class FlightPlanning extends Activity {
             takeoffCoordinate = new Coordinate(42.355402695082804,-71.06539529452146);
             Log.i("DEFAULT: ", "Setting Default values for flight plan...");
         } else {
-            // Import values from saved instance state
+            // Import values from bundle/saved instance state
         }
     }
 
+    /* Sends a plan to Airmap API to receive a plan briefing */
     public void createPlan(View v) {
+        // Make loading circle visible
+        pgrsPlanLoad.setVisibility(View.VISIBLE);
+
         // First we need to get all possible rulesets for the area
         AirMap.getRulesets(getGeoJSONFromGeometry(polygon), new AirMapCallback<List<AirMapRuleset>>() {
             @Override
             protected void onSuccess(List<AirMapRuleset> response) {
-                // We want to give the user a choice between all rulesets in the area
+                // We want to display all of the required rulesets for this flight geometry
                 ArrayList<String> rulesetIds = new ArrayList<>();
 
                 for(AirMapRuleset ruleset : response) {
-                    // Select the required rulesets in the area
                     if(ruleset.getType() == AirMapRuleset.Type.Required)
+                        // We only need the rulesetIDs for the planning request
                         rulesetIds.add(ruleset.getId());
                 }
 
@@ -118,6 +127,7 @@ public class FlightPlanning extends Activity {
                     Date startDate = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth(), timePickerStart.getHour(), timePickerStart.getMinute());
                     Date endDate = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth(), timePickerEnd.getHour(), timePickerEnd.getMinute());
 
+                    // Make sure the input end time was after the input start time
                     if(endDate.after(startDate)){
                         flightPlan.setStartsAt(startDate);
                         flightPlan.setEndsAt(endDate);
@@ -126,11 +136,12 @@ public class FlightPlanning extends Activity {
                             @Override
                             protected void onSuccess(AirMapFlightPlan response) {
                                 // Now that our flight plan has been registered with AirMap, we want to get a briefing to see if we are in compliance with the regulations of the area
-
                                 Intent goToBriefing = new Intent(getApplicationContext(), FlightBriefing.class);
                                 goToBriefing.putExtra("PlanID", response.getPlanId());
                                 goToBriefing.putExtra("AuthToken", AirMap.getAuthToken());
                                 Log.i("Airmap Success ", response.toString());
+
+                                pgrsPlanLoad.setVisibility(View.GONE);
 
                                 // Write to FireBase Database
                                 rootNode = FirebaseDatabase.getInstance();
@@ -151,6 +162,7 @@ public class FlightPlanning extends Activity {
                             protected void onError(AirMapException e) {
                                 Log.e("Airmap Planning Error ", e.toString());
                                 Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Flight Plan API, please try again later", Toast.LENGTH_LONG).show();
+                                pgrsPlanLoad.setVisibility(View.GONE);
                             }
                         });
                     } else {
@@ -173,6 +185,7 @@ public class FlightPlanning extends Activity {
 
     }
 
+    /* Make sure that we maintain the state of the user's input on loads */
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);

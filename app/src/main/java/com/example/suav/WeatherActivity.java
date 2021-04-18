@@ -35,7 +35,7 @@ public class WeatherActivity extends Activity {
         txtVisibility = (TextView) findViewById(R.id.txtVisibility);
         txtWind = (TextView) findViewById(R.id.txtWind);
         txtHumidity = (TextView) findViewById(R.id.txtHumidity);
-        pgrsWeatherLoad = (ProgressBar) findViewById(R.id.pgrsWeatherLoad);
+        pgrsWeatherLoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
         pgrsWeatherLoad.setVisibility(View.GONE);
 
         // Middle of Boston Common

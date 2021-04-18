@@ -20,7 +20,6 @@ import com.airmap.airmapsdk.networking.services.AirMap;
 public class ProfileActivity extends Activity {
 
     EditText edtFirstName, edtLastName, edtUserName, edtEmail;
-    TextView txtFirstName, txtLastName, txtUserName, txtEmail;
     Button btnSave;
     ProgressBar pgrsPilotLoad;
 
@@ -31,16 +30,12 @@ public class ProfileActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        txtFirstName = (TextView) findViewById(R.id.txtFirstName);
-        txtLastName = (TextView) findViewById(R.id.txtLastName);
-        txtUserName = (TextView) findViewById(R.id.txtUserName);
-        txtEmail = (TextView) findViewById(R.id.txtEmail);
         edtFirstName = (EditText) findViewById(R.id.edtFirstName);
         edtLastName = (EditText) findViewById(R.id.edtLastName);
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtEmail = (EditText) findViewById(R.id.edtEmail);
         btnSave = (Button) findViewById(R.id.btnSave);
-        pgrsPilotLoad = (ProgressBar) findViewById(R.id.pgrsWeatherLoad);
+        pgrsPilotLoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
 
         // Only display loading when this is our first request
         if(savedInstanceState == null)
@@ -89,6 +84,7 @@ public class ProfileActivity extends Activity {
 
     }
 
+    /* Places current pilot object's information into the edit texts */
     private void putPilotInfoInTexts() {
         edtFirstName.setText(pilot.getFirstName());
         edtLastName.setText(pilot.getLastName());
@@ -96,6 +92,7 @@ public class ProfileActivity extends Activity {
         edtUserName.setText(pilot.getUsername());
     }
 
+    /* Places information in the edit texts into the current pilot object */
     private void updatePilotInfoFromTexts() {
         pilot.setFirstName(edtFirstName.getText().toString());
         pilot.setLastName(edtLastName.getText().toString());
@@ -103,8 +100,12 @@ public class ProfileActivity extends Activity {
         pilot.setUsername(edtUserName.getText().toString());
     }
 
+    /* Makes a call to Airmap that updates the pilot's profile based on what is in the edit texts */
     public void saveChanges(View v) {
+        // First update pilot object
         this.updatePilotInfoFromTexts();
+
+        // Pass in updated pilot object to update user's airmap profile
         AirMap.updatePilot(pilot, new AirMapCallback<AirMapPilot>() {
             @Override
             protected void onSuccess(AirMapPilot response) {
@@ -121,6 +122,7 @@ public class ProfileActivity extends Activity {
         });
     }
 
+    /* Maintain user's current input on load even if they have not committed it yet */
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);

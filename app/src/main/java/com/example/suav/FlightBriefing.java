@@ -43,10 +43,12 @@ public class FlightBriefing extends Activity {
         btnBack = (Button) findViewById(R.id.btnBack);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
         // Include a loading bar since the API calls may take some time
-        pgrsAPILoad = (ProgressBar) findViewById(R.id.pgrsWeatherLoad);
+        pgrsAPILoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
 
+        // Hide the back button to start out with as it is used to go from rules back to rulesets
         deactivateButtons();
 
+        // viewingRulesets tells us what state the lisview is in
         viewingRulesets = true;
 
         Bundle bundle = getIntent().getExtras();
@@ -60,12 +62,12 @@ public class FlightBriefing extends Activity {
                 AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
         }
 
+        // Get the flight plan ID from the previous activity
         if(bundle != null) {
             flightPlanID = bundle.getString("PlanID");
         }
 
-        String flightPlanID = bundle.getString("PlanID");
-
+        // When user clicks the listview while it is displaying a ruleset, we change the view to display the rules in that ruleset
         lstRules.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -75,10 +77,11 @@ public class FlightBriefing extends Activity {
                     // Flip to false because we are now viewing rules of a given ruleset
                     viewingRulesets = false;
 
+                    // Get the ruleset from our list of rulesets based on the listview item that was clicked
                     AirMapRuleset ruleset = rulesets.get(position);
 
+                    // Display all of the rules and whether they are violated or not
                     ArrayList<String> ruleList = new ArrayList<>();
-                    ArrayList<String> violationsList = new ArrayList<>();
                     for(AirMapRule rule : ruleset.getRules()) {
                         String rulestring = rule.getShortText();
 
@@ -90,19 +93,23 @@ public class FlightBriefing extends Activity {
                         ruleList.add(rulestring);
                     }
 
+                    // Place our rules into the listview
                     ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, ruleList);
 
                     lstRules.setAdapter(listAdapter);
 
+                    // Activate the back button so user can return to rulesets
                     activateButtons();
                 }
             }
         });
 
+        // Display loading ring
         pgrsAPILoad.setVisibility(View.VISIBLE);
         AirMap.getFlightBrief(flightPlanID, new AirMapCallback<AirMapFlightBriefing>() {
             @Override
             protected void onSuccess(AirMapFlightBriefing response) {
+                // On response, populate listview if nothing is there and remove loading circle
                 rulesets = response.getRulesets();
                 if(savedInstanceState == null)
                     viewRulesets();
@@ -118,19 +125,18 @@ public class FlightBriefing extends Activity {
         });
     }
 
+    /* OnClick function wrapped around a call to viewRulesets */
     public void backToRulesets(View v) {
         viewRulesets();
     }
 
+    /* Populates the listview with descriptions of the values currently stored in rulesets */
     private void viewRulesets() {
         ArrayList<String> ruleList = new ArrayList<>();
-        ArrayList<String> violationList = new ArrayList<>();
 
+        // Iterate over every ruleset for this flight plan
         for(int i = 0; i < rulesets.size(); i++) {
             AirMapRuleset ruleset = rulesets.get(i);
-
-            // Get the number of rules violations in each ruleset
-
 
             // Ruleset names not displaying, so we will clean up the IDs to be more readable
             String ruleString = ruleset.getId();
@@ -146,6 +152,7 @@ public class FlightBriefing extends Activity {
                 }
             }
 
+            // Counts the number of rules that user's plan violates in each ruleset and displays them to the user
             int violationCount = 0;
             for(AirMapRule rule : ruleset.getRules()) {
                 if(rule.getStatus() == AirMapRule.Status.Conflicting)
@@ -161,19 +168,23 @@ public class FlightBriefing extends Activity {
         lstRules.setAdapter(listAdapter);
 
         viewingRulesets = true;
+
         deactivateButtons();
     }
 
+    /* Displays the back button that returns user to ruleset view */
     private void activateButtons() {
         btnBack.setAlpha(1);
         btnBack.setClickable(true);
     }
 
+    /* Hides the back button that returns user to ruleset view */
     private void deactivateButtons() {
         btnBack.setAlpha(0);
         btnBack.setClickable(false);
     }
 
+    /* Submits flight plan to airmap */
     public void submitPlan(View v) {
         // Disable submission on click
         btnSubmit.setAlpha(.5f);
@@ -212,6 +223,7 @@ public class FlightBriefing extends Activity {
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        // If the rulesets were displayed, make sure we toggle the button accordingly
         viewingRulesets = savedInstanceState.getBoolean("viewingRulesets");
         if(viewingRulesets) {
             deactivateButtons();
@@ -219,10 +231,13 @@ public class FlightBriefing extends Activity {
             activateButtons();
         }
 
+        // Repopulate the list with what was there previously so screen doesn't go blank on every reload
         ArrayList<String> listEntries = savedInstanceState.getStringArrayList("listEntries");
 
         ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, listEntries);
         lstRules.setAdapter(listAdapter);
+
+        flightPlanID = savedInstanceState.getString("flightID");
 
         // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
@@ -242,9 +257,7 @@ public class FlightBriefing extends Activity {
         }
 
         outState.putStringArrayList("listEntries", listEntries);
-
-
-
+        outState.putString("flightID", flightPlanID);
         super.onSaveInstanceState(outState);
     }
 }

@@ -76,8 +76,8 @@ public class ProfileActivity extends Activity {
 
             @Override
             protected void onError(AirMapException e) {
-                Log.e("Airmap error", e.toString());
-                Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Pilot API, please try again later", Toast.LENGTH_LONG).show();
+                Log.e(getResources().getString(R.string.airmap_error), e.toString());
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.profile_error_toast), Toast.LENGTH_LONG).show();
                 pgrsPilotLoad.setVisibility(View.GONE);
             }
         });
@@ -111,13 +111,13 @@ public class ProfileActivity extends Activity {
             protected void onSuccess(AirMapPilot response) {
                 pilot = response;
                 putPilotInfoInTexts();
-                Toast.makeText(getApplicationContext(), "Information Updated!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.profile_submit_success), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             protected void onError(AirMapException e) {
-                Log.e("Airmap error", e.toString());
-                Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Pilot API, please try again later", Toast.LENGTH_LONG).show();
+                Log.e(getResources().getString(R.string.airmap_error), e.toString());
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.profile_error_toast), Toast.LENGTH_LONG).show();
             }
         });
     }

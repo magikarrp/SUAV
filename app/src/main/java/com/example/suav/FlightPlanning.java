@@ -82,7 +82,6 @@ public class FlightPlanning extends Activity {
             polygon = new AirMapPolygon(coordinates);
 
             takeoffCoordinate = new Coordinate(42.355402695082804,-71.06539529452146);
-            Log.i("DEFAULT: ", "Setting Default values for flight plan...");
         } else {
             // Import values from bundle/saved instance state
         }
@@ -139,7 +138,6 @@ public class FlightPlanning extends Activity {
                                 Intent goToBriefing = new Intent(getApplicationContext(), FlightBriefing.class);
                                 goToBriefing.putExtra("PlanID", response.getPlanId());
                                 goToBriefing.putExtra("AuthToken", AirMap.getAuthToken());
-                                Log.i("Airmap Success ", response.toString());
 
                                 pgrsPlanLoad.setVisibility(View.GONE);
 
@@ -160,26 +158,26 @@ public class FlightPlanning extends Activity {
 
                             @Override
                             protected void onError(AirMapException e) {
-                                Log.e("Airmap Planning Error ", e.toString());
-                                Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Flight Plan API, please try again later", Toast.LENGTH_LONG).show();
+                                Log.e(getResources().getString(R.string.planning_submission_error), e.toString());
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.planning_submission_error_toast), Toast.LENGTH_LONG).show();
                                 pgrsPlanLoad.setVisibility(View.GONE);
                             }
                         });
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please make sure that your end time is after your starting time", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.planning_etime_error), Toast.LENGTH_LONG).show();
                     }
 
 
                 } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "Please input a valid number for altitude.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.planning_altitude_error), Toast.LENGTH_LONG).show();
                 }
 
             }
 
             @Override
             protected void onError(AirMapException e) {
-                Log.e("Airmap Planning Error ", e.toString());
-                Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Ruleset API, please try again later", Toast.LENGTH_LONG).show();
+                Log.e(getResources().getString(R.string.ruleset_error), e.toString());
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.ruleset_error_toast), Toast.LENGTH_LONG).show();
             }
         });
 

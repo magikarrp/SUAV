@@ -67,19 +67,19 @@ public class WeatherActivity extends Activity {
 
                     // Display Weather conditions to the user
                     txtCondition.setText(update.getCondition());
-                    txtHumidity.setText(update.getHumidity() * 100 + "%");
-                    txtPrecip.setText(update.getPrecipitation() * 100 + "%");
-                    txtTemperature.setText(update.getTemperature() + " C");
-                    txtVisibility.setText(update.getVisibility() + "km");
-                    txtWind.setText(update.getWind().getSpeed() + "kmph");
+                    txtHumidity.setText(update.getHumidity() * 100 + getResources().getString(R.string.weather_humidity_unit));
+                    txtPrecip.setText(update.getPrecipitation() * 100 + getResources().getString(R.string.weather_precipitation_unit));
+                    txtTemperature.setText(update.getTemperature() + getResources().getString(R.string.weather_temperature_unit));
+                    txtVisibility.setText(update.getVisibility() + getResources().getString(R.string.weather_visibility_unit));
+                    txtWind.setText(update.getWind().getSpeed() + getResources().getString(R.string.weather_wind_unit));
                     pgrsWeatherLoad.setVisibility(View.GONE);
                 }
 
                 @Override
                 protected void onError(AirMapException e) {
                     pgrsWeatherLoad.setVisibility(View.GONE);
-                    Log.e("Airmap error", e.toString());
-                    Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Weather API, please try again later", Toast.LENGTH_LONG).show();
+                    Log.e(getResources().getString(R.string.airmap_error), e.toString());
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.weather_error_toast), Toast.LENGTH_LONG).show();
                 }
             });
         }

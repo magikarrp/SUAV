@@ -86,9 +86,9 @@ public class FlightBriefing extends Activity {
                         String rulestring = rule.getShortText();
 
                         if(rule.getStatus() == AirMapRule.Status.Conflicting) {
-                            rulestring += ("\n\n - Violated");
+                            rulestring += ("\n\n" + getResources().getString(R.string.briefing_violation));
                         } else {
-                            rulestring += ("\n\n - Followed");
+                            rulestring += ("\n\n" + getResources().getString(R.string.briefing_following));
                         }
                         ruleList.add(rulestring);
                     }
@@ -118,8 +118,8 @@ public class FlightBriefing extends Activity {
 
             @Override
             protected void onError(AirMapException e) {
-                Log.e("Airmap Briefing Error: ", e.toString());
-                Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Flight Briefing API, please try again later", Toast.LENGTH_LONG).show();
+                Log.e(getResources().getString(R.string.airmap_error), e.toString());
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.briefing_api_error), Toast.LENGTH_LONG).show();
                 pgrsAPILoad.setVisibility(View.GONE);
             }
         });
@@ -158,7 +158,7 @@ public class FlightBriefing extends Activity {
                 if(rule.getStatus() == AirMapRule.Status.Conflicting)
                     violationCount++;
             }
-            ruleString += "\n\n Violations: " + violationCount;
+            ruleString += "\n\n" + getResources().getString(R.string.briefing_violations) + violationCount;
 
             ruleList.add(ruleString);
         }
@@ -196,8 +196,7 @@ public class FlightBriefing extends Activity {
             AirMap.submitFlightPlan(flightPlanID, new AirMapCallback<AirMapFlightPlan>() {
                 @Override
                 protected void onSuccess(AirMapFlightPlan response) {
-                    Log.i("Submission Success!", "Flight id: " + response.getFlightId());
-                    Toast.makeText(getApplicationContext(), "Successfully submitted flight!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.briefing_submission), Toast.LENGTH_SHORT).show();
 
                     // Go back to main page
                     Intent goToMainActivity = new Intent(getApplicationContext(), LoginActivity.class);
@@ -207,9 +206,9 @@ public class FlightBriefing extends Activity {
 
                 @Override
                 protected void onError(AirMapException e) {
-                    Log.e("Submission Failure", e.toString());
+                    Log.e(getResources().getString(R.string.briefing_submission_error), e.toString());
                     // Display error to user because most airmap errors are in plaintext about the information that they input
-                    Toast.makeText(getApplicationContext(), "Failed to submit flight, " +e.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.briefing_submission_error_toast) +e.toString(), Toast.LENGTH_SHORT).show();
                     // Reenable submission
                     btnSubmit.setAlpha(1);
                     btnSubmit.setClickable(true);

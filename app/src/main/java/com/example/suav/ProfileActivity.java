@@ -2,6 +2,7 @@ package com.example.suav;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 
 import com.airmap.airmapsdk.AirMapException;
 import com.airmap.airmapsdk.models.pilot.AirMapPilot;
@@ -30,6 +32,8 @@ public class ProfileActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        initMenu(); // sets up the menu for this activity
 
         edtFirstName = (EditText) findViewById(R.id.edtFirstName);
         edtLastName = (EditText) findViewById(R.id.edtLastName);
@@ -147,6 +151,12 @@ public class ProfileActivity extends Activity {
         outState.putString("username", edtUserName.getText().toString());
 
         super.onSaveInstanceState(outState);
+    }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.profile_toolbar);
+        t.setTitle(getString(R.string.profile_menu_title));
+        t.inflateMenu(R.menu.profile_menu);
     }
 
 }

@@ -1,0 +1,15 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/fp_menu_weather"
+        android:icon="@drawable/ic_suav_sun_white"
+        android:title="@string/menu_weather_txt"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/fp_menu_profile"
+        android:icon="@drawable/ic_suav_user_white"
+        android:title="@string/menu_profile_txt"
+        app:showAsAction="ifRoom" />
+</menu>

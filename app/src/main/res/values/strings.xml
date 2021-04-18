@@ -11,6 +11,12 @@
     <string name="auth_success">Login successful.</string>
     <string name="auth_error">Something went wrong. Please try again.</string>
 
+    <!-- Menus -->
+    <string name="fp_menu_title">Flight Planning</string>
+    <string name="profile_menu_title">Pilot Profile</string>
+    <string name="menu_weather_txt">Weather</string>
+    <string name="menu_profile_txt">Profile</string>
+
     <!-- Airmap values -->
     <string name="airmap_error">Airmap Error: </string>
 
@@ -64,8 +70,6 @@
     <string name="weather_visibility_unit">km</string>
     <string name="weather_wind_unit">kmph</string>
     <string name="weather_humidity_unit">%</string>
-
-    <string name="menu_icon_title">Menu</string>
 
 
     <string name="mapbox_access_token">pk.eyJ1IjoiZGVubmlza2E5IiwiYSI6ImNrbXYxMnd1djAwbmUycGt2cmdpN3NsencifQ.doCZcsysKJmsm92mU1bftA</string>

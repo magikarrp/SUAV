@@ -106,7 +106,7 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
                 // This is done by using an image view with the default marker found in the SDK. You can
                 // swap out for your own marker image, just make sure it matches up with the dropped marker.
                 hoveringMarker = new ImageView(LocationPickerActivity.this);
-                hoveringMarker.setImageResource(R.drawable.red_marker);
+                //hoveringMarker.setImageResource(R.drawable.red_marker);
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
@@ -173,8 +173,7 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
 
     private void initDroppedMarker(@NonNull Style loadedMapStyle) {
         // Add the marker image to map
-        loadedMapStyle.addImage("dropped-icon-image", BitmapFactory.decodeResource(
-                getResources(), R.drawable.blue_marker));
+        //loadedMapStyle.addImage("dropped-icon-image", BitmapFactory.decodeResource(getResources(), R.drawable.blue_marker));
         loadedMapStyle.addSource(new GeoJsonSource("dropped-marker-source-id"));
         loadedMapStyle.addLayer(new SymbolLayer(DROPPED_MARKER_LAYER_ID,
                 "dropped-marker-source-id").withProperties(

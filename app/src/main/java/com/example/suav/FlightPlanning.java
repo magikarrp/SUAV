@@ -1,21 +1,21 @@
 package com.example.suav;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.airmap.airmapsdk.AirMapException;
 import com.airmap.airmapsdk.models.Coordinate;
@@ -24,22 +24,17 @@ import com.airmap.airmapsdk.models.rules.AirMapRuleset;
 import com.airmap.airmapsdk.models.shapes.AirMapPolygon;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.services.AirMap;
+import static com.airmap.airmapsdk.models.shapes.AirMapGeometry.getGeoJSONFromGeometry;
+
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.airmap.airmapsdk.models.shapes.AirMapGeometry.getGeoJSONFromGeometry;
+public class FlightPlanning extends AppCompatActivity {
 
-public class FlightPlanning extends Activity {
-
-    private TextView txtTitle;
     private EditText edtAltitude;
     private AirMapPolygon polygon;
     private Coordinate takeoffCoordinate;
@@ -53,7 +48,8 @@ public class FlightPlanning extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flight);
 
-        txtTitle = (TextView) findViewById(R.id.txtTitle);
+        initMenu(); // sets up the menu for this activity
+
         edtAltitude = (EditText) findViewById(R.id.edtAltitude);
         datePicker = (DatePicker) findViewById(R.id.datePicker);
         timePickerStart = (TimePicker) findViewById(R.id.timePickerStart);
@@ -92,6 +88,7 @@ public class FlightPlanning extends Activity {
 
         // First we need to get all possible rulesets for the area
         AirMap.getRulesets(getGeoJSONFromGeometry(polygon), new AirMapCallback<List<AirMapRuleset>>() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             protected void onSuccess(List<AirMapRuleset> response) {
                 // We want to display all of the required rulesets for this flight geometry
@@ -163,11 +160,13 @@ public class FlightPlanning extends Activity {
                         });
                     } else {
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.planning_etime_error), Toast.LENGTH_LONG).show();
+                        pgrsPlanLoad.setVisibility(View.GONE);
                     }
 
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.planning_altitude_error), Toast.LENGTH_LONG).show();
+                    pgrsPlanLoad.setVisibility(View.GONE);
                 }
 
             }
@@ -176,12 +175,14 @@ public class FlightPlanning extends Activity {
             protected void onError(AirMapException e) {
                 Log.e(getResources().getString(R.string.ruleset_error), e.toString());
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.ruleset_error_toast), Toast.LENGTH_LONG).show();
+                pgrsPlanLoad.setVisibility(View.GONE);
             }
         });
 
     }
 
     /* Make sure that we maintain the state of the user's input on loads */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -197,6 +198,7 @@ public class FlightPlanning extends Activity {
         timePickerEnd.setHour(savedInstanceState.getInt("EndMinute"));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString("AuthToken", AirMap.getAuthToken());
@@ -206,5 +208,26 @@ public class FlightPlanning extends Activity {
         outState.putInt("EndMinute", timePickerEnd.getMinute());
 
         super.onSaveInstanceState(outState);
+    }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.profile_toolbar);
+        t.setTitle(getString(R.string.fp_menu_title));
+        t.inflateMenu(R.menu.flight_planning_menu);
+        t.setOnMenuItemClickListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.fp_menu_weather:
+                    // GO TO WEATHER
+                    Log.e("FP MENU ===>", "WEATHER ON CLICK");
+                    return true;
+                case R.id.fp_menu_profile:
+                    // GO TO PROFILE
+                    Intent i = new Intent(FlightPlanning.this, ProfileActivity.class);
+                    startActivity(i);
+                    return true;
+                default:
+                    return true;
+            }
+        });
     }
 }

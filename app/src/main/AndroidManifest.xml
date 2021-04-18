@@ -9,28 +9,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SUAV">
-        <activity android:name=".LocationPickerActivity">
+
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".LocationPickerActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".FlightPlanning">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".FlightBriefing">
-        </activity>
-        <activity android:name=".ProfileActivity">
-        </activity>
-        <activity android:name=".WeatherActivity">
-        </activity>
+
+        <activity android:name=".FlightBriefing"/>
+        <activity android:name=".ProfileActivity"/>
+        <activity android:name=".WeatherActivity"/>
     </application>
 
 </manifest>

@@ -38,14 +38,27 @@ public class WeatherActivity extends Activity {
         pgrsWeatherLoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
         pgrsWeatherLoad.setVisibility(View.GONE);
 
-        // Middle of Boston Common
-        Coordinate coordinate = new Coordinate(42.35534150531174,-71.06617418626098);
+
 
         // Get a start and end time for the user's flight
         Date startTime = new Date();
         Date endTime = new Date(startTime.getTime() + (4 * 60 * 60 * 1000));
 
         Bundle bundle = getIntent().getExtras();
+
+        // Get coordinate from previous activity
+        Coordinate coordinate;
+        if(bundle.getString("coordinate_long") != null) {
+            try {
+                coordinate = new Coordinate(Double.parseDouble(bundle.getString("coordinate_long")), Double.parseDouble(bundle.getString("coordinate_lat")));
+            } catch (Exception e) {
+                coordinate = new Coordinate(42.35534150531174,-71.06617418626098);
+            }
+
+        } else {
+            // Default value: Middle of Boston Common
+            coordinate = new Coordinate(42.35534150531174,-71.06617418626098);
+        }
 
         // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {

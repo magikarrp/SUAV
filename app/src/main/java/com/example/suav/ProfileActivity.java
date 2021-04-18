@@ -1,41 +1,28 @@
 package com.example.suav;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.airmap.airmapsdk.AirMapException;
-import com.airmap.airmapsdk.models.Coordinate;
-import com.airmap.airmapsdk.models.flight.AirMapFlightPlan;
 import com.airmap.airmapsdk.models.pilot.AirMapPilot;
-import com.airmap.airmapsdk.models.rules.AirMapRuleset;
-import com.airmap.airmapsdk.models.shapes.AirMapPolygon;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.services.AirMap;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static com.airmap.airmapsdk.models.shapes.AirMapGeometry.getGeoJSONFromGeometry;
 
 public class ProfileActivity extends Activity {
 
     EditText edtFirstName, edtLastName, edtUserName, edtEmail;
     TextView txtFirstName, txtLastName, txtUserName, txtEmail;
     Button btnSave;
+    ProgressBar pgrsPilotLoad;
 
     AirMapPilot pilot;
 
@@ -53,29 +40,50 @@ public class ProfileActivity extends Activity {
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtEmail = (EditText) findViewById(R.id.edtEmail);
         btnSave = (Button) findViewById(R.id.btnSave);
+        pgrsPilotLoad = (ProgressBar) findViewById(R.id.pgrsWeatherLoad);
+
+        // Only display loading when this is our first request
+        if(savedInstanceState == null)
+            pgrsPilotLoad.setVisibility(View.VISIBLE);
+        else
+            pgrsPilotLoad.setVisibility(View.GONE);
+
+        // User cannot commit the pilot info until the pilot object is received from Airmap
+        btnSave.setAlpha(.5f);
+        btnSave.setClickable(false);
 
         Bundle bundle = getIntent().getExtras();
 
+        // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
             if(savedInstanceState == null)
                 AirMap.setAuthToken(bundle.getString("AuthToken"));
             else
                 AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
-            Log.i("New init", AirMap.getUserId());
         }
+
 
         AirMap.getPilot(new AirMapCallback<AirMapPilot>() {
             @Override
             protected void onSuccess(AirMapPilot response) {
                 pilot = response;
-                putPilotInfoInTexts();
+                pgrsPilotLoad.setVisibility(View.GONE);
+                // Only update the text boxes if this is the first time that activity loads
+                // We don't want to overwrite user input if it was a destroy->create
+                if(savedInstanceState == null)
+                    putPilotInfoInTexts();
+
+                btnSave.setAlpha(1f);
+                btnSave.setClickable(true);
+
             }
 
             @Override
             protected void onError(AirMapException e) {
                 Log.e("Airmap error", e.toString());
                 Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Pilot API, please try again later", Toast.LENGTH_LONG).show();
+                pgrsPilotLoad.setVisibility(View.GONE);
             }
         });
 
@@ -117,16 +125,26 @@ public class ProfileActivity extends Activity {
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        edtFirstName.setText(savedInstanceState.getString("firstname"));
+        edtLastName.setText(savedInstanceState.getString("lastname"));
+        edtEmail.setText(savedInstanceState.getString("email"));
+        edtUserName.setText(savedInstanceState.getString("username"));
+
+        // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
             AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
-            Log.i("Restore Init", AirMap.getUserId());
         }
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString("AuthToken", AirMap.getAuthToken());
+
+        outState.putString("firstname", edtFirstName.getText().toString());
+        outState.putString("lastname", edtLastName.getText().toString());
+        outState.putString("email", edtEmail.getText().toString());
+        outState.putString("username", edtUserName.getText().toString());
 
         super.onSaveInstanceState(outState);
     }

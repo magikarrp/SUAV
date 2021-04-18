@@ -29,6 +29,8 @@
         </activity>
         <activity android:name=".ProfileActivity">
         </activity>
+        <activity android:name=".WeatherActivity">
+        </activity>
     </application>
 
 </manifest>

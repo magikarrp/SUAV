@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,12 +29,11 @@ public class FlightBriefing extends Activity {
 
     private ListView lstRules;
     private Button btnBack, btnSubmit;
+    private ProgressBar pgrsAPILoad;
 
     private List<AirMapRuleset> rulesets;
     private boolean viewingRulesets;
     private String flightPlanID;
-
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,8 @@ public class FlightBriefing extends Activity {
         lstRules = (ListView) findViewById(R.id.lstRules);
         btnBack = (Button) findViewById(R.id.btnBack);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
+        // Include a loading bar since the API calls may take some time
+        pgrsAPILoad = (ProgressBar) findViewById(R.id.pgrsWeatherLoad);
 
         deactivateButtons();
 
@@ -49,6 +51,7 @@ public class FlightBriefing extends Activity {
 
         Bundle bundle = getIntent().getExtras();
 
+        // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
             if(savedInstanceState == null)
@@ -96,17 +99,21 @@ public class FlightBriefing extends Activity {
             }
         });
 
+        pgrsAPILoad.setVisibility(View.VISIBLE);
         AirMap.getFlightBrief(flightPlanID, new AirMapCallback<AirMapFlightBriefing>() {
             @Override
             protected void onSuccess(AirMapFlightBriefing response) {
                 rulesets = response.getRulesets();
-                viewRulesets();
+                if(savedInstanceState == null)
+                    viewRulesets();
+                pgrsAPILoad.setVisibility(View.GONE);
             }
 
             @Override
             protected void onError(AirMapException e) {
                 Log.e("Airmap Briefing Error: ", e.toString());
                 Toast.makeText(getApplicationContext(), "Error connecting to the AirMap Flight Briefing API, please try again later", Toast.LENGTH_LONG).show();
+                pgrsAPILoad.setVisibility(View.GONE);
             }
         });
     }
@@ -168,12 +175,18 @@ public class FlightBriefing extends Activity {
     }
 
     public void submitPlan(View v) {
+        // Disable submission on click
+        btnSubmit.setAlpha(.5f);
+        btnSubmit.setClickable(false);
+
+        pgrsAPILoad.setVisibility(View.VISIBLE);
+
         if(rulesets.size() > 0) {
             AirMap.submitFlightPlan(flightPlanID, new AirMapCallback<AirMapFlightPlan>() {
                 @Override
                 protected void onSuccess(AirMapFlightPlan response) {
                     Log.i("Submission Success!", "Flight id: " + response.getFlightId());
-                    Toast.makeText(getApplicationContext(), "Successfully submitted flight " + response.getFlightId(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Successfully submitted flight!", Toast.LENGTH_SHORT).show();
 
                     // Go back to main page
                     Intent goToMainActivity = new Intent(getApplicationContext(), LoginActivity.class);
@@ -184,7 +197,11 @@ public class FlightBriefing extends Activity {
                 @Override
                 protected void onError(AirMapException e) {
                     Log.e("Submission Failure", e.toString());
+                    // Display error to user because most airmap errors are in plaintext about the information that they input
                     Toast.makeText(getApplicationContext(), "Failed to submit flight, " +e.toString(), Toast.LENGTH_SHORT).show();
+                    // Reenable submission
+                    btnSubmit.setAlpha(1);
+                    btnSubmit.setClickable(true);
                 }
             });
         }
@@ -207,6 +224,7 @@ public class FlightBriefing extends Activity {
         ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, listEntries);
         lstRules.setAdapter(listAdapter);
 
+        // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
             AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));

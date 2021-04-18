@@ -239,7 +239,7 @@ public class LoginActivity extends AppCompatActivity {
                         setEnabled(false);
 
                         // start main
-                        Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
+                        Intent goToPlanning = new Intent(getApplication(), WeatherActivity.class);
                         goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
                         startActivity(goToPlanning);
 

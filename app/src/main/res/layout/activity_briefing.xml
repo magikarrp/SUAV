@@ -10,26 +10,38 @@
         android:id="@+id/lstRules"
         android:layout_width="330dp"
         android:layout_height="509dp"
-        android:textAlignment="center"
         android:background="@drawable/list_divider"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.617"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtMain"
+        app:layout_constraintTop_toBottomOf="@+id/txtBriefing"
         app:layout_constraintVertical_bias="0.406" />
 
     <TextView
-        android:id="@+id/txtMain"
+        android:id="@+id/txtBriefing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Flight Briefing"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022" />
+
+    <ProgressBar
+        android:id="@+id/pgrsWeatherLoad"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="142dp"
+        android:layout_height="142dp"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toTopOf="@+id/btnSubmit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtBriefing" />
 
     <Button
         android:id="@+id/btnBack"
@@ -38,7 +50,7 @@
         android:clickable="false"
         android:onClick="backToRulesets"
         android:text="Back"
-        app:layout_constraintEnd_toStartOf="@+id/txtMain"
+        app:layout_constraintEnd_toStartOf="@+id/txtBriefing"
         app:layout_constraintHorizontal_bias="0.216"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

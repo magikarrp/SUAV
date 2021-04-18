@@ -1,6 +1,7 @@
 package com.example.suav;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -63,10 +64,7 @@ public class WeatherActivity extends Activity {
         // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
-            if(savedInstanceState == null)
-                AirMap.setAuthToken(bundle.getString("AuthToken"));
-            else
-                AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
+            AirMap.setAuthToken(getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.auth_preference_file_key), Context.MODE_PRIVATE).getString("auth_token", ""));
         }
 
         // Since this page is static, we only need to call the weather API on first creation (i.e. null saved instance state)
@@ -112,7 +110,7 @@ public class WeatherActivity extends Activity {
         // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
-            AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
+            AirMap.setAuthToken(getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.auth_preference_file_key), Context.MODE_PRIVATE).getString("auth_token", ""));
         }
 
     }

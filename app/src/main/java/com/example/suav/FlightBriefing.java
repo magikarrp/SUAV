@@ -1,6 +1,7 @@
 package com.example.suav;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,10 +57,7 @@ public class FlightBriefing extends Activity {
         // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
-            if(savedInstanceState == null)
-                AirMap.setAuthToken(bundle.getString("AuthToken"));
-            else
-                AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
+            AirMap.setAuthToken(getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.auth_preference_file_key), Context.MODE_PRIVATE).getString("auth_token", ""));
         }
 
         // Get the flight plan ID from the previous activity
@@ -241,7 +239,7 @@ public class FlightBriefing extends Activity {
         // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
             AirMap.init(getApplicationContext());
-            AirMap.setAuthToken(savedInstanceState.getString("AuthToken"));
+            AirMap.setAuthToken(getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.auth_preference_file_key), Context.MODE_PRIVATE).getString("auth_token", ""));
         }
     }
 

@@ -1,15 +1,9 @@
 # SUAV
-UAV flight planning
+UAV Flight Planning App
 
-API'S:
-
-Airmap
-
-OpenSky
+API's:
+* [AirMap](https://www.airmap.com/)
+* [OpenSky](https://opensky-network.org/)
 
 Libraries:
-
-
-Real-time Database
-Firebase: 
-https://console.firebase.google.com/u/0/project/uav-bdb37/database/uav-bdb37-default-rtdb/data
+* [Firebase - Real Time Database](https://console.firebase.google.com/u/0/)

@@ -138,7 +138,7 @@ public class FlightPlanning extends AppCompatActivity {
 
                                 // Write to FireBase Database
                                 rootNode = FirebaseDatabase.getInstance();
-                                reference = rootNode.getReference("Pins");
+                                reference = rootNode.getReference("Pins").child("Events");
                                 String flightID = response.getPlanId();
 
                                 //Test to see if flightID is null and edtAltitude is null

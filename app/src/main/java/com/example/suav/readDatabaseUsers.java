@@ -34,7 +34,7 @@ public class readDatabaseUsers extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference().child("Pins");
+        reference = rootNode.getReference().child("Pins").child("Events");
 
         // create listView and array adapter for display
         ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<>(readDatabaseUsers.this, android.R.layout.simple_expandable_list_item_1, myArrayList);

@@ -3,13 +3,20 @@ package com.example.suav;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
@@ -48,10 +55,16 @@ public class MainMapActivity extends AppCompatActivity implements
     private MapView mapView;
     private MapboxMap mapboxMap;
     private PermissionsManager permissionsManager;
+    List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
+    private FirebaseDatabase rootNode;
+    private DatabaseReference reference;
+    private String pinName, pinRating, pinComment;
+    private double pinLong, pinLat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
 // Mapbox access token is configured here. This needs to be called either in your application
 // object or in the same activity which contains the mapview.
@@ -63,6 +76,40 @@ public class MainMapActivity extends AppCompatActivity implements
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
+        //Read from database
+        rootNode = FirebaseDatabase.getInstance();
+        reference = rootNode.getReference().child("Pins").child("Pins");
+        // Read from the database
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            // for loop to grab each parent node and the look at the child details
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990533, -30.583266)));
+                for (DataSnapshot ss : snapshot.getChildren()) {
+                    String name = ss.child("pinName").getValue(String.class);
+                    String pinRating = ss.child("pinRating").getValue(String.class);
+                    String pinComment = ss.child("pinComment").getValue(String.class);
+                    Log.d(name, "helloxx");
+                    double pinLat = ss.child("latitude").getValue(double.class);
+                    double pinLong = ss.child("longitude").getValue(double.class);
+                    symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
+                    symbolLayerIconFeatureList.add(Feature.fromGeometry(
+                            Point.fromLngLat(-56.990550, -30.583250)));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        reference.addListenerForSingleValueEvent(eventListener);
+    }
+
+    ;
+
 
         Button btnDropMark = (Button) findViewById(R.id.btnDropMark);
         btnDropMark.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +135,8 @@ public class MainMapActivity extends AppCompatActivity implements
             public void onClick(View view) {
                 Intent intent = new Intent(MainMapActivity.this, FlightPathPicker.class);
                 startActivity(intent);
+
+
             }
         });
     }
@@ -97,13 +146,20 @@ public class MainMapActivity extends AppCompatActivity implements
         MainMapActivity.this.mapboxMap = mapboxMap;
 
 
-        List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-57.225365, -33.213144)));
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-54.14164, -33.981818)));
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-56.990533, -30.583266)));
+//          test cases
+//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                Point.fromLngLat(-57.225365, -33.213144)));
+//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                Point.fromLngLat(-54.14164, -33.981818)));
+//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                Point.fromLngLat(-56.990533, -30.583266)));
+
+        //                pinName = dataSnapshot.getValue().toString();
+//                Log.d(pinName, "helloxx");
+//                Object pinLat = dataSnapshot.child("latitude").getValue(Object.class);
+//                Object pinLong = dataSnapshot.child("longitude").getValue(Object.class);
+//                Double finalLat = Double.parseDouble(pinLat.toString());
+//                Double finalLon = Double.parseDouble(pinLong.toString());
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 
@@ -142,7 +198,7 @@ public class MainMapActivity extends AppCompatActivity implements
 
 // set non-data-driven properties, such as:
                 symbolManager.setIconAllowOverlap(true);
-                symbolManager.setIconTranslate(new Float[]{-4f,5f});
+                symbolManager.setIconTranslate(new Float[]{-4f, 5f});
                 symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
 
             }

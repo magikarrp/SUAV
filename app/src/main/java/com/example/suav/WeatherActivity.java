@@ -50,9 +50,9 @@ public class WeatherActivity extends Activity {
 
         // Get coordinate from previous activity
         Coordinate coordinate;
-        if(bundle != null && bundle.getString("coordinate_long") != null) {
+        if(bundle != null && bundle.getDouble("lon") != 0) {
             try {
-                coordinate = new Coordinate(Double.parseDouble(bundle.getString("coordinate_long")), Double.parseDouble(bundle.getString("coordinate_lat")));
+                coordinate = new Coordinate(bundle.getDouble("lon"), bundle.getDouble("lat"));
             } catch (Exception e) {
                 coordinate = new Coordinate(42.35534150531174,-71.06617418626098);
             }

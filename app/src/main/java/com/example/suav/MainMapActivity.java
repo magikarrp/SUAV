@@ -72,31 +72,32 @@ public class MainMapActivity extends AppCompatActivity implements
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference().child("Pins").child("Pins");
         // Read from the database
-        ValueEventListener eventListener = new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
-            // for loop to grab each parent node and the look at the child details
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990533, -30.583266)));
-                for (DataSnapshot ss : snapshot.getChildren()) {
-                    String name = ss.child("pinName").getValue(String.class);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ss : dataSnapshot.getChildren()) {
+                    String name = reference.getKey();
                     String pinRating = ss.child("pinRating").getValue(String.class);
                     String pinComment = ss.child("pinComment").getValue(String.class);
                     Log.d(name, "helloxx");
+                    Log.d(pinRating, "helloxx");
                     double pinLat = ss.child("latitude").getValue(double.class);
                     double pinLong = ss.child("longitude").getValue(double.class);
+                    String test = String.valueOf(pinLat);
+                    Log.d(test, "helloxx");
                     symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
-                    symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                            Point.fromLngLat(-56.990550, -30.583250)));
+
 
                 }
+                symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990550, -30.583250)));
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("FAILED", "Failed to read value.", error.toException());
             }
-        };
-        reference.addListenerForSingleValueEvent(eventListener);
+        });
     }
 
     ;
@@ -121,8 +122,7 @@ public class MainMapActivity extends AppCompatActivity implements
 //                Point.fromLngLat(-57.225365, -33.213144)));
 //        symbolLayerIconFeatureList.add(Feature.fromGeometry(
 //                Point.fromLngLat(-54.14164, -33.981818)));
-//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-//                Point.fromLngLat(-56.990533, -30.583266)));
+//       symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990533, -30.583266)));
 
         //                pinName = dataSnapshot.getValue().toString();
 //                Log.d(pinName, "helloxx");
@@ -130,6 +130,8 @@ public class MainMapActivity extends AppCompatActivity implements
 //                Object pinLong = dataSnapshot.child("longitude").getValue(Object.class);
 //                Double finalLat = Double.parseDouble(pinLat.toString());
 //                Double finalLon = Double.parseDouble(pinLong.toString());
+//
+
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 

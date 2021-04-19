@@ -1,8 +1,10 @@
 package com.example.suav;
 
-
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +32,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 /**
  * Display {@link SymbolLayer} icons on the map.
  */
-public class MapActivity extends AppCompatActivity implements
+public class MainMapActivity extends AppCompatActivity implements
         OnMapReadyCallback {
 
     private static final String SOURCE_ID = "SOURCE_ID";
@@ -47,7 +49,7 @@ public class MapActivity extends AppCompatActivity implements
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
 
 // This contains the MapView in XML and needs to be called after the access token is configured.
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_map_activity);
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -56,6 +58,15 @@ public class MapActivity extends AppCompatActivity implements
 
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
+
+        Button btnPin = (Button) findViewById(R.id.btnPin);
+        btnPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainMapActivity.this, PinPickerActivity.class);
+                startActivity(intent);
+            }
+        });
 
         List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
         symbolLayerIconFeatureList.add(Feature.fromGeometry(
@@ -73,7 +84,7 @@ public class MapActivity extends AppCompatActivity implements
 
 // Add the SymbolLayer icon image to the map style
                 .withImage(ICON_ID, BitmapFactory.decodeResource(
-                        MapActivity.this.getResources(), R.drawable.mapbox_marker_icon_default))
+                        MainMapActivity.this.getResources(), R.drawable.mapbox_marker_icon_default))
 
 // Adding a GeoJson source for the SymbolLayer icons.
                 .withSource(new GeoJsonSource(SOURCE_ID,

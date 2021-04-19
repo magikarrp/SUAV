@@ -39,6 +39,7 @@ public class MainMapActivity extends AppCompatActivity implements
     private static final String ICON_ID = "ICON_ID";
     private static final String LAYER_ID = "LAYER_ID";
     private MapView mapView;
+    List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +66,13 @@ public class MainMapActivity extends AppCompatActivity implements
             public void onClick(View view) {
                 Intent intent = new Intent(MainMapActivity.this, PinPickerActivity.class);
                 startActivity(intent);
+
+
+
             }
         });
 
-        List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
+
         symbolLayerIconFeatureList.add(Feature.fromGeometry(
                 Point.fromLngLat(-57.225365, -33.213144)));
         symbolLayerIconFeatureList.add(Feature.fromGeometry(

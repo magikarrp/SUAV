@@ -40,17 +40,18 @@ public class PinDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //raymond, this is where you want to upload pin data to database
+                //Write to database
                 rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("Pins");
+                reference = rootNode.getReference("Pins").child("pinz");
 
                 //Convert data to string for easier database storage
                 String pinName = edtPinName.getText().toString();
                 String pinRating = "Rating: " + edtPinRating.getText().toString();
                 String pinComment = "Comments: " + edtComment.getText().toString();
-                String takeOffCoordinateString = txtLat.getText().toString() + ", "  + txtLong.getText().toString();
+                double lat = Double.parseDouble(txtLat.getText().toString());
+                double lon = Double.parseDouble(txtLong.getText().toString());
 
-                writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinRating, takeOffCoordinateString, pinComment);
+                writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinComment, lat, lon);
                 reference.child(pinName).setValue(writeHelper);
 
                 Intent intent = new Intent(PinDetails.this, MainMapActivity.class);

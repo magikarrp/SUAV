@@ -3,12 +3,19 @@ package com.example.suav;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
@@ -40,10 +47,15 @@ public class MainMapActivity extends AppCompatActivity implements
     private static final String LAYER_ID = "LAYER_ID";
     private MapView mapView;
     List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
+    private FirebaseDatabase rootNode;
+    private DatabaseReference reference;
+    private String pinName, pinRating, pinComment;
+    private double pinLong, pinLat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
 // Mapbox access token is configured here. This needs to be called either in your application
 // object or in the same activity which contains the mapview.
@@ -55,6 +67,35 @@ public class MainMapActivity extends AppCompatActivity implements
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
+        //Read from database
+        rootNode = FirebaseDatabase.getInstance();
+        reference = rootNode.getReference().child("Pins").child("pinz");
+
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            // for loop to grab each parent node and the look at the child details
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ss : snapshot.getChildren()) {
+                   pinName = ss.getValue(String.class);
+                   pinRating = ss.child("pinRating").getValue(String.class);
+                   pinComment = ss.child("pinComment").getValue(String.class);
+                   pinLat = ss.child("latitude").getValue(double.class);
+                   pinLong = ss.child("longitude").getValue(double.class);
+
+                    Log.i("testSuccess ", pinLat + " " + pinLong);
+
+                   symbolLayerIconFeatureList.add(Feature.fromGeometry(
+                            Point.fromLngLat(pinLat, pinLong)));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
     }
 
     @Override

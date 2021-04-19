@@ -10,6 +10,10 @@ public class writeDatabaseHelper {
     String endDate;
     String takeOffCoordinate;
     String maxAltitude;
+    Double longitude;
+    Double latitude;
+    String pinComment;
+    String pinRating;
 
     public writeDatabaseHelper() {
     }
@@ -20,6 +24,14 @@ public class writeDatabaseHelper {
         this.startDate = startDate;
         this.takeOffCoordinate = takeoffCoordinate;
         this.maxAltitude = maxAltitude;
+
+    }
+
+    public writeDatabaseHelper(String pinRating, String pinComment, double lat, double lon) {
+        this.longitude = lon;
+        this.latitude = lat;
+        this.pinRating = pinRating;
+        this.pinComment = pinComment;
 
     }
 

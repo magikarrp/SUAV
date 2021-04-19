@@ -44,6 +44,7 @@ public class FlightBriefing extends Activity {
         initMenu(); // setup menu
 
         lstRules = (ListView) findViewById(R.id.lstRules);
+        lstRules.setDivider(null);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
         // Include a loading bar since the API calls may take some time
         pgrsAPILoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
@@ -94,7 +95,7 @@ public class FlightBriefing extends Activity {
                     }
 
                     // Place our rules into the listview
-                    ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, ruleList);
+                    ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, R.id.txtLV, ruleList);
 
                     lstRules.setAdapter(listAdapter);
 
@@ -163,7 +164,7 @@ public class FlightBriefing extends Activity {
             ruleList.add(ruleString);
         }
 
-        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, ruleList);
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, R.id.txtLV, ruleList);
 
         lstRules.setAdapter(listAdapter);
 
@@ -233,7 +234,7 @@ public class FlightBriefing extends Activity {
         // Repopulate the list with what was there previously so screen doesn't go blank on every reload
         ArrayList<String> listEntries = savedInstanceState.getStringArrayList("listEntries");
 
-        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, listEntries);
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_layout, R.id.txtLV, listEntries);
         lstRules.setAdapter(listAdapter);
 
         flightPlanID = savedInstanceState.getString("flightID");
@@ -264,6 +265,12 @@ public class FlightBriefing extends Activity {
         Toolbar t = (Toolbar) findViewById(R.id.briefing_toolbar);
         t.setTitle(getString(R.string.briefing_menu_title));
         t.inflateMenu(R.menu.default_menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!viewingRulesets) viewRulesets();
+        else finish();
     }
 
 }

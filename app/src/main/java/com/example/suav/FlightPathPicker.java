@@ -37,6 +37,7 @@ import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -62,12 +63,13 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
     private static final String DROPPED_MARKER_LAYER_ID = "DROPPED_MARKER_LAYER_ID";
     private MapView mapView;
     private MapboxMap mapboxMap;
-    private Button selectLocationButton, btnMenu, confirm_location;
+    private Button btnDropMark, btnMenu, btnConfirm, btnRemoveMark;
 
     private PermissionsManager permissionsManager;
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
     private LatLng pin;
+    private ArrayList<LatLng> path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
 
         // This contains the MapView in XML and needs to be called after the access token is configured.
-        setContentView(R.layout.pin_picker_activity);
+        setContentView(R.layout.flight_path_picker);
 
         // Initialize the mapboxMap view
         mapView = findViewById(R.id.mapView);
@@ -95,9 +97,6 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
             public void onStyleLoaded(@NonNull final Style style) {
                 enableLocationPlugin(style);
                 enableLocationComponent(style);
-
-
-
 
                 // Toast instructing user to tap on the mapboxMap
                 Toast.makeText(
@@ -119,27 +118,35 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                 initDroppedMarker(style);
 
                 // Button for user to drop marker or to pick marker back up.
-                btnMenu = findViewById(R.id.select_location_button);
+                btnDropMark = (Button) findViewById(R.id.btnDropMark);
+                btnRemoveMark = (Button) findViewById(R.id.btnRemoveMark);
+                btnConfirm = (Button) findViewById(R.id.btnConfirm);
+                btnConfirm.setVisibility(View.GONE);
 
-                confirm_location = (Button) findViewById(R.id.confirm_location);
-                confirm_location.setVisibility(View.GONE);
+                if (path.size()>=2) {
+                    btnConfirm.setVisibility(View.VISIBLE);
+                    btnConfirm.setClickable(true);
+                }
+                else {
+                    btnConfirm.setVisibility(View.GONE);
+                    btnConfirm.setClickable(false);
+                }
 
-                selectLocationButton = findViewById(R.id.select_location_button);
-                selectLocationButton.setOnClickListener(new View.OnClickListener() {
+                btnDropMark.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (hoveringMarker.getVisibility() == View.VISIBLE) {
-
                             // Use the map target's coordinates to make a reverse geocoding search
                             final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
 
+                            path.add(mapTargetLatLng);
+
                             // Hide the hovering red hovering ImageView marker
-                            hoveringMarker.setVisibility(View.INVISIBLE);
+                            //hoveringMarker.setVisibility(View.INVISIBLE);
 
                             // Transform the appearance of the button to become the cancel button
-                            selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(FlightPathPicker.this, R.color.mapbox_blue));
-                            selectLocationButton.setText(getString(R.string.location_picker_select_location_button_cancel));
+                            //btnDropMark.setBackgroundColor(ContextCompat.getColor(FlightPathPicker.this, R.color.mapbox_blue));
+                            //btnDropMark.setText(getString(R.string.location_picker_select_location_button_cancel));
 
                             // Show the SymbolLayer icon to represent the selected map location
                             if (style.getLayer(DROPPED_MARKER_LAYER_ID) != null) {
@@ -156,38 +163,23 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                             // Use the map camera target's coordinates to make a reverse geocoding search
                             reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
 
-                            confirm_location.setVisibility(View.VISIBLE);
-                            confirm_location.setOnClickListener (new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent = new Intent(FlightPathPicker.this, PinDetails.class);
-                                    double lat = mapTargetLatLng.getLatitude();
-                                    double lon = mapTargetLatLng.getLongitude();
-
-                                    intent.putExtra("lat", lat);
-                                    intent.putExtra("lon", lon);
-                                    startActivity(intent);
-                                }
-                            });
-
-                        } else {
-
-                            // Switch the button appearance back to select a location.
-                            selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(FlightPathPicker.this, R.color.mapbox_blue));
-                            selectLocationButton.setText(getString(R.string.location_picker_select_location_button_select));
-
-                            // Show the red hovering ImageView marker
-                            hoveringMarker.setVisibility(View.VISIBLE);
-
-                            // Hide the selected location SymbolLayer
-                            droppedMarkerLayer = style.getLayer(DROPPED_MARKER_LAYER_ID);
-                            if (droppedMarkerLayer != null) {
-                                droppedMarkerLayer.setProperties(visibility(NONE));
-                            }
                         }
                     }
                 });
+
+
+
+                btnConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(FlightPathPicker.this, FlightPlanning.class);
+
+
+                        intent.putExtra("path", path);
+                        startActivity(intent);
+                    }
+                });
+
             }
         });
     }

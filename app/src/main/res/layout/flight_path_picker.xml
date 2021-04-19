@@ -9,26 +9,28 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        mapbox:mapbox_cameraZoom="15"/>
+        mapbox:mapbox_cameraZoom="15">
+
+    </com.mapbox.mapboxsdk.maps.MapView>
 
     <Button
-        android:id="@+id/btnDropMark"
+        android:id="@+id/btnRemoveMark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
+        android:layout_gravity="bottom|right"
         android:layout_margin="8dp"
         android:background="@color/mapbox_blue"
-        android:text="Drop Pin"
+        android:text="Remove Mark"
         android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/btnConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="top|left"
         android:layout_margin="8dp"
         android:background="@color/mapbox_blue"
-        android:text="Add Info"
+        android:text="Confirm Boundaries"
         android:textColor="@android:color/white" />
 
     <Button
@@ -39,6 +41,16 @@
         android:layout_margin="8dp"
         android:background="@color/mapbox_blue"
         android:text="Menu"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/btnDropMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="8dp"
+        android:background="@color/mapbox_blue"
+        android:text="Drop Marker"
         android:textColor="@android:color/white" />
 
 

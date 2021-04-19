@@ -6,14 +6,79 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editTextTextPersonName7"
+        android:id="@+id/edtPinName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="223dp"
+        android:layout_marginTop="68dp"
         android:ems="10"
+        android:hint="Pin Name"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edtPinRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="3dp"
+        android:ems="10"
+        android:hint="Rating"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/edtPinName"
+        app:layout_constraintTop_toBottomOf="@+id/edtPinName" />
+
+    <EditText
+        android:id="@+id/edtComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="Comment"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/edtPinRating"
+        app:layout_constraintTop_toBottomOf="@+id/edtPinRating" />
+
+    <TextView
+        android:id="@+id/txtLat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="59dp"
+        android:text="Latitude"
+        app:layout_constraintStart_toStartOf="@+id/edtComment"
+        app:layout_constraintTop_toBottomOf="@+id/edtComment" />
+
+    <TextView
+        android:id="@+id/txtLong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="40dp"
+        android:text="Longitutde"
+        app:layout_constraintStart_toStartOf="@+id/txtLat"
+        app:layout_constraintTop_toBottomOf="@+id/txtLat" />
+
+    <CheckBox
+        android:id="@+id/checkPublic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:text="Public Pin"
+        app:layout_constraintBottom_toTopOf="@+id/btnSubPin"
+        app:layout_constraintStart_toStartOf="@+id/btnSubPin" />
+
+    <Button
+        android:id="@+id/btnSubPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="142dp"
+        android:layout_marginBottom="134dp"
+        android:text="SUBMIT"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

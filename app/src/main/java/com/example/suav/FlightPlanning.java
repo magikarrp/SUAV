@@ -153,7 +153,7 @@ public class FlightPlanning extends AppCompatActivity {
 
                                 // call write helper class and set a new child as flightid with other details as children
                                 writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDateString, endDateString, takeOffCoordinateString, edtAltitude.getText().toString());
-                                reference.child("testUSERID").setValue(writeHelper);
+                                reference.child(flightID).setValue(writeHelper);
                                 startActivity(goToBriefing);
                             }
 

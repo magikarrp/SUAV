@@ -53,7 +53,7 @@ public class PinDetails extends AppCompatActivity {
                 String pinComment = "Comments: " + edtComment.getText().toString();
                 String takeOffCoordinateString = txtLat.getText().toString() + ", "  + txtLong.getText().toString();
 
-                writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinRating, takeOffCoordinateString, pinComment;
+                writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinRating, takeOffCoordinateString, pinComment);
                 reference.child(pinName).setValue(writeHelper);
 
                 Intent intent = new Intent(PinDetails.this, MainMapActivity.class);

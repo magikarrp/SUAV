@@ -72,31 +72,36 @@ public class MainMapActivity extends AppCompatActivity implements
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference().child("Pins").child("pinz");
 
-        ValueEventListener eventListener = new ValueEventListener() {
+        // Read from the database
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
-            // for loop to grab each parent node and the look at the child details
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ss : snapshot.getChildren()) {
-                   pinName = ss.getValue(String.class);
-                   pinRating = ss.child("pinRating").getValue(String.class);
-                   pinComment = ss.child("pinComment").getValue(String.class);
-                   pinLat = ss.child("latitude").getValue(double.class);
-                   pinLong = ss.child("longitude").getValue(double.class);
-
-                    Log.i("testSuccess ", pinLat + " " + pinLong);
-
-                   symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                            Point.fromLngLat(pinLat, pinLong)));
-
-                }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                pinName = dataSnapshot.getValue().toString();
+                Log.d("TEST", "Value is: " + pinName);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("FAILED", "Failed to read value.", error.toException());
             }
-        };
-    }
+        });
+    };
+//
+//    pinName = ss.getValue(String.class);
+//    pinRating = ss.child("pinRating").getValue(String.class);
+//    pinComment = ss.child("pinComment").getValue(String.class);
+//    pinLat = ss.child("latitude").getValue(double.class);
+//    pinLong = ss.child("longitude").getValue(double.class);
+//
+//                    Log.i("testSuccess ", pinLat + " " + pinLong);
+//
+//                   symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                           Point.fromLngLat(-57.225365, -33.213144)));
+//
+//}
 
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
@@ -113,13 +118,13 @@ public class MainMapActivity extends AppCompatActivity implements
             }
         });
 
-
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-57.225365, -33.213144)));
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-54.14164, -33.981818)));
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-56.990533, -30.583266)));
+//          test cases
+//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                Point.fromLngLat(-57.225365, -33.213144)));
+//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                Point.fromLngLat(-54.14164, -33.981818)));
+//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                Point.fromLngLat(-56.990533, -30.583266)));
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 

@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                     AirMap.setAuthToken(authToken);
 
                     // log event
-                    Log.e("AUTH SUCCESS ===>", response.toString());
+                    Log.e("AUTH LOGIN DONE ===>", response.toString());
 
                     // disabled ui since user is logged in
                     setEnabled(false);
@@ -151,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
                     goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
                     startActivity(goToPlanning);
+                    finish();
 
                 } catch (JSONException e) {
                     // error handler for json parsing
@@ -232,7 +233,7 @@ public class LoginActivity extends AppCompatActivity {
                         AirMap.setAuthToken(authToken);
 
                         // log
-                        Log.e("AUTH REFRESH SUCCESS ===>", response);
+                        Log.e("AUTH REFRESH DONE ===>", response);
 
                         // disabled ui since user is logged in
                         setEnabled(false);
@@ -241,6 +242,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
                         goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
                         startActivity(goToPlanning);
+                        finish();
 
                     } catch (JSONException e) {
                         // error handler for json parsing

@@ -6,12 +6,15 @@ import java.util.Date;
 
 public class writeDatabaseHelper {
 
-    Date startDate;
-    Date endDate;
-    Coordinate takeOffCoordinate;
+    String startDate;
+    String endDate;
+    String takeOffCoordinate;
     String maxAltitude;
 
-    public writeDatabaseHelper(Date startDate, Date endDate, Coordinate takeoffCoordinate, String maxAltitude) {
+    public writeDatabaseHelper() {
+    }
+
+    public writeDatabaseHelper(String startDate, String endDate, String takeoffCoordinate, String maxAltitude) {
 
         this.endDate = endDate;
         this.startDate = startDate;
@@ -20,27 +23,27 @@ public class writeDatabaseHelper {
 
     }
 
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Coordinate getTakeOffCoordinate() {
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getTakeOffCoordinate() {
         return takeOffCoordinate;
     }
 
-    public void setTakeOffCoordinate(Coordinate takeOffCoordinate) {
+    public void setTakeOffCoordinate(String takeOffCoordinate) {
         this.takeOffCoordinate = takeOffCoordinate;
     }
 
@@ -52,9 +55,13 @@ public class writeDatabaseHelper {
         this.maxAltitude = maxAltitude;
     }
 
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "writeDatabaseHelper{" +
+                "startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", takeOffCoordinate='" + takeOffCoordinate + '\'' +
+                ", maxAltitude='" + maxAltitude + '\'' +
+                '}';
+    }
 }

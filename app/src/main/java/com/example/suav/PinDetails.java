@@ -10,9 +10,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.w3c.dom.Text;
 
 public class PinDetails extends AppCompatActivity {
+
+
+    private FirebaseDatabase rootNode;
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,17 @@ public class PinDetails extends AppCompatActivity {
             public void onClick(View view) {
 
                 //raymond, this is where you want to upload pin data to database
+                rootNode = FirebaseDatabase.getInstance();
+                reference = rootNode.getReference("Pins");
+
+                //Convert data to string for easier database storage
+                String pinName = edtPinName.getText().toString();
+                String pinRating = "Rating: " + edtPinRating.getText().toString();
+                String pinComment = "Comments: " + edtComment.getText().toString();
+                String takeOffCoordinateString = txtLat.getText().toString() + ", "  + txtLong.getText().toString();
+
+                writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinRating, takeOffCoordinateString, pinComment;
+                reference.child(pinName).setValue(writeHelper);
 
                 Intent intent = new Intent(PinDetails.this, MainMapActivity.class);
                 startActivity(intent);

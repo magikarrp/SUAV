@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,10 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -27,6 +32,8 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +47,14 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
  * Display {@link SymbolLayer} icons on the map.
  */
 public class MainMapActivity extends AppCompatActivity implements
-        OnMapReadyCallback {
+        OnMapReadyCallback, PermissionsListener {
 
     private static final String SOURCE_ID = "SOURCE_ID";
     private static final String ICON_ID = "ICON_ID";
     private static final String LAYER_ID = "LAYER_ID";
     private MapView mapView;
+    private MapboxMap mapboxMap;
+    private PermissionsManager permissionsManager;
     List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
@@ -103,19 +112,40 @@ public class MainMapActivity extends AppCompatActivity implements
     ;
 
 
-    @Override
-    public void onMapReady(@NonNull final MapboxMap mapboxMap) {
-
-        Button btnPin = (Button) findViewById(R.id.btnPin);
-        btnPin.setOnClickListener(new View.OnClickListener() {
+        Button btnDropMark = (Button) findViewById(R.id.btnDropMark);
+        btnDropMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainMapActivity.this, PinPickerActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button btnEvents = (Button) findViewById(R.id.btnEvents);
+        btnEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainMapActivity.this, readDatabaseUsers.class);
+                startActivity(intent);
+            }
+        });
+
+        Button btnPlanFlight = (Button) findViewById(R.id.btnPlanFlight);
+        btnPlanFlight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainMapActivity.this, FlightPathPicker.class);
                 startActivity(intent);
 
 
             }
         });
+    }
+
+    @Override
+    public void onMapReady(@NonNull final MapboxMap mapboxMap) {
+        MainMapActivity.this.mapboxMap = mapboxMap;
+
 
 //          test cases
 //        symbolLayerIconFeatureList.add(Feature.fromGeometry(
@@ -160,6 +190,7 @@ public class MainMapActivity extends AppCompatActivity implements
                 ), new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
+                enableLocationComponent(style);
 
 // Map is set up and the style has loaded. Now you can add additional data or make other map adjustments.
 //////////////////////////////////////////////display user location on map load/////////////////////////////////////////////
@@ -176,17 +207,70 @@ public class MainMapActivity extends AppCompatActivity implements
         });
     }
 
+    @SuppressWarnings( {"MissingPermission"})
+    private void enableLocationComponent(@NonNull Style loadedMapStyle) {
+// Check if permissions are enabled and if not request
+        if (PermissionsManager.areLocationPermissionsGranted(this)) {
+
+// Get an instance of the component
+            LocationComponent locationComponent = mapboxMap.getLocationComponent();
+
+// Activate with options
+            locationComponent.activateLocationComponent(
+                    LocationComponentActivationOptions.builder(this, loadedMapStyle).build());
+
+// Enable to make component visible
+            locationComponent.setLocationComponentEnabled(true);
+
+// Set the component's camera mode
+            locationComponent.setCameraMode(CameraMode.TRACKING);
+
+// Set the component's render mode
+            locationComponent.setRenderMode(RenderMode.COMPASS);
+        } else {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onExplanationNeeded(List<String> permissionsToExplain) {
+        Toast.makeText(this, R.string.user_location_permission_explanation, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onPermissionResult(boolean granted) {
+        if (granted) {
+            mapboxMap.getStyle(new Style.OnStyleLoaded() {
+                @Override
+                public void onStyleLoaded(@NonNull Style style) {
+                    enableLocationComponent(style);
+                }
+            });
+        } else {
+            Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    @Override
+    @SuppressWarnings( {"MissingPermission"})
+    protected void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mapView.onStart();
-    }
 
     @Override
     protected void onStop() {

@@ -50,7 +50,7 @@ public class MainMapActivity extends AppCompatActivity implements
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
     private String pinName, pinRating, pinComment;
-    private Object pinLong, pinLat;
+    private double pinLong, pinLat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,32 +71,32 @@ public class MainMapActivity extends AppCompatActivity implements
         //Read from database
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference().child("Pins").child("Pins");
-
         // Read from the database
-        reference.addValueEventListener(new ValueEventListener() {
+        ValueEventListener eventListener = new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                pinName = dataSnapshot.getValue().toString();
-                Log.d(pinName, "helloxx");
-                pinRating = dataSnapshot.child("pinRating").getValue(String.class);
-                pinComment = dataSnapshot.child("pinComment").getValue(String.class);
-//                Object pinLat = dataSnapshot.child("latitude").getValue(Object.class);
-//                Object pinLong = dataSnapshot.child("longitude").getValue(Object.class);
-//                Double finalLat = Double.parseDouble(pinLat.toString());
-//                Double finalLon = Double.parseDouble(pinLong.toString());
+            // for loop to grab each parent node and the look at the child details
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990533, -30.583266)));
+                for (DataSnapshot ss : snapshot.getChildren()) {
+                    String name = ss.child("pinName").getValue(String.class);
+                    String pinRating = ss.child("pinRating").getValue(String.class);
+                    String pinComment = ss.child("pinComment").getValue(String.class);
+                    Log.d(name, "helloxx");
+                    double pinLat = ss.child("latitude").getValue(double.class);
+                    double pinLong = ss.child("longitude").getValue(double.class);
+                    symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
+                    symbolLayerIconFeatureList.add(Feature.fromGeometry(
+                            Point.fromLngLat(-56.990550, -30.583250)));
 
-                Log.d(pinRating, "helloxx");
-                //symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(finalLat, finalLon)));
+                }
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("FAILED", "Failed to read value.", error.toException());
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
-        });
+        };
+        reference.addListenerForSingleValueEvent(eventListener);
     }
 
     ;
@@ -123,6 +123,13 @@ public class MainMapActivity extends AppCompatActivity implements
 //                Point.fromLngLat(-54.14164, -33.981818)));
 //        symbolLayerIconFeatureList.add(Feature.fromGeometry(
 //                Point.fromLngLat(-56.990533, -30.583266)));
+
+        //                pinName = dataSnapshot.getValue().toString();
+//                Log.d(pinName, "helloxx");
+//                Object pinLat = dataSnapshot.child("latitude").getValue(Object.class);
+//                Object pinLong = dataSnapshot.child("longitude").getValue(Object.class);
+//                Double finalLat = Double.parseDouble(pinLat.toString());
+//                Double finalLon = Double.parseDouble(pinLong.toString());
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 

@@ -123,12 +123,12 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                 initDroppedMarker(style);
 
                 // Button for user to drop marker or to pick marker back up.
-                btnMenu = findViewById(R.id.select_location_button);
+                btnMenu = findViewById(R.id.btnDropMark);
 
-                confirm_location = (Button) findViewById(R.id.confirm_location);
+                confirm_location = (Button) findViewById(R.id.btnConfirm);
                 confirm_location.setVisibility(View.GONE);
 
-                selectLocationButton = findViewById(R.id.select_location_button);
+                selectLocationButton = findViewById(R.id.btnDropMark);
                 selectLocationButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

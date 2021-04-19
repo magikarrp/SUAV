@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -28,11 +29,13 @@ public class PinDetails extends AppCompatActivity {
         setContentView(R.layout.pin_details);
 
         Button btnSubPin = (Button) findViewById(R.id.btnSubPin);
-        EditText edtPinName = (EditText) findViewById(R.id.edtPinName);
-        EditText edtPinRating = (EditText) findViewById(R.id.edtPinRating);
-        EditText edtComment = (EditText) findViewById(R.id.edtComment);
+        EditText edtPinName = (EditText) findViewById(R.id.edtPinName);             //not null
+        EditText edtPinRating = (EditText) findViewById(R.id.edtPinRating);         //not null
+        EditText edtComment = (EditText) findViewById(R.id.edtComment);             //not null
         TextView txtLat = (TextView) findViewById(R.id.txtLat);
         TextView txtLong = (TextView) findViewById(R.id.txtLong);
+        CheckBox checkPublic = (CheckBox) findViewById(R.id.checkPublic);
+
 
 
         txtLat.setText(getIntent().getExtras().getString("lat"));

@@ -1,26 +1,24 @@
 package com.example.suav;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.airmap.airmapsdk.models.pilot.AirMapPilot;
+
 import com.airmap.airmapsdk.networking.services.AirMap;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +56,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // set up volley request queue
         rq = Volley.newRequestQueue(this);
+
+        // only allow portrait mode
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // initialize views
         edtAuthEmail = (EditText) findViewById(R.id.edtAuthEmail);
@@ -141,14 +142,16 @@ public class LoginActivity extends AppCompatActivity {
                     AirMap.setAuthToken(authToken);
 
                     // log event
-                    Log.e("AUTH SUCCESS ===>", response.toString());
+                    Log.e("AUTH LOGIN DONE ===>", response.toString());
 
                     // disabled ui since user is logged in
                     setEnabled(false);
 
                     // start main
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
+                    goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
+                    startActivity(goToPlanning);
+                    finish();
 
                 } catch (JSONException e) {
                     // error handler for json parsing
@@ -166,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                     // make sure ui is enabled for normal login
                     setEnabled(true);
                 }
+
             },
 
             // error handler for volley request
@@ -229,14 +233,16 @@ public class LoginActivity extends AppCompatActivity {
                         AirMap.setAuthToken(authToken);
 
                         // log
-                        Log.e("AUTH REFRESH SUCCESS ===>", response);
+                        Log.e("AUTH REFRESH DONE ===>", response);
 
                         // disabled ui since user is logged in
                         setEnabled(false);
 
                         // start main
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
+                        goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
+                        startActivity(goToPlanning);
+                        finish();
 
                     } catch (JSONException e) {
                         // error handler for json parsing

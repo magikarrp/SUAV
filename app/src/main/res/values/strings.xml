@@ -1,15 +1,79 @@
 <resources>
     <string name="app_name">SUAV</string>
-    <string name="airmap_client_id">04ac7eed-c654-4c5a-867b-6d68291dec4a</string>
-    <string name="airmap_auth_url">https://auth.airmap.com/realms/airmap/protocol/openid-connect/token</string>
+
+    <!-- Login / Auth values -->
+    <string name="auth_preference_file_key">com.example.suav.AUTH_PREFERENCE_FILE_KEY</string>
     <string name="login_button_text">Login</string>
     <string name="auth_email_hint">Email</string>
     <string name="auth_password_hint">Password</string>
     <string name="auth_msg_hint"></string>
     <string name="auth_instructions">Login With AirMap</string>
-    <string name="auth_preference_file_key">com.example.suav.AUTH_PREFERENCE_FILE_KEY</string>
     <string name="auth_success">Login successful.</string>
     <string name="auth_error">Something went wrong. Please try again.</string>
+
+    <!-- Menus -->
+    <string name="fp_menu_title">Flight Planning</string>
+    <string name="profile_menu_title">Pilot Profile</string>
+    <string name="weather_menu_title">Check The Skies</string>
+    <string name="briefing_menu_title">Flight Briefing</string>
+    <string name="menu_weather_txt">Weather</string>
+    <string name="menu_profile_txt">Profile</string>
+
+    <!-- Airmap values -->
+    <string name="airmap_error">Airmap Error: </string>
+    <string name="airmap_client_id">04ac7eed-c654-4c5a-867b-6d68291dec4a</string>
+    <string name="airmap_auth_url">https://auth.airmap.com/realms/airmap/protocol/openid-connect/token</string>
+
+    <!-- Briefing Activity -->
+    <string name="briefing_title">Flight Briefing</string>
+    <string name="briefing_submit">Submit</string>
+    <string name="briefing_back">Back</string>
+    <string name="briefing_violation"> - Violated</string>
+    <string name="briefing_following"> - Followed</string>
+    <string name="briefing_violations"> Violations: </string>
+    <string name="briefing_submission_error">Submission Failure</string>
+    <string name="briefing_submission_error_toast">Failed to submit flight, </string>
+    <string name="briefing_api_error">Error connecting to the AirMap Flight Briefing API, please try again later</string>
+    <string name="briefing_submission">"Successfully submitted flight!"</string>
+
+    <!-- Planning Activity -->
+    <string name="planning_title">Flight Planning</string>
+    <string name="planning_submit">Create Plan</string>
+    <string name="planning_altitude">Max. Altitude</string>
+    <string name="planning_units">(meters)</string>
+    <string name="planning_date">Date</string>
+    <string name="planning_stime">Start Time</string>
+    <string name="planning_etime">End Time</string>
+    <string name="planning_submission_error">Airmap Planning Error </string>
+    <string name="planning_submission_error_toast">Error connecting to the AirMap Flight Plan API, please try again later</string>
+    <string name="planning_etime_error">Please make sure that your end time is after your starting time</string>
+    <string name="planning_altitude_error">Please input a valid number for altitude.</string>
+    <string name="ruleset_error_toast">Error connecting to the AirMap Ruleset API, please try again later</string>
+    <string name="ruleset_error">Airmap Planning Error </string>
+
+    <!-- Profile Activity -->
+    <string name="profile_username">Username</string>
+    <string name="profile_email">Email</string>
+    <string name="profile_firstname">First Name</string>
+    <string name="profile_lastname">Last Name</string>
+    <string name="profile_submit">Save Changes</string>
+    <string name="profile_error_toast">Error connecting to the AirMap Pilot API, please try again later</string>
+    <string name="profile_submit_success">Information Updated!</string>
+
+    <!-- Weather Activity -->
+    <string name="weather_title">Check The Skies</string>
+    <string name="weather_condition">Condition:</string>
+    <string name="weather_temperature">Temperature:</string>
+    <string name="weather_precipitation">Precipitation:</string>
+    <string name="weather_visibility">Visibility:</string>
+    <string name="weather_wind">Wind:</string>
+    <string name="weather_humidity">Humidity:</string>
+    <string name="weather_error_toast">Error connecting to the AirMap Weather API, please try again later</string>
+    <string name="weather_temperature_unit"> C</string>
+    <string name="weather_precipitation_unit">%</string>
+    <string name="weather_visibility_unit">km</string>
+    <string name="weather_wind_unit">kmph</string>
+    <string name="weather_humidity_unit">%</string>
 
 
     <string name="mapbox_access_token">pk.eyJ1IjoiZGVubmlza2E5IiwiYSI6ImNrbXYxMnd1djAwbmUycGt2cmdpN3NsencifQ.doCZcsysKJmsm92mU1bftA</string>

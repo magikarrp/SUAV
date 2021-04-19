@@ -1,38 +1,60 @@
 package com.example.suav;
 
+import com.airmap.airmapsdk.models.Coordinate;
+
+import java.util.Date;
+
 public class writeDatabaseHelper {
 
-    String text;
-    String userID;
-    String location;
-    String date;
+    Date startDate;
+    Date endDate;
+    Coordinate takeOffCoordinate;
+    String maxAltitude;
 
-    public writeDatabaseHelper() {
+    public writeDatabaseHelper(Date startDate, Date endDate, Coordinate takeoffCoordinate, String maxAltitude) {
+
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.takeOffCoordinate = takeoffCoordinate;
+        this.maxAltitude = maxAltitude;
+
     }
 
-    public writeDatabaseHelper(String userID, String name, String location, String date) {
-        this.date = date;
-        this.location = location;
-        this.text = name;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public writeDatabaseHelper(String text) {
-        this.text = text;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public String getText() {
-        return this.text;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public String getLocation() {
-        return location;
+    public Coordinate getTakeOffCoordinate() {
+        return takeOffCoordinate;
     }
 
-    public java.lang.String getDate() {
-        return date;
+    public void setTakeOffCoordinate(Coordinate takeOffCoordinate) {
+        this.takeOffCoordinate = takeOffCoordinate;
     }
+
+    public String getMaxAltitude() {
+        return this.maxAltitude;
+    }
+
+    public void setMaxAltitude(String maxAltitude) {
+        this.maxAltitude = maxAltitude;
+    }
+
+
+
+
+
+
 }

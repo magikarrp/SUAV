@@ -1,5 +1,6 @@
 package com.example.suav;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -56,15 +57,17 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
  * Drop a marker at a specific location and then perform
  * reverse geocoding to retrieve and display the location's address
  */
-public class LocationPickerActivity extends AppCompatActivity implements PermissionsListener, OnMapReadyCallback {
+public class PinPickerActivity extends AppCompatActivity implements PermissionsListener, OnMapReadyCallback {
 
     private static final String DROPPED_MARKER_LAYER_ID = "DROPPED_MARKER_LAYER_ID";
     private MapView mapView;
     private MapboxMap mapboxMap;
-    private Button selectLocationButton;
+    private Button selectLocationButton, btnMenu, confirm_location;
+
     private PermissionsManager permissionsManager;
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
+    private LatLng pin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,19 +78,18 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
 
         // This contains the MapView in XML and needs to be called after the access token is configured.
-        setContentView(R.layout.pin_create);
+        setContentView(R.layout.pin_picker_activity);
 
         // Initialize the mapboxMap view
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-
     }
 
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
-        LocationPickerActivity.this.mapboxMap = mapboxMap;
+        PinPickerActivity.this.mapboxMap = mapboxMap;
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull final Style style) {
@@ -99,14 +101,14 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
 
                 // Toast instructing user to tap on the mapboxMap
                 Toast.makeText(
-                        LocationPickerActivity.this,
+                        PinPickerActivity.this,
                         getString(R.string.move_map_instruction), Toast.LENGTH_SHORT).show();
 
                 // When user is still picking a location, we hover a marker above the mapboxMap in the center.
                 // This is done by using an image view with the default marker found in the SDK. You can
                 // swap out for your own marker image, just make sure it matches up with the dropped marker.
-                hoveringMarker = new ImageView(LocationPickerActivity.this);
-                //hoveringMarker.setImageResource(R.drawable.red_marker);
+                hoveringMarker = new ImageView(PinPickerActivity.this);
+                hoveringMarker.setImageResource(R.drawable.red_marker);
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
@@ -117,6 +119,11 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
                 initDroppedMarker(style);
 
                 // Button for user to drop marker or to pick marker back up.
+                btnMenu = findViewById(R.id.select_location_button);
+
+                confirm_location = (Button) findViewById(R.id.confirm_location);
+                confirm_location.setVisibility(View.GONE);
+
                 selectLocationButton = findViewById(R.id.select_location_button);
                 selectLocationButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -131,7 +138,7 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
 
                             // Transform the appearance of the button to become the cancel button
                             selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(LocationPickerActivity.this, R.color.mapbox_blue));
+                                    ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
                             selectLocationButton.setText(getString(R.string.location_picker_select_location_button_cancel));
 
                             // Show the SymbolLayer icon to represent the selected map location
@@ -149,11 +156,22 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
                             // Use the map camera target's coordinates to make a reverse geocoding search
                             reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
 
+                            confirm_location.setVisibility(View.VISIBLE);
+                            confirm_location.setOnClickListener (new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(PinPickerActivity.this, PinDetails.class);
+                                    LatLng pin = mapTargetLatLng;
+                                    intent.putExtra("location", pin );
+                                    startActivity(intent);
+                                }
+                            });
+
                         } else {
 
                             // Switch the button appearance back to select a location.
                             selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(LocationPickerActivity.this, R.color.mapbox_blue));
+                                    ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
                             selectLocationButton.setText(getString(R.string.location_picker_select_location_button_select));
 
                             // Show the red hovering ImageView marker
@@ -173,7 +191,8 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
 
     private void initDroppedMarker(@NonNull Style loadedMapStyle) {
         // Add the marker image to map
-        //loadedMapStyle.addImage("dropped-icon-image", BitmapFactory.decodeResource(getResources(), R.drawable.blue_marker));
+        loadedMapStyle.addImage("dropped-icon-image", BitmapFactory.decodeResource(
+                getResources(), R.drawable.blue_marker));
         loadedMapStyle.addSource(new GeoJsonSource("dropped-marker-source-id"));
         loadedMapStyle.addLayer(new SymbolLayer(DROPPED_MARKER_LAYER_ID,
                 "dropped-marker-source-id").withProperties(
@@ -309,7 +328,7 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
                                 @Override
                                 public void onStyleLoaded(@NonNull Style style) {
                                     if (style.getLayer(DROPPED_MARKER_LAYER_ID) != null) {
-                                        Toast.makeText(LocationPickerActivity.this,
+                                        Toast.makeText(PinPickerActivity.this,
                                                 String.format(getString(R.string.location_picker_place_name_result),
                                                         feature.placeName()), Toast.LENGTH_SHORT).show();
                                     }
@@ -317,7 +336,7 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
                             });
 
                         } else {
-                            Toast.makeText(LocationPickerActivity.this,
+                            Toast.makeText(PinPickerActivity.this,
                                     getString(R.string.location_picker_dropped_marker_snippet_no_results), Toast.LENGTH_SHORT).show();
                         }
                     }

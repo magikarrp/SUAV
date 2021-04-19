@@ -48,11 +48,12 @@ public class PinDetails extends AppCompatActivity {
                 String pinName = edtPinName.getText().toString();
                 String pinRating = "Rating: " + edtPinRating.getText().toString();
                 String pinComment = "Comments: " + edtComment.getText().toString();
-                double lat = Double.parseDouble(txtLat.getText().toString());
-                double lon = Double.parseDouble(txtLong.getText().toString());
-
-                writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinComment, lat, lon);
-                reference.child(pinName).setValue(writeHelper);
+//                Commeneted out for now
+//                double lat = Double.parseDouble(txtLat.getText().toString());
+//                double lon = Double.parseDouble(txtLong.getText().toString());
+//
+//                writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinComment, lat, lon);
+//                reference.child(pinName).setValue(writeHelper);
 
                 Intent intent = new Intent(PinDetails.this, MainMapActivity.class);
                 startActivity(intent);

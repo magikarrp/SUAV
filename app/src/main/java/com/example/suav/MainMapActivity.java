@@ -79,7 +79,10 @@ public class MainMapActivity extends AppCompatActivity implements
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 pinName = dataSnapshot.getValue().toString();
-                Log.d("TEST", "Value is: " + pinName);
+//                pinRating = dataSnapshot.child("pinRating").getValue(String.class);
+//                pinComment = dataSnapshot.child("pinComment").getValue(String.class);
+//                pinLat = dataSnapshot.child("latitude").getValue(double.class);
+//                pinLong = dataSnapshot.child("longitude").getValue(double.class);
             }
 
             @Override

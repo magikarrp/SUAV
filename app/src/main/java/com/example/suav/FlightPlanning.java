@@ -139,14 +139,20 @@ public class FlightPlanning extends AppCompatActivity {
                                 // Write to FireBase Database
                                 rootNode = FirebaseDatabase.getInstance();
                                 reference = rootNode.getReference("Pins");
-                                String flightID = response.getFlightId();
+                                String flightID = response.getPlanId();
 
                                 //Test to see if flightID is null and edtAltitude is null
                                 Log.i("testSuccess ", flightID);
                                 Log.i("testSuccess ", edtAltitude.getText().toString());
 
+                                //Convert objects into more readable strings for database entry
+                                String dateString = startDate.getMonth() + ":" + startDate.getDay() + ":"  +startDate.getYear();
+                                String startDateString = dateString + " Time: " + startDate.getHours() + ":" + startDate.getMinutes();
+                                String endDateString = endDate.getHours() + ":" + endDate.getMinutes();
+                                String takeOffCoordinateString = takeoffCoordinate.getLatitude() + ", " + takeoffCoordinate.getLongitude();
 
-                                writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDate, endDate, takeoffCoordinate, edtAltitude.getText().toString());
+                                // call write helper class and set a new child as flightid with other details as children
+                                writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDateString, endDateString, takeOffCoordinateString, edtAltitude.getText().toString());
                                 reference.child("testUSERID").setValue(writeHelper);
                                 startActivity(goToBriefing);
                             }

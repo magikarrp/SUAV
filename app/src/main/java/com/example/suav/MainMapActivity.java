@@ -50,7 +50,7 @@ public class MainMapActivity extends AppCompatActivity implements
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
     private String pinName, pinRating, pinComment;
-    private double pinLong, pinLat;
+    private Object pinLong, pinLat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class MainMapActivity extends AppCompatActivity implements
 
         //Read from database
         rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference().child("Pins").child("pinz");
+        reference = rootNode.getReference().child("Pins").child("Pins");
 
         // Read from the database
         reference.addValueEventListener(new ValueEventListener() {
@@ -79,10 +79,16 @@ public class MainMapActivity extends AppCompatActivity implements
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 pinName = dataSnapshot.getValue().toString();
-//                pinRating = dataSnapshot.child("pinRating").getValue(String.class);
-//                pinComment = dataSnapshot.child("pinComment").getValue(String.class);
-//                pinLat = dataSnapshot.child("latitude").getValue(double.class);
-//                pinLong = dataSnapshot.child("longitude").getValue(double.class);
+                Log.d(pinName, "helloxx");
+                pinRating = dataSnapshot.child("pinRating").getValue(String.class);
+                pinComment = dataSnapshot.child("pinComment").getValue(String.class);
+//                Object pinLat = dataSnapshot.child("latitude").getValue(Object.class);
+//                Object pinLong = dataSnapshot.child("longitude").getValue(Object.class);
+//                Double finalLat = Double.parseDouble(pinLat.toString());
+//                Double finalLon = Double.parseDouble(pinLong.toString());
+
+                Log.d(pinRating, "helloxx");
+                //symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(finalLat, finalLon)));
             }
 
             @Override
@@ -91,20 +97,10 @@ public class MainMapActivity extends AppCompatActivity implements
                 Log.w("FAILED", "Failed to read value.", error.toException());
             }
         });
-    };
-//
-//    pinName = ss.getValue(String.class);
-//    pinRating = ss.child("pinRating").getValue(String.class);
-//    pinComment = ss.child("pinComment").getValue(String.class);
-//    pinLat = ss.child("latitude").getValue(double.class);
-//    pinLong = ss.child("longitude").getValue(double.class);
-//
-//                    Log.i("testSuccess ", pinLat + " " + pinLong);
-//
-//                   symbolLayerIconFeatureList.add(Feature.fromGeometry(
-//                           Point.fromLngLat(-57.225365, -33.213144)));
-//
-//}
+    }
+
+    ;
+
 
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
@@ -115,7 +111,6 @@ public class MainMapActivity extends AppCompatActivity implements
             public void onClick(View view) {
                 Intent intent = new Intent(MainMapActivity.this, PinPickerActivity.class);
                 startActivity(intent);
-
 
 
             }
@@ -165,7 +160,7 @@ public class MainMapActivity extends AppCompatActivity implements
 
 // set non-data-driven properties, such as:
                 symbolManager.setIconAllowOverlap(true);
-                symbolManager.setIconTranslate(new Float[]{-4f,5f});
+                symbolManager.setIconTranslate(new Float[]{-4f, 5f});
                 symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
 
             }

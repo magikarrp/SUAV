@@ -2,6 +2,7 @@ package com.example.suav;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ public class PinDetails extends AppCompatActivity {
 
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
+    private double lon, lat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +38,25 @@ public class PinDetails extends AppCompatActivity {
         txtLat.setText(getIntent().getExtras().getString("lat"));
         txtLong.setText(getIntent().getExtras().getString("lon"));
 
+        this.lat = getIntent().getExtras().getDouble("lat");
+        this.lon = getIntent().getExtras().getDouble("lon");
+
         btnSubPin.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 //Write to database
                 rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("Pins").child("pinz");
+                reference = rootNode.getReference("Pins").child("Pins");
 
                 //Convert data to string for easier database storage
                 String pinName = edtPinName.getText().toString();
                 String pinRating = "Rating: " + edtPinRating.getText().toString();
                 String pinComment = "Comments: " + edtComment.getText().toString();
-//                Commeneted out for now
-//                double lat = Double.parseDouble(txtLat.getText().toString());
-//                double lon = Double.parseDouble(txtLong.getText().toString());
-//
-//                writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinComment, lat, lon);
-//                reference.child(pinName).setValue(writeHelper);
+
+
+                writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinComment, lat, lon);
+                reference.child(pinName).setValue(writeHelper);
 
                 Intent intent = new Intent(PinDetails.this, MainMapActivity.class);
                 startActivity(intent);
@@ -64,4 +67,11 @@ public class PinDetails extends AppCompatActivity {
 
     }
 
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
 }

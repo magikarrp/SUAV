@@ -3,6 +3,7 @@ package com.example.suav;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,9 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
     private LatLng pin;
+
+    //Has setter method for coordinates
+    private PinDetails coordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +167,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                                     Intent intent = new Intent(PinPickerActivity.this, PinDetails.class);
                                     double lat = mapTargetLatLng.getLatitude();
                                     double lon = mapTargetLatLng.getLongitude();
+
 
                                     intent.putExtra("lat", lat);
                                     intent.putExtra("lon", lon);

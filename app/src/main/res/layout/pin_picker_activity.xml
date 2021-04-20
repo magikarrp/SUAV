@@ -19,7 +19,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="680dp"
-        mapbox:layout_constraintTop_toBottomOf="@+id/fpp_toolbar">
+        mapbox:layout_constraintTop_toBottomOf="@+id/ppa_toolbar">
 
         <com.mapbox.mapboxsdk.maps.MapView
             android:id="@+id/mapView"

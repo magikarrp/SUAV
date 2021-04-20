@@ -37,6 +37,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,8 +129,6 @@ public class MainMapActivity extends AppCompatActivity implements
         symbolLayerIconFeatureList.add(Feature.fromGeometry(
                 Point.fromLngLat(-56.990533, -30.583266)));
 
-
-
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 
 // Add the SymbolLayer icon image to the map style
@@ -159,6 +158,31 @@ public class MainMapActivity extends AppCompatActivity implements
 
                 // create symbol manager object
                 SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
+                // set non-data-driven properties, such as:
+                symbolManager.setIconAllowOverlap(true);
+                symbolManager.setIconTranslate(new Float[]{-4f, 5f});
+                symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
+                symbolManager.addClickListener(new OnSymbolClickListener() {
+                    @Override
+                    public boolean onAnnotationClick(Symbol symbol) {
+                        if(symbol.getIconImage()=="red_marker") {
+                            Toast.makeText(MainMapActivity.this,
+                                    "selected", Toast.LENGTH_SHORT).show();
+                            symbol.setIconImage("blue_marker");
+                            symbolManager.update(symbol);
+                            return true;
+                        }
+                        else {
+                            Toast.makeText(MainMapActivity.this,
+                                    "unselected", Toast.LENGTH_SHORT).show();
+                            symbol.setIconImage("blue_marker");
+                            symbolManager.update(symbol);
+                            return true;
+                        }
+
+
+                    }
+                });
 
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -202,29 +226,7 @@ public class MainMapActivity extends AppCompatActivity implements
                 });
 
 
-// set non-data-driven properties, such as:
-                symbolManager.setIconAllowOverlap(true);
-                symbolManager.setIconTranslate(new Float[]{-4f, 5f});
-                symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
-                symbolManager.addClickListener(new OnSymbolClickListener() {
-                    @Override
-                    public boolean onAnnotationClick(Symbol symbol) {
-                        if(symbol.getIconImage()=="red_marker") {
-                            Toast.makeText(MainMapActivity.this,
-                                    getString(R.string.clicked_symbol_toast), Toast.LENGTH_SHORT).show();
-                            symbol.setIconImage("blue_marker");
-                            symbolManager.update(symbol);
-                        }
-                        else {
-                            Toast.makeText(MainMapActivity.this,
-                                    getString(R.string.clicked_symbol_toast), Toast.LENGTH_SHORT).show();
-                            symbol.setIconImage("blue_marker");
-                            symbolManager.update(symbol);
-                        }
 
-                        return false;
-                    }
-                });
 
             }
         });

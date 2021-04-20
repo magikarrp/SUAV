@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.airmap.airmapsdk.models.Coordinate;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -69,7 +70,7 @@ public class EventDetails extends AppCompatActivity {
 
                 Intent intent = new Intent(EventDetails.this, FlightBriefing.class);
                 intent.putExtra("PlanID", getIntent().getExtras().getString("PlanID"));
-                intent.putExtra("Coordinate", bundle.getString("takeoffcoord"));
+                intent.putExtra("Coordinate", (Coordinate) bundle.get("Coordinate"));
                 startActivity(intent);
             }
         });}

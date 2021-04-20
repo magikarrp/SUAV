@@ -1,19 +1,43 @@
 package com.example.suav;
 
+import android.widget.EditText;
+
 import com.airmap.airmapsdk.models.Coordinate;
 
 import java.util.Date;
 
 public class writeDatabaseHelper {
 
-    String startDate;
-    String endDate;
-    String takeOffCoordinate;
-    String maxAltitude;
     Double longitude;
     Double latitude;
-    String pinComment;
-    String pinRating;
+    String pinComment, pinRating, message, message1, startDate, endDate, date, takeOffCoordinate, maxAltitude;
+
+    public writeDatabaseHelper(String startDateString, String endDateString, String takeOffCoordinate, String maxAltitude, String message, String message1) {
+        this.startDate = startDateString;
+        this.endDate = endDateString;
+        this.takeOffCoordinate = takeOffCoordinate;
+        this.maxAltitude = maxAltitude;
+        this.message = message;
+        this.message1 = message1;
+    }
+
+    public String getFlightID() {
+        return flightID;
+    }
+
+    public void setFlightID(String flightID) {
+        this.flightID = flightID;
+    }
+
+    String flightID;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public writeDatabaseHelper() {
     }
@@ -106,6 +130,7 @@ public class writeDatabaseHelper {
                 ", endDate='" + endDate + '\'' +
                 ", takeOffCoordinate='" + takeOffCoordinate + '\'' +
                 ", maxAltitude='" + maxAltitude + '\'' +
-                '}';
+                ", message='" + message + '\'' +
+                ", message1='" + message1 + '\'' + '}';
     }
 }

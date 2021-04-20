@@ -69,6 +69,7 @@ public class EventDetails extends AppCompatActivity {
 
                 Intent intent = new Intent(EventDetails.this, FlightBriefing.class);
                 intent.putExtra("PlanID", getIntent().getExtras().getString("PlanID"));
+                intent.putExtra("Coordinate", bundle.getString("takeoffcoord"));
                 startActivity(intent);
             }
         });}

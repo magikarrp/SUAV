@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import com.airmap.airmapsdk.AirMapException;
+import com.airmap.airmapsdk.models.Coordinate;
 import com.airmap.airmapsdk.models.flight.AirMapFlightBriefing;
 import com.airmap.airmapsdk.models.flight.AirMapFlightPlan;
 import com.airmap.airmapsdk.models.rules.AirMapRule;
@@ -50,6 +51,7 @@ public class FlightBriefing extends Activity {
     private ListView lstRules;
     private Button  btnSubmit;
     private ProgressBar pgrsAPILoad;
+    private Coordinate takeOffCoord;
 
     private List<AirMapRuleset> rulesets;
     private boolean viewingRulesets;
@@ -75,6 +77,8 @@ public class FlightBriefing extends Activity {
         viewingRulesets = true;
 
         Bundle bundle = getIntent().getExtras();
+
+        takeOffCoord = (Coordinate) bundle.get("Coordinate");
 
         // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {

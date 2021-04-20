@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,12 +20,21 @@ import com.airmap.airmapsdk.models.AirMapWeatherUpdate;
 import com.airmap.airmapsdk.models.Coordinate;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.services.AirMap;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class WeatherActivity extends Activity {
 
-    TextView txtCondition, txtTemperature, txtPrecip, txtVisibility, txtWind, txtHumidity;
+    TextView txtCondition, txtTemperature, txtPrecip, txtVisibility, txtWind, txtHumidity, txtNumPlanes;
     ProgressBar pgrsWeatherLoad;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +44,7 @@ public class WeatherActivity extends Activity {
 
         initMenu(); // sets up the menu for this activity
 
+        txtNumPlanes = (TextView) findViewById(R.id.txtNumPlanes);
         txtCondition = (TextView) findViewById(R.id.txtCondition);
         txtTemperature = (TextView) findViewById(R.id.txtTemperature);
         txtPrecip = (TextView) findViewById(R.id.txtPrecip);
@@ -147,6 +158,77 @@ public class WeatherActivity extends Activity {
                     return true;
             }
         });
+    }
+
+    private void setPlaneCount() {
+
+        double lon1 = -71.06617418626098;
+        double lat1 = 42.35534150531174;
+
+        // Get coordinate from previous activity
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null && bundle.getDouble("lon") != 0) {
+            try {
+                lon1 = bundle.getDouble("lon");
+                lat1 = bundle.getDouble("lat");
+            } catch (Exception e) {
+                // ...
+            }
+        }
+
+        double finalLon = lon1;
+        double finalLat = lat1;
+        JsonRequest request = new JsonObjectRequest(Request.Method.GET, getString(R.string.opensky_url), null,
+                (Response.Listener<JSONObject>) response -> {
+                    try {
+
+                        int count = 0;
+
+                        // 3) the request was successful, lets try to parse the json data returned and get aircraft states
+                        JSONArray states = response.getJSONArray("states");
+
+                        // 4) create a list of aircraft states, each state is represented by a JSONArray
+                        ArrayList<JSONArray> stateList = new ArrayList<JSONArray>();
+                        for (int i = 0; i < states.length(); i++) {
+                            stateList.add((JSONArray) states.get(i));
+                        }
+
+                        // check distance of each state
+                        for (JSONArray s : stateList) {
+                            double lon2 = s.getDouble(5);
+                            double lat2 = s.getDouble(6);
+
+                            double R = 6371.0;
+                            double dLon = deg2rad(lon2 - finalLon);
+                            double dLat = deg2rad(lat2 - finalLat);
+
+                            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(finalLat)) * Math.cos(deg2rad(lat2)) + Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                            double d = R * c;
+
+                            if (d < 10) {
+                                count++;
+                            }
+                        }
+
+                        findViewById(R.id.icPlane).setVisibility(View.VISIBLE);
+                        txtNumPlanes.setText(String.valueOf(count));
+
+
+                    } catch (JSONException e) {
+
+                        // there was an error parsing the json data
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    // there was an error requesting the states
+                }
+        );
+    }
+
+    private double deg2rad(double deg) {
+        return deg * (Math.PI/180);
     }
 
 }

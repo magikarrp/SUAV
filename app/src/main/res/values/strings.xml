@@ -11,6 +11,9 @@
     <string name="auth_success">Login successful.</string>
     <string name="auth_error">Something went wrong. Please try again.</string>
 
+    <!-- OpenSky -->
+    <string name="opensky_url">https://opensky-network.org/api/states/all</string>
+
     <!-- Menus -->
     <string name="fp_menu_title">Flight Planning</string>
     <string name="ppa_menu_title">Location Picker</string>

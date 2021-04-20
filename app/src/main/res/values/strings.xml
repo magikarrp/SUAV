@@ -40,7 +40,7 @@
     <string name="briefing_submission_error">Submission Failure</string>
     <string name="briefing_submission_error_toast">Failed to submit flight, </string>
     <string name="briefing_api_error">Error connecting to the AirMap Flight Briefing API, please try again later</string>
-    <string name="briefing_submission">"Successfully submitted flight!"</string>
+    <string name="briefing_submission">Flight Aprroved!</string>
 
     <!-- Planning Activity -->
     <string name="planning_title">Flight Planning</string>

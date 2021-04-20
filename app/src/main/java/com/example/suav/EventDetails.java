@@ -34,9 +34,11 @@ public class EventDetails extends AppCompatActivity {
         TextView txtAdd = (TextView) findViewById(R.id.txtAdd);
 
         initMenu();
+        edtEventName = (EditText) findViewById(R.id.edtEventDetailsName);
+        TextView txtDisc = (TextView) findViewById(R.id.txtDisc);
+
 
         txtAdd.setText(getIntent().getExtras().getString("address"));
-
 
         btnSubEvent.setOnClickListener (new View.OnClickListener() {
             @Override
@@ -49,11 +51,16 @@ public class EventDetails extends AppCompatActivity {
                 //Convert data to string for easier database storage
                 String pinName = edtEventName.getText().toString();
                 String pinComment = "Description: " + edtDescription.getText().toString();
-                dateString = dataGrab.getDate();
+                Bundle bundle = getIntent().getExtras();
+                flightID = bundle.getString("PlanID");
+
+                dataGrab = new writeDatabaseHelper(bundle.getString("startDate"), bundle.getString("endDate"), bundle.getString("takeoffcoord"), bundle.getString("altitude"), pinName, pinComment);
+                dataGrab.setDate(dateString);
+                dataGrab.setFlightID(flightID);
+
                 startDateString = dataGrab.getStartDate();
                 endDateString = dataGrab.getEndDate();
                 takeOffCoordinate = dataGrab.getTakeOffCoordinate();
-                flightID = dataGrab.getFlightID();
                 maxAltitude = dataGrab.getMaxAltitude();
 
 

@@ -105,9 +105,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                 enableLocationComponent(style);
 
                 // Toast instructing user to tap on the mapboxMap
-                Toast.makeText(
-                        PinPickerActivity.this,
-                        getString(R.string.move_map_instruction), Toast.LENGTH_SHORT).show();
+                Toast.makeText(PinPickerActivity.this, getString(R.string.move_map_instruction), Toast.LENGTH_SHORT).show();
 
                 // When user is still picking a location, we hover a marker above the mapboxMap in the center.
                 // This is done by using an image view with the default marker found in the SDK. You can

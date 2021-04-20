@@ -86,8 +86,8 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
     private ArrayList<LatLng> path;
     private List<Feature> symbolLayer;
 
-    private static final List<List<Point>> POINTS = new ArrayList<>();
-    private static final List<Point> OUTER_POINTS = new ArrayList<>();
+    private List<List<Point>> POINTS;
+    private List<Point> OUTER_POINTS;
 
     private static final String SOURCE_ID = "SOURCE_ID";
     private static final String ICON_ID = "ICON_ID";
@@ -121,6 +121,8 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
         btnFlightPlan.setVisibility(View.GONE);
         btnEdtPath = (Button) findViewById(R.id.btnEditPath);
         btnEdtPath.setVisibility(View.GONE);
+        POINTS = new ArrayList<>();
+        OUTER_POINTS = new ArrayList<>();
 
         path = new ArrayList<>();
         symbolLayer = new ArrayList<>();

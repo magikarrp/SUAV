@@ -110,7 +110,6 @@ public class MainMapActivity extends AppCompatActivity implements
             }
         };
         reference.addListenerForSingleValueEvent(eventListener);
->>>>>>> 34f689dc2bc1b5aa800e011db634a54889db7d1c
 
         Button btnDropMark = (Button) findViewById(R.id.btnDropMark);
         btnDropMark.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +144,7 @@ public class MainMapActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         MainMapActivity.this.mapboxMap = mapboxMap;
-        
+
        // symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong,pinLat)));
 
 //          test cases

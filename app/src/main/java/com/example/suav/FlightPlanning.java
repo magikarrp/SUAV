@@ -200,6 +200,7 @@ public class FlightPlanning extends AppCompatActivity {
                                 if(!newEvent) {
                                     intent = new Intent(getApplicationContext(), FlightBriefing.class);
                                     intent.putExtra("PlanID", response.getPlanId());
+                                    intent.putExtra("Coordinate", takeoffCoordinate);
                                 } else {
                                     intent = new Intent(getApplicationContext(), EventDetails.class);
                                     intent.putExtra("PlanID", response.getPlanId());

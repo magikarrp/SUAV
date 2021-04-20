@@ -68,7 +68,7 @@ public class EventDetails extends AppCompatActivity {
 
                 startActivity(intent);
             }
-        });
+        })};
 
     }
 

@@ -166,11 +166,6 @@ public class MainMapActivity extends AppCompatActivity implements
                             String test = String.valueOf(pinLat);
                             String test1 = String.valueOf(pinLong);
 
-                            Log.d(name, "helloxx");
-                            Log.d(pinRating, "helloxx");
-                            Log.d(test, "helloxx");
-                            Log.d(test1, "helloxx");
-
                             symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
 
 

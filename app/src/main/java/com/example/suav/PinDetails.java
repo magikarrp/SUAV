@@ -14,6 +14,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
 public class PinDetails extends AppCompatActivity {
 
 
@@ -32,6 +34,7 @@ public class PinDetails extends AppCompatActivity {
         EditText edtComment = (EditText) findViewById(R.id.edtComment);             //not null
         TextView txtAdd = (TextView) findViewById(R.id.txtAdd);
         CheckBox checkPublic = (CheckBox) findViewById(R.id.checkPublic);
+        TextView txtDesc = (TextView) findViewById(R.id.txtDesc);
 
         initMenu();
 

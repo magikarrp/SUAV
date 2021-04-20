@@ -100,9 +100,6 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                 enableLocationPlugin(style);
                 enableLocationComponent(style);
 
-
-
-
                 // Toast instructing user to tap on the mapboxMap
                 Toast.makeText(
                         PinPickerActivity.this,

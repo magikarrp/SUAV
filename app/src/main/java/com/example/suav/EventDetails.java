@@ -37,7 +37,6 @@ public class EventDetails extends AppCompatActivity {
 
         txtAdd.setText(getIntent().getExtras().getString("address"));
 
-
         btnSubEvent.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -156,6 +156,7 @@ public class MainMapActivity extends AppCompatActivity implements
 
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
+                    // For loop grabs children of branch and then drops pin by reverse geo-caching w/ symbolLayerIconFeatureList
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot ss : dataSnapshot.getChildren()) {
                             String name = reference.getKey();
@@ -163,8 +164,7 @@ public class MainMapActivity extends AppCompatActivity implements
                             pinComment = ss.child("pinComment").getValue(String.class);
                             pinLat = ss.child("latitude").getValue(double.class);
                             pinLong = ss.child("longitude").getValue(double.class);
-                            String test = String.valueOf(pinLat);
-                            String test1 = String.valueOf(pinLong);
+
 
                             symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
 

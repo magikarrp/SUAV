@@ -17,7 +17,6 @@
         mapbox:layout_constraintStart_toStartOf="parent"
         mapbox:layout_constraintTop_toTopOf="parent" />
 
-
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
@@ -59,8 +58,20 @@
         android:background="@color/mapbox_blue"
         android:text="Drop Marker"
         android:textColor="@android:color/white"
-        mapbox:layout_constraintBottom_toBottomOf="@+id/mapView"
+        mapbox:layout_constraintBottom_toBottomOf="parent"
         mapbox:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnEditPath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="8dp"
+        android:background="@color/mapbox_blue"
+        android:text="Edit Path"
+        android:textColor="@android:color/white"
+        mapbox:layout_constraintBottom_toBottomOf="@+id/mapView"
+        mapbox:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnFlightPlan"

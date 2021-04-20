@@ -48,6 +48,7 @@ public class readDatabaseUsers extends AppCompatActivity {
             @Override
             // for loop to grab each parent node and the look at the child details
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                reference = rootNode.getReference().child("Pins").child("Events");
                 for(DataSnapshot ss : snapshot.getChildren()) {
                     String maxAltitude = ss.child("maxAltitude").getValue(String.class);
                     String startDate = ss.child("startDate").getValue(String.class);
@@ -65,5 +66,29 @@ public class readDatabaseUsers extends AppCompatActivity {
 
             }
         };reference.addListenerForSingleValueEvent(eventListener);
+
+        reference = rootNode.getReference().child("Pins").child("Personal");
+        ValueEventListener personalListener = new ValueEventListener() {
+            @Override
+            // for loop to grab each parent node and the look at the child details
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot personal : snapshot.getChildren()) {
+                    String maxAltitude = personal.child("maxAltitude").getValue(String.class);
+                    String startDate = personal.child("startDate").getValue(String.class);
+                    String endDate = personal.child("endDate").getValue(String.class);
+                    String takeOffCoordinate = personal.child("takeOffCoordinate").getValue(String.class);
+                    flightDetails = "Latitude, Longitude: \n" + takeOffCoordinate + " \n Max Altitude: " + maxAltitude + " \n Date: " + startDate + " | " + endDate;
+                    myArrayList.add(flightDetails);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(readDatabaseUsers.this, android.R.layout.simple_list_item_1, myArrayList);
+                    myListView.setAdapter(arrayAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };reference.addListenerForSingleValueEvent(personalListener);
+
     }
 }

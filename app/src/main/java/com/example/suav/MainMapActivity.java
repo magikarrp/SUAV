@@ -200,8 +200,8 @@ public class MainMapActivity extends AppCompatActivity implements
                             String name = reference.getKey();
                             pinRating = ss.child("pinRating").getValue(String.class);
                             pinComment = ss.child("pinComment").getValue(String.class);
-                            pinLat = ss.child("latitude").getValue(double.class);
-                            pinLong = ss.child("longitude").getValue(double.class);
+//                            pinLat = ss.child("latitude").getValue(double.class);
+//                            pinLong = ss.child("longitude").getValue(double.class);
                             String test = String.valueOf(pinLat);
                             String test1 = String.valueOf(pinLong);
                             addPin(pinLong, pinLat);

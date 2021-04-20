@@ -30,6 +30,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener;
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
@@ -63,6 +64,7 @@ public class MainMapActivity extends AppCompatActivity implements
     private DatabaseReference reference;
     private String pinName, pinRating, pinComment;
     private double pinLong, pinLat;
+    private Symbol symbol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +135,7 @@ public class MainMapActivity extends AppCompatActivity implements
 
 // Add the SymbolLayer icon image to the map style
                 .withImage(ICON_ID, BitmapFactory.decodeResource(
-                        MainMapActivity.this.getResources(), R.drawable.mapbox_marker_icon_default))
+                        MainMapActivity.this.getResources(), R.drawable.red_marker))
 
 // Adding a GeoJson source for the SymbolLayer icons.
                 .withSource(new GeoJsonSource(SOURCE_ID,
@@ -162,27 +164,9 @@ public class MainMapActivity extends AppCompatActivity implements
                 symbolManager.setIconAllowOverlap(true);
                 symbolManager.setIconTranslate(new Float[]{-4f, 5f});
                 symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
-                symbolManager.addClickListener(new OnSymbolClickListener() {
-                    @Override
-                    public boolean onAnnotationClick(Symbol symbol) {
-                        if(symbol.getIconImage()=="red_marker") {
-                            Toast.makeText(MainMapActivity.this,
-                                    "selected", Toast.LENGTH_SHORT).show();
-                            symbol.setIconImage("blue_marker");
-                            symbolManager.update(symbol);
-                            return true;
-                        }
-                        else {
-                            Toast.makeText(MainMapActivity.this,
-                                    "unselected", Toast.LENGTH_SHORT).show();
-                            symbol.setIconImage("blue_marker");
-                            symbolManager.update(symbol);
-                            return true;
-                        }
 
 
-                    }
-                });
+
 
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -201,7 +185,7 @@ public class MainMapActivity extends AppCompatActivity implements
 
                             mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
                                     .withImage(ICON_ID, BitmapFactory.decodeResource(
-                                            MainMapActivity.this.getResources(), R.drawable.mapbox_marker_icon_default))
+                                            MainMapActivity.this.getResources(), R.drawable.red_marker))
                                     .withSource(new GeoJsonSource(SOURCE_ID,
                                             FeatureCollection.fromFeatures(symbolLayerIconFeatureList)))
                                     .withLayer(new SymbolLayer(LAYER_ID, SOURCE_ID)
@@ -213,6 +197,28 @@ public class MainMapActivity extends AppCompatActivity implements
                                     ), new Style.OnStyleLoaded() {
                                 @Override
                                 public void onStyleLoaded(@NonNull Style style) {    ///reload map
+                                    symbolManager.addClickListener(new OnSymbolClickListener() {
+                                        @Override
+                                        public boolean onAnnotationClick(Symbol symbol) {
+                                            Toast.makeText(MainMapActivity.this,
+                                                    "selected", Toast.LENGTH_SHORT).show();
+                                            if(symbol.getIconImage()=="red_marker") {
+                                                Toast.makeText(MainMapActivity.this,
+                                                        "selected", Toast.LENGTH_SHORT).show();
+                                                symbol.setIconImage("blue_marker");
+                                                symbolManager.update(symbol);
+                                            }
+                                            else {
+                                                Toast.makeText(MainMapActivity.this,
+                                                        "unselected", Toast.LENGTH_SHORT).show();
+                                                symbol.setIconImage("blue_marker");
+                                                symbolManager.update(symbol);
+                                            }
+                                            return true;
+
+                                        }
+                                    });
+
                                 }});
                         }
 
@@ -231,6 +237,7 @@ public class MainMapActivity extends AppCompatActivity implements
             }
         });
     }
+
 
 
     @SuppressWarnings( {"MissingPermission"})

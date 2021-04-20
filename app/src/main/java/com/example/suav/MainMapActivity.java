@@ -22,6 +22,8 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -82,6 +84,7 @@ public class MainMapActivity extends AppCompatActivity implements
         //Read from database
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference().child("Pins").child("Pins");
+
         // Read from the database
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
@@ -142,6 +145,7 @@ public class MainMapActivity extends AppCompatActivity implements
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         MainMapActivity.this.mapboxMap = mapboxMap;
 
+       // symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong,pinLat)));
 
 //          test cases
 //        symbolLayerIconFeatureList.add(Feature.fromGeometry(
@@ -157,6 +161,7 @@ public class MainMapActivity extends AppCompatActivity implements
 //                Object pinLong = dataSnapshot.child("longitude").getValue(Object.class);
 //                Double finalLat = Double.parseDouble(pinLat.toString());
 //                Double finalLon = Double.parseDouble(pinLong.toString());
+
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 
@@ -188,6 +193,33 @@ public class MainMapActivity extends AppCompatActivity implements
                 // create symbol manager object
                 SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
 
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ss : dataSnapshot.getChildren()) {
+                            String name = reference.getKey();
+                            pinRating = ss.child("pinRating").getValue(String.class);
+                            pinComment = ss.child("pinComment").getValue(String.class);
+//                            pinLat = ss.child("latitude").getValue(double.class);
+//                            pinLong = ss.child("longitude").getValue(double.class);
+                            String test = String.valueOf(pinLat);
+                            String test1 = String.valueOf(pinLong);
+                            addPin(pinLong, pinLat);
+                            Log.d(name, "helloxx");
+                            Log.d(pinRating, "helloxx");
+                            Log.d(test, "helloxx");
+                            Log.d(test1, "helloxx");
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w("FAILED", "Failed to read value.", error.toException());
+                    }
+                });
+
 
 // set non-data-driven properties, such as:
                 symbolManager.setIconAllowOverlap(true);
@@ -196,6 +228,12 @@ public class MainMapActivity extends AppCompatActivity implements
 
             }
         });
+    }
+
+    public void addPin(double pLon,double pLat) {
+        Log.d("it works", "helloxx");
+        symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-122.08294276583858,37.42083003104637)));
+        symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(this.pinLong, 37.42083003104637)));
     }
 
     @SuppressWarnings( {"MissingPermission"})

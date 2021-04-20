@@ -3,7 +3,6 @@ package com.example.suav;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +52,6 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacem
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
-//import com.mapbox.mapboxandroiddemo.R;
-
 /**
  * Drop a marker at a specific location and then perform
  * reverse geocoding to retrieve and display the location's address
@@ -64,16 +61,12 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
     private static final String DROPPED_MARKER_LAYER_ID = "DROPPED_MARKER_LAYER_ID";
     private MapView mapView;
     private MapboxMap mapboxMap;
-    private Button selectLocationButton, btnMenu, confirm_location;
+    private Button selectLocationButton, confirm_location;
 
     private PermissionsManager permissionsManager;
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
-    private LatLng pin;
     private String address = "";
-
-    //Has setter method for coordinates
-    private PinDetails coordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +86,13 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        confirm_location = (Button) findViewById(R.id.btnConfirm);
+        selectLocationButton = (Button) findViewById(R.id.btnDropMark);
+
+        // check if user is trying to view weather
+        if (getIntent().getBooleanExtra("weather_redirect", false)) {
+            confirm_location.setText(getString(R.string.weather_menu_title));
+        }
     }
 
     @Override
@@ -121,13 +121,8 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                 // Initialize, but don't show, a SymbolLayer for the marker icon which will represent a selected location.
                 initDroppedMarker(style);
 
-                // Button for user to drop marker or to pick marker back up.
-                btnMenu = findViewById(R.id.btnDropMark);
-
-                confirm_location = (Button) findViewById(R.id.btnConfirm);
                 confirm_location.setVisibility(View.GONE);
 
-                selectLocationButton = findViewById(R.id.btnDropMark);
                 selectLocationButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -140,8 +135,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                             hoveringMarker.setVisibility(View.INVISIBLE);
 
                             // Transform the appearance of the button to become the cancel button
-                            selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
+                            selectLocationButton.setBackgroundColor(ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
                             selectLocationButton.setText(getString(R.string.location_picker_select_location_button_cancel));
 
                             // Show the SymbolLayer icon to represent the selected map location
@@ -164,7 +158,17 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                             confirm_location.setOnClickListener (new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Intent intent = new Intent(PinPickerActivity.this, PinDetails.class);
+
+                                    Intent intent;
+
+                                    // check if user is trying to view weather
+                                    if (getIntent().getBooleanExtra("weather_redirect", false)) {
+                                        intent = new Intent(PinPickerActivity.this, WeatherActivity.class);
+                                    } else {
+                                        intent = new Intent(PinPickerActivity.this, PinDetails.class);
+                                    }
+
+
                                     double lat = mapTargetLatLng.getLatitude();
                                     double lon = mapTargetLatLng.getLongitude();
 
@@ -178,9 +182,9 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                         } else {
 
                             // Switch the button appearance back to select a location.
-                            selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
+                            selectLocationButton.setBackgroundColor(ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
                             selectLocationButton.setText(getString(R.string.location_picker_select_location_button_select));
+                            confirm_location.setVisibility(View.GONE);
 
                             // Show the red hovering ImageView marker
                             hoveringMarker.setVisibility(View.VISIBLE);
@@ -387,8 +391,20 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
 
     private void initMenu() {
         Toolbar t = (Toolbar) findViewById(R.id.ppa_toolbar);
-        t.setTitle(getString(R.string.fp_menu_title));
+        t.setTitle(getString(R.string.ppa_menu_title));
         t.inflateMenu(R.menu.default_menu);
+        t.setOnMenuItemClickListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.menu_profile:
+                    // GO TO PROFILE
+                    Intent toProfile = new Intent(PinPickerActivity.this, ProfileActivity.class);
+                    startActivity(toProfile);
+                    return true;
+                default:
+                    // Should not happen
+                    return true;
+            }
+        });
     }
 }
 

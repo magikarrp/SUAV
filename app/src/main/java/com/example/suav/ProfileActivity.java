@@ -163,6 +163,7 @@ public class ProfileActivity extends Activity {
         Toolbar t = (Toolbar) findViewById(R.id.profile_toolbar);
         t.setTitle(getString(R.string.profile_menu_title));
         t.inflateMenu(R.menu.default_menu);
+        t.getMenu().removeItem(R.id.menu_profile);
     }
 
 }

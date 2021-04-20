@@ -78,5 +78,17 @@ public class PinDetails extends AppCompatActivity {
         Toolbar t = (Toolbar) findViewById(R.id.pd_toolbar);
         t.setTitle(getString(R.string.pd_menu_title));
         t.inflateMenu(R.menu.default_menu);
+        t.setOnMenuItemClickListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.menu_profile:
+                    // GO TO PROFILE
+                    Intent toProfile = new Intent(PinDetails.this, ProfileActivity.class);
+                    startActivity(toProfile);
+                    return true;
+                default:
+                    // Should not happen
+                    return true;
+            }
+        });
     }
 }

@@ -13,6 +13,7 @@
 
     <!-- Menus -->
     <string name="fp_menu_title">Flight Planning</string>
+    <string name="ppa_menu_title">Location Picker</string>
     <string name="mm_menu_title">SUAV</string>
     <string name="pd_menu_title">Pin Details</string>
     <string name="profile_menu_title">Pilot Profile</string>
@@ -177,7 +178,7 @@
 
     <!--LocationPickerActivity activity-->
     <string name="location_picker_select_location_button_cancel">Cancel</string>
-    <string name="location_picker_select_location_button_select">Select a location</string>
+    <string name="location_picker_select_location_button_select">Select Location</string>
     <string name="location_picker_dropped_marker_snippet_no_results">No results</string>
     <string name="location_picker_place_name_result">Place name: %1$s</string>
 

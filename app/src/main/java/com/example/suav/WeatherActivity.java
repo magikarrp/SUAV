@@ -21,9 +21,11 @@ import com.airmap.airmapsdk.models.Coordinate;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.services.AirMap;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,13 +36,16 @@ import java.util.Date;
 
 public class WeatherActivity extends Activity {
 
-    TextView txtCondition, txtTemperature, txtPrecip, txtVisibility, txtWind, txtHumidity, txtNumPlanes;
-    ProgressBar pgrsWeatherLoad;
+    private TextView txtCondition, txtTemperature, txtPrecip, txtVisibility, txtWind, txtHumidity, txtNumPlanes;
+    private ProgressBar pgrsWeatherLoad;
+    private RequestQueue rq;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+
+        rq = Volley.newRequestQueue(WeatherActivity.this);
 
         txtNumPlanes = (TextView) findViewById(R.id.txtNumPlanes);
         txtCondition = (TextView) findViewById(R.id.txtCondition);
@@ -163,6 +168,8 @@ public class WeatherActivity extends Activity {
 
     private void setPlaneCount() {
 
+        Log.e("PLANE COUNT ===>", "STARTING");
+
         double lon1 = -71.06617418626098;
         double lat1 = 42.35534150531174;
 
@@ -183,21 +190,28 @@ public class WeatherActivity extends Activity {
                 (Response.Listener<JSONObject>) response -> {
                     try {
 
+                        Log.e("PLANE COUNT ===>", "GOT RESPONSE");
+
                         int count = 0;
 
-                        // 3) the request was successful, lets try to parse the json data returned and get aircraft states
+                        // the request was successful, lets try to parse the json data returned and get aircraft states
                         JSONArray states = response.getJSONArray("states");
 
-                        // 4) create a list of aircraft states, each state is represented by a JSONArray
+                        // create a list of aircraft states, each state is represented by a JSONArray
                         ArrayList<JSONArray> stateList = new ArrayList<JSONArray>();
                         for (int i = 0; i < states.length(); i++) {
                             stateList.add((JSONArray) states.get(i));
                         }
 
+                        Log.e("PLANE COUNT ===>", "CHECKING DISTANCES");
+
                         // check distance of each state
                         for (JSONArray s : stateList) {
-                            double lon2 = s.getDouble(5);
-                            double lat2 = s.getDouble(6);
+
+                            if (s.getString(5).equals("null") || s.getString(6).equals("null")) continue;
+
+                            double lon2 = Double.parseDouble(s.getString(5));
+                            double lat2 = Double.parseDouble(s.getString(6));
 
                             double R = 6371.0;
                             double dLon = deg2rad(lon2 - finalLon);
@@ -216,14 +230,18 @@ public class WeatherActivity extends Activity {
                         txtNumPlanes.setText(String.valueOf(count));
 
                     } catch (JSONException e) {
-                        // there was an error parsing the json data
+                        Log.e("PLANE COUNT ===>", "JSON ERROR");
                         e.printStackTrace();
                     }
                 },
                 error -> {
-                    // there was an error requesting the states
+                    Log.e("PLANE COUNT ===>", "VOLLEY ERROR");
+                    error.printStackTrace();
                 }
         );
+
+        Log.e("PLANE COUNT ===>", "SENDING REQUEST");
+        rq.add(request);
     }
 
     private double deg2rad(double deg) {

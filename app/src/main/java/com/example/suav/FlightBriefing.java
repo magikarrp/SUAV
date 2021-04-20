@@ -26,9 +26,11 @@ import com.airmap.airmapsdk.models.rules.AirMapRuleset;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.services.AirMap;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,11 +59,13 @@ public class FlightBriefing extends Activity {
     private boolean viewingRulesets;
     private String flightPlanID;
 
+    private RequestQueue rq;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_briefing);
 
-        initMenu(); // setup menu
+        rq = Volley.newRequestQueue(FlightBriefing.this);
 
         txtNumPlanes = (TextView) findViewById(R.id.txtNumPlanes1);
         lstRules = (ListView) findViewById(R.id.lstRules);
@@ -69,6 +73,8 @@ public class FlightBriefing extends Activity {
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
         // Include a loading bar since the API calls may take some time
         pgrsAPILoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
+
+        initMenu(); // setup menu
 
         // Hide the back button to start out with as it is used to go from rules back to rulesets
         deactivateButtons();
@@ -79,6 +85,7 @@ public class FlightBriefing extends Activity {
         Bundle bundle = getIntent().getExtras();
 
         takeOffCoord = (Coordinate) bundle.get("Coordinate");
+        setPlaneCount();
 
         // We need to make sure the airmap object does not get destroyed and reinit it if it was
         if(!AirMap.hasBeenInitialized()) {
@@ -313,15 +320,16 @@ public class FlightBriefing extends Activity {
 
     private void setPlaneCount() {
 
+        Log.e("PLANE COUNT ===>", "STARTING...");
+
         double lon1 = -71.06617418626098;
         double lat1 = 42.35534150531174;
 
         // Get coordinate from previous activity
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null && bundle.getDouble("lon") != 0) {
+        if(takeOffCoord != null) {
             try {
-                lon1 = bundle.getDouble("lon");
-                lat1 = bundle.getDouble("lat");
+                lon1 = takeOffCoord.getLongitude();
+                lat1 = takeOffCoord.getLatitude();
             } catch (Exception e) {
                 // ...
             }
@@ -333,21 +341,28 @@ public class FlightBriefing extends Activity {
                 (Response.Listener<JSONObject>) response -> {
                     try {
 
+                        Log.e("PLANE COUNT ===>", "GOT RESPONSE");
+
                         int count = 0;
 
-                        // 3) the request was successful, lets try to parse the json data returned and get aircraft states
+                        // the request was successful, lets try to parse the json data returned and get aircraft states
                         JSONArray states = response.getJSONArray("states");
 
-                        // 4) create a list of aircraft states, each state is represented by a JSONArray
+                        // create a list of aircraft states, each state is represented by a JSONArray
                         ArrayList<JSONArray> stateList = new ArrayList<JSONArray>();
                         for (int i = 0; i < states.length(); i++) {
                             stateList.add((JSONArray) states.get(i));
                         }
 
+                        Log.e("PLANE COUNT ===>", "CHECKING DISTANCES");
+
                         // check distance of each state
                         for (JSONArray s : stateList) {
-                            double lon2 = s.getDouble(5);
-                            double lat2 = s.getDouble(6);
+
+                            if (s.getString(5).equals("null") || s.getString(6).equals("null")) continue;
+
+                            double lon2 = Double.parseDouble(s.getString(5));
+                            double lat2 = Double.parseDouble(s.getString(6));
 
                             double R = 6371.0;
                             double dLon = deg2rad(lon2 - finalLon);
@@ -366,14 +381,18 @@ public class FlightBriefing extends Activity {
                         txtNumPlanes.setText(String.valueOf(count));
 
                     } catch (JSONException e) {
-                        // there was an error parsing the json data
+                        Log.e("PLANE COUNT ===>", "JSON ERROR");
                         e.printStackTrace();
                     }
                 },
                 error -> {
-                    // there was an error requesting the states
+                    Log.e("PLANE COUNT ===>", "VOLLEY ERROR");
+                    error.printStackTrace();
                 }
         );
+
+        Log.e("PLANE COUNT ===>", "SENDING REQUEST");
+        rq.add(request);
     }
 
     private double deg2rad(double deg) {

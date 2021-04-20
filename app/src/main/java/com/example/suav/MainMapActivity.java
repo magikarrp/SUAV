@@ -85,40 +85,7 @@ public class MainMapActivity extends AppCompatActivity implements
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference().child("Pins").child("Pins");
 
-        // Read from the database
-        ValueEventListener eventListener = new ValueEventListener() {
-            @Override
-            // for loop to grab each parent node and the look at the child details
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990533, -30.583266)));
-                for (DataSnapshot ss : snapshot.getChildren()) {
-                    String name = ss.child("pinName").getValue(String.class);
-                    String pinRating = ss.child("pinRating").getValue(String.class);
-                    String pinComment = ss.child("pinComment").getValue(String.class);
-                    Log.d(name, "helloxx");
-                    double pinLat = ss.child("latitude").getValue(double.class);
-                    double pinLong = ss.child("longitude").getValue(double.class);
-                    symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
-                    symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990550, -30.583250)));
 
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        reference.addListenerForSingleValueEvent(eventListener);
-
-        Button btnDropMark = (Button) findViewById(R.id.btnDropMark);
-        btnDropMark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainMapActivity.this, PinPickerActivity.class);
-                startActivity(intent);
-            }
-        });
 
         Button btnEvents = (Button) findViewById(R.id.btnEvents);
         btnEvents.setOnClickListener(new View.OnClickListener() {
@@ -148,19 +115,13 @@ public class MainMapActivity extends AppCompatActivity implements
        // symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong,pinLat)));
 
 //          test cases
-//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-//                Point.fromLngLat(-57.225365, -33.213144)));
-//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-//                Point.fromLngLat(-54.14164, -33.981818)));
-//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-//                Point.fromLngLat(-56.990533, -30.583266)));
+        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+                Point.fromLngLat(-57.225365, -33.213144)));
+        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+                Point.fromLngLat(-54.14164, -33.981818)));
+        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+                Point.fromLngLat(-56.990533, -30.583266)));
 
-        //                pinName = dataSnapshot.getValue().toString();
-//                Log.d(pinName, "helloxx");
-//                Object pinLat = dataSnapshot.child("latitude").getValue(Object.class);
-//                Object pinLong = dataSnapshot.child("longitude").getValue(Object.class);
-//                Double finalLat = Double.parseDouble(pinLat.toString());
-//                Double finalLon = Double.parseDouble(pinLong.toString());
 
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
@@ -200,15 +161,29 @@ public class MainMapActivity extends AppCompatActivity implements
                             String name = reference.getKey();
                             pinRating = ss.child("pinRating").getValue(String.class);
                             pinComment = ss.child("pinComment").getValue(String.class);
-//                            pinLat = ss.child("latitude").getValue(double.class);
-//                            pinLong = ss.child("longitude").getValue(double.class);
+                            pinLat = ss.child("latitude").getValue(double.class);
+                            pinLong = ss.child("longitude").getValue(double.class);
                             String test = String.valueOf(pinLat);
                             String test1 = String.valueOf(pinLong);
-                            addPin(pinLong, pinLat);
-                            Log.d(name, "helloxx");
-                            Log.d(pinRating, "helloxx");
-                            Log.d(test, "helloxx");
-                            Log.d(test1, "helloxx");
+
+                            symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
+
+
+                            mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
+                                    .withImage(ICON_ID, BitmapFactory.decodeResource(
+                                            MainMapActivity.this.getResources(), R.drawable.mapbox_marker_icon_default))
+                                    .withSource(new GeoJsonSource(SOURCE_ID,
+                                            FeatureCollection.fromFeatures(symbolLayerIconFeatureList)))
+                                    .withLayer(new SymbolLayer(LAYER_ID, SOURCE_ID)
+                                            .withProperties(
+                                                    iconImage(ICON_ID),
+                                                    iconAllowOverlap(true),
+                                                    iconIgnorePlacement(true)
+                                            )
+                                    ), new Style.OnStyleLoaded() {
+                                @Override
+                                public void onStyleLoaded(@NonNull Style style) {    ///reload map
+                                }});
                         }
 
                     }
@@ -230,11 +205,6 @@ public class MainMapActivity extends AppCompatActivity implements
         });
     }
 
-    public void addPin(double pLon,double pLat) {
-        Log.d("it works", "helloxx");
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-122.08294276583858,37.42083003104637)));
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(this.pinLong, 37.42083003104637)));
-    }
 
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {

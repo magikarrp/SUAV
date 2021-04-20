@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mapbox:layout_constraintTop_toTopOf="parent"
+        mapbox:mapbox_cameraZoom="15" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/ppa_toolbar"
         android:layout_width="match_parent"
@@ -16,38 +23,29 @@
         mapbox:layout_constraintStart_toStartOf="parent"
         mapbox:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="680dp"
-        mapbox:layout_constraintTop_toBottomOf="@+id/ppa_toolbar">
+    <Button
+        android:id="@+id/btnDropMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="8dp"
+        android:background="@color/mapbox_blue"
+        android:text="Drop Pin"
+        android:textColor="@android:color/white"
+        mapbox:layout_constraintBottom_toBottomOf="@+id/mapView"
+        mapbox:layout_constraintEnd_toEndOf="@+id/mapView" />
 
-        <com.mapbox.mapboxsdk.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            mapbox:mapbox_cameraZoom="15" />
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="8dp"
+        android:background="@color/mapbox_blue"
+        android:text="Add Info"
+        android:textColor="@android:color/white"
+        mapbox:layout_constraintBottom_toBottomOf="@+id/mapView"
+        mapbox:layout_constraintStart_toStartOf="@+id/mapView" />
 
-        <Button
-            android:id="@+id/btnDropMark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|left"
-            android:layout_margin="8dp"
-            android:background="@color/mapbox_blue"
-            android:text="Drop Pin"
-            android:textColor="@android:color/white" />
-
-        <Button
-            android:id="@+id/btnConfirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="8dp"
-            android:background="@color/mapbox_blue"
-            android:text="Add Info"
-            android:textColor="@android:color/white" />
-
-
-    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

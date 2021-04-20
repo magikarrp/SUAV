@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
@@ -102,6 +103,8 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
 
         // This contains the MapView in XML and needs to be called after the access token is configured.
         setContentView(R.layout.flight_path_picker);
+
+        initMenu();
 
         // Initialize the mapboxMap view
         mapView = findViewById(R.id.mapView);
@@ -500,6 +503,12 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
         }
+    }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.fpp_toolbar);
+        t.setTitle(getString(R.string.fp_menu_title));
+        t.inflateMenu(R.menu.default_menu);
     }
 }
 

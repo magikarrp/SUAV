@@ -219,23 +219,6 @@ public class FlightPlanning extends AppCompatActivity {
     private void initMenu() {
         Toolbar t = (Toolbar) findViewById(R.id.profile_toolbar);
         t.setTitle(getString(R.string.fp_menu_title));
-        t.inflateMenu(R.menu.flight_planning_menu);
-        t.setOnMenuItemClickListener(item -> {
-            switch(item.getItemId()) {
-                case R.id.fp_menu_weather:
-                    // GO TO WEATHER
-                    Intent toWeather = new Intent(FlightPlanning.this, WeatherActivity.class);
-                    startActivity(toWeather);
-                    return true;
-                case R.id.fp_menu_profile:
-                    // GO TO PROFILE
-                    Intent toProfile = new Intent(FlightPlanning.this, ProfileActivity.class);
-                    startActivity(toProfile);
-                    return true;
-                default:
-                    // Should not happen
-                    return true;
-            }
-        });
+        t.inflateMenu(R.menu.default_menu);
     }
 }

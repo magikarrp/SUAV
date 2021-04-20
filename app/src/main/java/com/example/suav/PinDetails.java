@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,7 +33,7 @@ public class PinDetails extends AppCompatActivity {
         TextView txtAdd = (TextView) findViewById(R.id.txtAdd);
         CheckBox checkPublic = (CheckBox) findViewById(R.id.checkPublic);
 
-
+        initMenu();
 
         txtAdd.setText(getIntent().getExtras().getString("address"));
 
@@ -71,5 +72,11 @@ public class PinDetails extends AppCompatActivity {
 
     public void setLon(double lon) {
         this.lon = lon;
+    }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.pd_toolbar);
+        t.setTitle(getString(R.string.pd_menu_title));
+        t.inflateMenu(R.menu.default_menu);
     }
 }

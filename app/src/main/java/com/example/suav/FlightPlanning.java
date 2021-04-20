@@ -200,6 +200,8 @@ public class FlightPlanning extends AppCompatActivity {
 
                                 // call write helper class and set a new child as flightid with other details as children
                                 writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDateString, endDateString, takeOffCoordinateString, edtAltitude.getText().toString());
+                                writeHelper.setDate(dateString);
+                                writeHelper.setFlightID(flightID);
                                 reference.child(flightID).setValue(writeHelper);
                                 startActivity(intent);
                             }

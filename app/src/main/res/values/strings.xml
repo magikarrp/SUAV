@@ -181,6 +181,8 @@
     <string name="location_picker_select_location_button_select">Select Location</string>
     <string name="location_picker_dropped_marker_snippet_no_results">No results</string>
     <string name="location_picker_place_name_result">Place name: %1$s</string>
+    <string name="location_picker_create_pin_button">Create Pin</string>
+    <string name="location_picker_weather_button">Check The Skies</string>
 
     <!--PulsingLayerOpacityColorActivity activity-->
     <string name="fab_title_hotels">Hotels</string>

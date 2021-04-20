@@ -41,6 +41,7 @@
     <!-- Planning Activity -->
     <string name="planning_title">Flight Planning</string>
     <string name="planning_submit">Create Plan</string>
+    <string name="planning_new_event">Create Event</string>
     <string name="planning_altitude">Max. Altitude</string>
     <string name="planning_units">(meters)</string>
     <string name="planning_date">Date</string>
@@ -586,4 +587,9 @@
 
     <!-- Extrusion color expression highlight -->
     <string name="tap_on_building_to_highlight">Tap on a building to highlight it</string>
+
+    <!-- Event Details Activity -->
+    <string name="event_title">Event Details</string>
+    <string name="event_name">Name:</string>
+    <string name="event_description">Description:</string>
 </resources>

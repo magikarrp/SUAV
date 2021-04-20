@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.airmap.airmapsdk.networking.services.AirMap;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -20,23 +21,24 @@ public class EventDetails extends AppCompatActivity {
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
     private double lon, lat;
+    private String flightID;
+
+    private Button btnCreatePlan;
+    private EditText edtEventName, edtEventDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pin_details);
 
-        Button btnSubEvent = (Button) findViewById(R.id.btnSubEvent);
-        EditText edtEventName = (EditText) findViewById(R.id.edtEventName);             //not null
-        EditText edtDescription = (EditText) findViewById(R.id.edtDescription);             //not null
-        TextView txtAdd = (TextView) findViewById(R.id.txtAdd);
+        edtEventName = (EditText) findViewById(R.id.edtEventDetailsName);
+        edtEventDescription = (EditText) findViewById(R.id.edtEventDescription);
 
         initMenu();
 
-        txtAdd.setText(getIntent().getExtras().getString("address"));
+        flightID = getIntent().getExtras().getString("PlanID");
 
-
-        btnSubEvent.setOnClickListener (new View.OnClickListener() {
+        btnCreatePlan.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -46,14 +48,14 @@ public class EventDetails extends AppCompatActivity {
 
                 //Convert data to string for easier database storage
                 String pinName = edtEventName.getText().toString();
-                String pinComment = "Description: " + edtDescription.getText().toString();
+                String pinComment = "Description: " + edtEventDescription.getText().toString();
 
 
                // writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinComment, lat, lon);
                // reference.child(pinName).setValue(writeHelper);
 
                 Intent intent = new Intent(EventDetails.this, FlightBriefing.class);
-
+                intent.putExtra("PlanID", flightID);
                 startActivity(intent);
             }
         });

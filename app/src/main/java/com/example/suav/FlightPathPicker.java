@@ -213,6 +213,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                         OUTER_POINTS.add(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
                         path.add(mapTargetLatLng);
 
+
                         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
                                 .withImage(ICON_ID, BitmapFactory.decodeResource(
                                         FlightPathPicker.this.getResources(), R.drawable.mapbox_marker_icon_default))

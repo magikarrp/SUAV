@@ -50,7 +50,7 @@ public class EventDetails extends AppCompatActivity {
                 DatabaseReference reference = rootNode.getReference("Pins").child("Personal");
 
                 //Convert data to string for easier database storage
-                String pinName = edtEventName.getText().toString();
+                //String pinName = edtEventName.getText().toString();
                 String pinComment = "Description: " + edtDescription.getText().toString();
                 startDateString = dataGrab.getStartDate();
                 endDateString = dataGrab.getEndDate();
@@ -62,8 +62,8 @@ public class EventDetails extends AppCompatActivity {
                // writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinComment, lat, lon);
                // reference.child(pinName).setValue(writeHelper);'
                 //Write to database.
-                writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDateString, endDateString, takeOffCoordinate, maxAltitude, pinName, pinComment);
-                reference.child(flightID).setValue(writeHelper);
+                //writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDateString, endDateString, takeOffCoordinate, maxAltitude, pinName, pinComment);
+                //reference.child(flightID).setValue(writeHelper);
 
                 Intent intent = new Intent(EventDetails.this, FlightBriefing.class);
                 intent.putExtra("PlanID", getIntent().getExtras().getString("PlanID"));

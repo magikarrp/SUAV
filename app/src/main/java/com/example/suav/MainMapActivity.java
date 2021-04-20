@@ -121,12 +121,12 @@ public class MainMapActivity extends AppCompatActivity implements
        // symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong,pinLat)));
 
 //          test cases
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-57.225365, -33.213144)));
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-54.14164, -33.981818)));
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-56.990533, -30.583266)));
+//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                Point.fromLngLat(-57.225365, -33.213144)));
+//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                Point.fromLngLat(-54.14164, -33.981818)));
+//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
+//                Point.fromLngLat(-56.990533, -30.583266)));
 
 
 
@@ -168,8 +168,14 @@ public class MainMapActivity extends AppCompatActivity implements
                             String name = reference.getKey();
                             pinRating = ss.child("pinRating").getValue(String.class);
                             pinComment = ss.child("pinComment").getValue(String.class);
-                            pinLat = ss.child("latitude").getValue(double.class);
-                            pinLong = ss.child("longitude").getValue(double.class);
+
+                            try {
+                                pinLat = ss.child("latitude").getValue(double.class);
+                                pinLong = ss.child("longitude").getValue(double.class);
+                            }
+                            catch(Exception e) {
+                                Toast.makeText(MainMapActivity.this, "Cannot target pin", Toast.LENGTH_LONG).show();
+                            }
 
 
                             symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));

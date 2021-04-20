@@ -71,7 +71,7 @@ public class EventDetails extends AppCompatActivity {
 
                 startActivity(intent);
             }
-        })};
+        });}
 
     public void setLat(double lat) {
         this.lat = lat;

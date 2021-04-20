@@ -10,7 +10,7 @@ public class writeDatabaseHelper {
 
     private Double longitude;
     private Double latitude;
-    private String pinComment, pinRating, message, message1, startDate, endDate, date, takeOffCoordinate, maxAltitude;
+    private String pinComment, pinRating, message, message1, startDate, endDate, date, takeOffCoordinate, maxAltitude, flightID;
 
     public writeDatabaseHelper(String startDateString, String endDateString, String takeOffCoordinate, String maxAltitude, String message, String message1) {
         this.startDate = startDateString;
@@ -29,7 +29,6 @@ public class writeDatabaseHelper {
         this.flightID = flightID;
     }
 
-    String flightID;
 
     public String getDate() {
         return date;

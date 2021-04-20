@@ -73,11 +73,10 @@ public class readDatabaseUsers extends AppCompatActivity {
             // for loop to grab each parent node and the look at the child details
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot personal : snapshot.getChildren()) {
-                    String maxAltitude = personal.child("maxAltitude").getValue(String.class);
-                    String startDate = personal.child("startDate").getValue(String.class);
-                    String endDate = personal.child("endDate").getValue(String.class);
                     String takeOffCoordinate = personal.child("takeOffCoordinate").getValue(String.class);
-                    flightDetails = "Latitude, Longitude: \n" + takeOffCoordinate + " \n Max Altitude: " + maxAltitude + " \n Date: " + startDate + " | " + endDate;
+                    String message = personal.child("message").getValue(String.class);
+                    String message1 = personal.child("message1").getValue(String.class);
+                    flightDetails = "Personal Event: " + message + ", " + message1 + ", " + takeOffCoordinate;
                     myArrayList.add(flightDetails);
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(readDatabaseUsers.this, android.R.layout.simple_list_item_1, myArrayList);
                     myListView.setAdapter(arrayAdapter);

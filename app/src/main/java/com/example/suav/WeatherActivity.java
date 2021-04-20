@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -210,6 +211,8 @@ public class WeatherActivity extends Activity {
 
                             if (s.getString(5).equals("null") || s.getString(6).equals("null")) continue;
 
+                            Log.e("PLANE COUNT ===>", "...");
+
                             double lon2 = Double.parseDouble(s.getString(5));
                             double lat2 = Double.parseDouble(s.getString(6));
 
@@ -221,12 +224,12 @@ public class WeatherActivity extends Activity {
                             double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
                             double d = R * c;
 
-                            if (d < 10) {
+                            if (d < 50) {
                                 count++;
                             }
                         }
 
-                        findViewById(R.id.icPlane).setVisibility(View.VISIBLE);
+                        ((ImageView) findViewById(R.id.icPlane)).setVisibility(View.VISIBLE);
                         txtNumPlanes.setText(String.valueOf(count));
 
                     } catch (JSONException e) {

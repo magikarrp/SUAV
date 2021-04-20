@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class EventDetails extends AppCompatActivity {
-    private writeDatabaseHelper dataGrab;
+    private writeDatabaseHelper dataGrab = new writeDatabaseHelper();
     private String dateString, startDateString, endDateString, takeOffCoordinate, flightID, maxAltitude;
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;

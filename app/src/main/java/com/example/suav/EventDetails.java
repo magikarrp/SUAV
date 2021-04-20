@@ -1,52 +1,58 @@
 package com.example.suav;
-
 import android.os.Bundle;
 import android.widget.EditText;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
+
 import androidx.appcompat.widget.Toolbar;
 
-import com.airmap.airmapsdk.networking.services.AirMap;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class EventDetails extends AppCompatActivity {
-
+    private EditText message;
+    private EditText message1;
     private writeDatabaseHelper dataGrab;
     private String dateString, startDateString, endDateString, takeOffCoordinate, flightID, maxAltitude;
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
     private double lon, lat;
 
-    private Button btnCreatePlan;
-    private EditText edtEventName, edtEventDescription;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_details);
+        setContentView(R.layout.pin_details);
 
-        edtEventName = (EditText) findViewById(R.id.edtEventDetailsName);
-        edtEventDescription = (EditText) findViewById(R.id.edtEventDescription);
-        btnCreatePlan = (Button) findViewById(R.id.btnCreatePlan);
+        Button btnSubEvent = (Button) findViewById(R.id.btnSubEvent);
+        EditText edtEventName = (EditText) findViewById(R.id.edtEventName);             //not null
+        EditText edtDescription = (EditText) findViewById(R.id.edtDescription);             //not null
+        TextView txtAdd = (TextView) findViewById(R.id.txtAdd);
 
-        flightID = getIntent().getExtras().getString("PlanID");
+        initMenu();
 
-        btnCreatePlan.setOnClickListener (new View.OnClickListener() {
+        txtAdd.setText(getIntent().getExtras().getString("address"));
+
+
+        btnSubEvent.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 //Write to database
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("Pins").child("Pins");
+                FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+                DatabaseReference reference = rootNode.getReference("Pins").child("Personal");
 
                 //Convert data to string for easier database storage
                 String pinName = edtEventName.getText().toString();
-                String pinDescription = "Description: " + edtEventDescription.getText().toString();
-
+                String pinComment = "Description: " + edtDescription.getText().toString();
+                message = (EditText) findViewById(R.id.eventMessage);
+                message1 = (EditText) findViewById(R.id.eventMessage1);
                 dateString = dataGrab.getDate();
                 startDateString = dataGrab.getStartDate();
                 endDateString = dataGrab.getEndDate();
@@ -54,19 +60,18 @@ public class EventDetails extends AppCompatActivity {
                 flightID = dataGrab.getFlightID();
                 maxAltitude = dataGrab.getMaxAltitude();
 
-                // writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinComment, lat, lon);
-                // reference.child(pinName).setValue(writeHelper);'
+
+               // writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinComment, lat, lon);
+               // reference.child(pinName).setValue(writeHelper);'
                 //Write to database.
-                writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDateString, endDateString, takeOffCoordinate, maxAltitude, pinName, pinDescription.toString());
+                writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDateString, endDateString, takeOffCoordinate, maxAltitude, message.getText().toString(), message1.getText().toString());
                 reference.child(flightID).setValue(writeHelper);
 
                 Intent intent = new Intent(EventDetails.this, FlightBriefing.class);
-                intent.putExtra("PlanID", flightID);
+
                 startActivity(intent);
             }
-        });
-
-    }
+        });}
 
     public void setLat(double lat) {
         this.lat = lat;

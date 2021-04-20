@@ -50,8 +50,8 @@ public class PinDetails extends AppCompatActivity {
 
                 //Convert data to string for easier database storage
                 String pinName = edtPinName.getText().toString();
-                String pinRating = "Rating: " + edtPinRating.getText().toString();
-                String pinComment = "Comments: " + edtComment.getText().toString();
+                String pinRating = edtPinRating.getText().toString();
+                String pinComment = edtComment.getText().toString();
 
 
                 writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinRating, pinComment, lat, lon);

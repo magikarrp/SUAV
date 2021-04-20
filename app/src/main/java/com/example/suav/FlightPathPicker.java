@@ -509,6 +509,18 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
         Toolbar t = (Toolbar) findViewById(R.id.fpp_toolbar);
         t.setTitle(getString(R.string.fp_menu_title));
         t.inflateMenu(R.menu.default_menu);
+        t.setOnMenuItemClickListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.menu_profile:
+                    // GO TO PROFILE
+                    Intent toProfile = new Intent(FlightPathPicker.this, ProfileActivity.class);
+                    startActivity(toProfile);
+                    return true;
+                default:
+                    // Should not happen
+                    return true;
+            }
+        });
     }
 }
 

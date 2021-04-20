@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_profile"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_suav_user_white"
+        android:title="@string/menu_profile_txt"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
 
 </menu>

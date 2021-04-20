@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -22,8 +21,6 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -334,15 +331,16 @@ public class MainMapActivity extends AppCompatActivity implements
     private void initMenu() {
         Toolbar t = (Toolbar) findViewById(R.id.mm_toolbar);
         t.setTitle(getString(R.string.mm_menu_title));
-        t.inflateMenu(R.menu.flight_planning_menu);
+        t.inflateMenu(R.menu.weather_menu);
         t.setOnMenuItemClickListener(item -> {
             switch(item.getItemId()) {
-                case R.id.fp_menu_weather:
+                case R.id.w_menu_weather:
                     // GO TO WEATHER
-                    Intent toWeather = new Intent(MainMapActivity.this, WeatherActivity.class);
+                    Intent toWeather = new Intent(MainMapActivity.this, PinPickerActivity.class);
+                    toWeather.putExtra("weather_redirect", true);
                     startActivity(toWeather);
                     return true;
-                case R.id.fp_menu_profile:
+                case R.id.w_menu_profile:
                     // GO TO PROFILE
                     Intent toProfile = new Intent(MainMapActivity.this, ProfileActivity.class);
                     startActivity(toProfile);

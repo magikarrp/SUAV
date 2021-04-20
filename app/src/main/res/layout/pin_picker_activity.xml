@@ -30,7 +30,7 @@
         android:layout_gravity="bottom|left"
         android:layout_margin="8dp"
         android:background="@color/mapbox_blue"
-        android:text="Drop Pin"
+        android:text="@string/location_picker_select_location_button_select"
         android:textColor="@android:color/white"
         mapbox:layout_constraintBottom_toBottomOf="@+id/mapView"
         mapbox:layout_constraintEnd_toEndOf="@+id/mapView" />

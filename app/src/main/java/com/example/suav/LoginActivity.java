@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         refreshToken = "";
 
         // uncomment this line to run the app as if there was nothing in persistent storage (clears persistent storage during onCreate)
-        // saveData();
+        saveData();
 
         // set up volley request queue
         rq = Volley.newRequestQueue(this);
@@ -199,6 +199,12 @@ public class LoginActivity extends AppCompatActivity {
                 params.put("scope", "openid");
                 return params;
             }
+
+            // body content type
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded";
+            }
         };
 
         // add request to queue so volley will send it
@@ -278,6 +284,12 @@ public class LoginActivity extends AppCompatActivity {
                 params.put("client_id", getString(R.string.airmap_client_id));
                 params.put("refresh_token", refreshToken);
                 return params;
+            }
+
+            // body content type
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded";
             }
 
         };

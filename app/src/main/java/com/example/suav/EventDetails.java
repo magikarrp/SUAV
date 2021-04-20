@@ -47,7 +47,7 @@ public class EventDetails extends AppCompatActivity {
 
                 //Convert data to string for easier database storage
                 String pinName = edtEventName.getText().toString();
-                String pinComment = "Description: " + edtDescription.getText().toString();
+                String pinComment = edtDescription.getText().toString();
                 Bundle bundle = getIntent().getExtras();
                 flightID = bundle.getString("PlanID");
 

@@ -33,6 +33,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The Flight Planning activity prompts the user for information about the flight they would like to
+ * plan and eventually submit to AirMap.  Here the user inputs things like maximum altitude and time
+ * and date of the flight plan. We use this information to construct an AirMapFlightPlan as well as
+ * gather a list of the required regulations in the flight plan's area.
+ */
+
 public class FlightPlanning extends AppCompatActivity {
 
     private EditText edtAltitude;

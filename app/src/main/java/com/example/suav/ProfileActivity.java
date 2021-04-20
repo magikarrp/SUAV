@@ -20,6 +20,12 @@ import com.airmap.airmapsdk.models.pilot.AirMapPilot;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.services.AirMap;
 
+/**
+ * This preferences page allows the user to edit their AirMap profile. The form is automatically
+ * populated with the user's current information.  The user can edit these text boxes and click the
+ * save button in order to commit their new info to the AirMap API.
+ */
+
 public class ProfileActivity extends Activity {
 
     EditText edtFirstName, edtLastName, edtUserName, edtEmail;

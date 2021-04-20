@@ -91,10 +91,10 @@ public class MainMapActivity extends AppCompatActivity implements
                     String pinRating = ss.child("pinRating").getValue(String.class);
                     String pinComment = ss.child("pinComment").getValue(String.class);
                     Log.d(name, "helloxx");
-                    double pinLat = ss.child("latitude").getValue(double.class);
-                    double pinLong = ss.child("longitude").getValue(double.class);
-                    symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
-                    symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990550, -30.583250)));
+                    //double pinLat = ss.child("latitude").getValue(double.class);
+                    //double pinLong = ss.child("longitude").getValue(double.class);
+                    //symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
+                    //symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990550, -30.583250)));
 
                 }
             }

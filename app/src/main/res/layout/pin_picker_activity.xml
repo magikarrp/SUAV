@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mapbox:layout_constraintTop_toTopOf="parent"
+        mapbox:mapbox_cameraZoom="15" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/ppa_toolbar"
         android:layout_width="match_parent"
@@ -15,13 +22,6 @@
         mapbox:layout_constraintEnd_toEndOf="parent"
         mapbox:layout_constraintStart_toStartOf="parent"
         mapbox:layout_constraintTop_toTopOf="parent" />
-
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        mapbox:layout_constraintTop_toTopOf="parent"
-        mapbox:mapbox_cameraZoom="15" />
 
     <Button
         android:id="@+id/btnDropMark"

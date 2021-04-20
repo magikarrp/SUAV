@@ -5,6 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mapbox:layout_constraintTop_toTopOf="@+id/mm_toolbar"
+        mapbox:mapbox_cameraZoom="15">
+
+    </com.mapbox.mapboxsdk.maps.MapView>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mm_toolbar"
         android:layout_width="match_parent"
@@ -15,15 +24,6 @@
         mapbox:layout_constraintEnd_toEndOf="parent"
         mapbox:layout_constraintStart_toStartOf="parent"
         mapbox:layout_constraintTop_toTopOf="parent" />
-
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        mapbox:layout_constraintTop_toTopOf="@+id/mm_toolbar"
-        mapbox:mapbox_cameraZoom="15">
-
-    </com.mapbox.mapboxsdk.maps.MapView>
 
     <Button
         android:id="@+id/btnPlanFlight"

@@ -229,8 +229,8 @@ public class WeatherActivity extends Activity {
                             }
                         }
 
-                        ((ImageView) findViewById(R.id.icPlane)).setVisibility(View.VISIBLE);
-                        txtNumPlanes.setText(String.valueOf(count));
+                        //((ImageView) findViewById(R.id.icPlane)).setVisibility(View.VISIBLE);
+                        txtNumPlanes.setText("Nearby Aircraft: " + String.valueOf(count));
 
                     } catch (JSONException e) {
                         Log.e("PLANE COUNT ===>", "JSON ERROR");

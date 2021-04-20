@@ -76,7 +76,7 @@ public class readDatabaseUsers extends AppCompatActivity {
                     String takeOffCoordinate = personal.child("takeOffCoordinate").getValue(String.class);
                     String message = personal.child("message").getValue(String.class);
                     String message1 = personal.child("message1").getValue(String.class);
-                    flightDetails = "Personal Event: " + message + ", " + message1 + ", " + takeOffCoordinate;
+                    flightDetails = "Personal Event: \n" + message + ", " + message1 + ", \n" + takeOffCoordinate;
                     myArrayList.add(flightDetails);
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(readDatabaseUsers.this, android.R.layout.simple_list_item_1, myArrayList);
                     myListView.setAdapter(arrayAdapter);

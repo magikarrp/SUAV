@@ -23,22 +23,19 @@ public class EventDetails extends AppCompatActivity {
     private DatabaseReference reference;
     private double lon, lat;
 
+    private Button btnSubEvent;
+    private EditText edtEventName, edtDescription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_details);
 
         Button btnSubEvent = (Button) findViewById(R.id.btnSubEvent);
-        EditText edtEventName = (EditText) findViewById(R.id.edtEventName);             //not null
-        EditText edtDescription = (EditText) findViewById(R.id.edtDescription);             //not null
-        TextView txtAdd = (TextView) findViewById(R.id.txtAdd);
+        edtEventName = (EditText) findViewById(R.id.edtEventName);             //not null
+        edtDescription = (EditText) findViewById(R.id.edtDescription);
 
         initMenu();
-        edtEventName = (EditText) findViewById(R.id.edtEventDetailsName);
-        TextView txtDisc = (TextView) findViewById(R.id.txtDisc);
-
-
-        txtAdd.setText(getIntent().getExtras().getString("address"));
 
         btnSubEvent.setOnClickListener (new View.OnClickListener() {
             @Override

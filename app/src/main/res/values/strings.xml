@@ -13,6 +13,8 @@
 
     <!-- Menus -->
     <string name="fp_menu_title">Flight Planning</string>
+    <string name="mm_menu_title">SUAV</string>
+    <string name="pd_menu_title">Pin Details</string>
     <string name="profile_menu_title">Pilot Profile</string>
     <string name="weather_menu_title">Check The Skies</string>
     <string name="briefing_menu_title">Flight Briefing</string>

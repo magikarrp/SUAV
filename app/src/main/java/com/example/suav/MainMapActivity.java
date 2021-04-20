@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,13 +66,14 @@ public class MainMapActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-// Mapbox access token is configured here. This needs to be called either in your application
-// object or in the same activity which contains the mapview.
+        // Mapbox access token is configured here. This needs to be called either in your application
+        // object or in the same activity which contains the mapview.
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
 
-// This contains the MapView in XML and needs to be called after the access token is configured.
+        // This contains the MapView in XML and needs to be called after the access token is configured.
         setContentView(R.layout.main_map_activity);
+
+        initMenu();
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -289,5 +291,28 @@ public class MainMapActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
+    }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.mm_toolbar);
+        t.setTitle(getString(R.string.mm_menu_title));
+        t.inflateMenu(R.menu.flight_planning_menu);
+        t.setOnMenuItemClickListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.fp_menu_weather:
+                    // GO TO WEATHER
+                    Intent toWeather = new Intent(MainMapActivity.this, WeatherActivity.class);
+                    startActivity(toWeather);
+                    return true;
+                case R.id.fp_menu_profile:
+                    // GO TO PROFILE
+                    Intent toProfile = new Intent(MainMapActivity.this, ProfileActivity.class);
+                    startActivity(toProfile);
+                    return true;
+                default:
+                    // Should not happen
+                    return true;
+            }
+        });
     }
 }

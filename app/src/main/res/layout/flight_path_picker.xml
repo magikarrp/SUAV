@@ -1,77 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapView"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/fpp_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        mapbox:mapbox_cameraZoom="15">
-
-    </com.mapbox.mapboxsdk.maps.MapView>
-
-    <Button
-        android:id="@+id/btnRemoveMark"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="8dp"
-        android:background="@color/mapbox_blue"
-        android:text="Remove Mark"
-        android:textColor="@android:color/white" />
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        mapbox:layout_constraintEnd_toEndOf="parent"
+        mapbox:layout_constraintStart_toStartOf="parent"
+        mapbox:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnConfirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:layout_margin="8dp"
-        android:background="@color/mapbox_blue"
-        android:text="Confirm Boundaries"
-        android:textColor="@android:color/white" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="680dp"
+        mapbox:layout_constraintBottom_toBottomOf="parent"
+        mapbox:layout_constraintEnd_toEndOf="parent"
+        mapbox:layout_constraintStart_toStartOf="parent"
+        mapbox:layout_constraintTop_toBottomOf="@+id/mm_toolbar">
 
-    <Button
-        android:id="@+id/btnMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
-        android:layout_margin="8dp"
-        android:background="@color/mapbox_blue"
-        android:text="Menu"
-        android:textColor="@android:color/white" />
+        <com.mapbox.mapboxsdk.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            mapbox:mapbox_cameraZoom="15">
 
-    <Button
-        android:id="@+id/btnDropMark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:layout_margin="8dp"
-        android:background="@color/mapbox_blue"
-        android:text="Drop Marker"
-        android:textColor="@android:color/white" />
+        </com.mapbox.mapboxsdk.maps.MapView>
 
-    <Button
-        android:id="@+id/btnEditPath"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:layout_margin="8dp"
-        android:background="@color/mapbox_blue"
-        android:text="Edit Path"
-        android:textColor="@android:color/white" />
+        <Button
+            android:id="@+id/btnRemoveMark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="8dp"
+            android:background="@color/mapbox_blue"
+            android:text="Remove Mark"
+            android:textColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/btnFlightPlan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="8dp"
-        android:background="@color/mapbox_blue"
-        android:text="Flight Details"
-        android:textColor="@android:color/white" />
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:layout_margin="8dp"
+            android:background="@color/mapbox_blue"
+            android:text="Confirm Boundaries"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnDropMark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_margin="8dp"
+            android:background="@color/mapbox_blue"
+            android:text="Drop Marker"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnEditPath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_margin="8dp"
+            android:background="@color/mapbox_blue"
+            android:text="Edit Path"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnFlightPlan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="8dp"
+            android:background="@color/mapbox_blue"
+            android:text="Flight Details"
+            android:textColor="@android:color/white" />
 
 
-</FrameLayout>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

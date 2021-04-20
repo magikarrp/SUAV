@@ -377,7 +377,7 @@ public class FlightBriefing extends Activity {
                             }
                         }
 
-                        findViewById(R.id.icPlane).setVisibility(View.VISIBLE);
+                        findViewById(R.id.icPlane1).setVisibility(View.VISIBLE);
                         txtNumPlanes.setText(String.valueOf(count));
 
                     } catch (JSONException e) {

@@ -62,7 +62,6 @@ public class MainMapActivity extends AppCompatActivity implements
     private DatabaseReference reference;
     private String pinName, pinRating, pinComment;
     private double pinLong, pinLat;
-    private int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,32 +116,7 @@ public class MainMapActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         MainMapActivity.this.mapboxMap = mapboxMap;
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ss : dataSnapshot.getChildren()) {
-                    String name = reference.getKey();
-                    pinRating = ss.child("pinRating").getValue(String.class);
-                    pinComment = ss.child("pinComment").getValue(String.class);
-                    pinLat = ss.child("latitude").getValue(double.class);
-                    pinLong = ss.child("longitude").getValue(double.class);
-                    String test = String.valueOf(pinLat);
-                    String test1 = String.valueOf(pinLong);
-                    addPin(pinLong, pinLat);
-                    Log.d(name, "helloxx");
-                    Log.d(pinRating, "helloxx");
-                    Log.d(test, "helloxx");
-                    Log.d(test1, "helloxx");
-                }
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("FAILED", "Failed to read value.", error.toException());
-            }
-        });
 
 
 
@@ -184,6 +158,33 @@ public class MainMapActivity extends AppCompatActivity implements
 //////////////////////////////////////////////display user location on map load/////////////////////////////////////////////
                 // create symbol manager object
                 SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
+
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ss : dataSnapshot.getChildren()) {
+                            String name = reference.getKey();
+                            pinRating = ss.child("pinRating").getValue(String.class);
+                            pinComment = ss.child("pinComment").getValue(String.class);
+                            pinLat = ss.child("latitude").getValue(double.class);
+                            pinLong = ss.child("longitude").getValue(double.class);
+                            String test = String.valueOf(pinLat);
+                            String test1 = String.valueOf(pinLong);
+                            addPin(pinLong, pinLat);
+                            Log.d(name, "helloxx");
+                            Log.d(pinRating, "helloxx");
+                            Log.d(test, "helloxx");
+                            Log.d(test1, "helloxx");
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w("FAILED", "Failed to read value.", error.toException());
+                    }
+                });
 
 
 // set non-data-driven properties, such as:

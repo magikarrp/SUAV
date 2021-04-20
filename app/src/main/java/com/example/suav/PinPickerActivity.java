@@ -61,7 +61,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
     private static final String DROPPED_MARKER_LAYER_ID = "DROPPED_MARKER_LAYER_ID";
     private MapView mapView;
     private MapboxMap mapboxMap;
-    private Button selectLocationButton, confirm_location;
+    private Button btnSelect, btnConfirm, btnWeather;
 
     private PermissionsManager permissionsManager;
     private ImageView hoveringMarker;
@@ -86,13 +86,9 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-        confirm_location = (Button) findViewById(R.id.btnConfirm);
-        selectLocationButton = (Button) findViewById(R.id.btnDropMark);
-
-        // check if user is trying to view weather
-        if (getIntent().getBooleanExtra("weather_redirect", false)) {
-            confirm_location.setText(getString(R.string.weather_menu_title));
-        }
+        btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        btnSelect = (Button) findViewById(R.id.btnDropMark);
+        btnWeather = (Button) findViewById(R.id.btnWeather);
     }
 
     @Override
@@ -121,9 +117,10 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                 // Initialize, but don't show, a SymbolLayer for the marker icon which will represent a selected location.
                 initDroppedMarker(style);
 
-                confirm_location.setVisibility(View.GONE);
+                btnConfirm.setVisibility(View.GONE);
+                btnWeather.setVisibility(View.GONE);
 
-                selectLocationButton.setOnClickListener(new View.OnClickListener() {
+                btnSelect.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (hoveringMarker.getVisibility() == View.VISIBLE) {
@@ -135,8 +132,8 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                             hoveringMarker.setVisibility(View.INVISIBLE);
 
                             // Transform the appearance of the button to become the cancel button
-                            selectLocationButton.setBackgroundColor(ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
-                            selectLocationButton.setText(getString(R.string.location_picker_select_location_button_cancel));
+                            btnSelect.setBackgroundColor(ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
+                            btnSelect.setText(getString(R.string.location_picker_select_location_button_cancel));
 
                             // Show the SymbolLayer icon to represent the selected map location
                             if (style.getLayer(DROPPED_MARKER_LAYER_ID) != null) {
@@ -150,41 +147,44 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                                 }
                             }
 
-
                             // Use the map camera target's coordinates to make a reverse geocoding search
                             reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
 
-                            confirm_location.setVisibility(View.VISIBLE);
-                            confirm_location.setOnClickListener (new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                            btnConfirm.setVisibility(View.VISIBLE);
+                            btnConfirm.setOnClickListener (view1 -> {
 
-                                    Intent intent;
+                                Intent intent = new Intent(PinPickerActivity.this, PinDetails.class);
 
-                                    // check if user is trying to view weather
-                                    if (getIntent().getBooleanExtra("weather_redirect", false)) {
-                                        intent = new Intent(PinPickerActivity.this, WeatherActivity.class);
-                                    } else {
-                                        intent = new Intent(PinPickerActivity.this, PinDetails.class);
-                                    }
+                                double lat = mapTargetLatLng.getLatitude();
+                                double lon = mapTargetLatLng.getLongitude();
 
+                                intent.putExtra("lat", lat);
+                                intent.putExtra("lon", lon);
+                                intent.putExtra("address", address);
+                                startActivity(intent);
+                            });
 
-                                    double lat = mapTargetLatLng.getLatitude();
-                                    double lon = mapTargetLatLng.getLongitude();
+                            btnWeather.setVisibility(View.VISIBLE);
+                            btnWeather.setOnClickListener (v -> {
 
-                                    intent.putExtra("lat", lat);
-                                    intent.putExtra("lon", lon);
-                                    intent.putExtra("address", address);
-                                    startActivity(intent);
-                                }
+                                Intent intent = new Intent(PinPickerActivity.this, WeatherActivity.class);
+
+                                double lat = mapTargetLatLng.getLatitude();
+                                double lon = mapTargetLatLng.getLongitude();
+
+                                intent.putExtra("lat", lat);
+                                intent.putExtra("lon", lon);
+                                intent.putExtra("address", address);
+                                startActivity(intent);
                             });
 
                         } else {
 
                             // Switch the button appearance back to select a location.
-                            selectLocationButton.setBackgroundColor(ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
-                            selectLocationButton.setText(getString(R.string.location_picker_select_location_button_select));
-                            confirm_location.setVisibility(View.GONE);
+                            btnSelect.setBackgroundColor(ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
+                            btnSelect.setText(getString(R.string.location_picker_select_location_button_select));
+                            btnConfirm.setVisibility(View.GONE);
+                            btnWeather.setVisibility(View.GONE);
 
                             // Show the red hovering ImageView marker
                             hoveringMarker.setVisibility(View.VISIBLE);

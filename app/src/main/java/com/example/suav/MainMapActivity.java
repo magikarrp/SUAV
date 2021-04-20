@@ -301,16 +301,10 @@ public class MainMapActivity extends AppCompatActivity implements
     private void initMenu() {
         Toolbar t = (Toolbar) findViewById(R.id.mm_toolbar);
         t.setTitle(getString(R.string.mm_menu_title));
-        t.inflateMenu(R.menu.weather_menu);
+        t.inflateMenu(R.menu.default_menu);
         t.setOnMenuItemClickListener(item -> {
             switch(item.getItemId()) {
-                case R.id.w_menu_weather:
-                    // GO TO WEATHER
-                    Intent toWeather = new Intent(MainMapActivity.this, PinPickerActivity.class);
-                    toWeather.putExtra("weather_redirect", true);
-                    startActivity(toWeather);
-                    return true;
-                case R.id.w_menu_profile:
+                case R.id.menu_profile:
                     // GO TO PROFILE
                     Intent toProfile = new Intent(MainMapActivity.this, ProfileActivity.class);
                     startActivity(toProfile);

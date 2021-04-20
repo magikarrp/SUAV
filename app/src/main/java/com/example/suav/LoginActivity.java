@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         refreshToken = "";
 
         // uncomment this line to run the app as if there was nothing in persistent storage (clears persistent storage during onCreate)
-        // saveData();
+//        saveData();
 
         // set up volley request queue
         rq = Volley.newRequestQueue(this);

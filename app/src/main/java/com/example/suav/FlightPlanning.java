@@ -28,6 +28,7 @@ import static com.airmap.airmapsdk.models.shapes.AirMapGeometry.getGeoJSONFromGe
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,8 +74,12 @@ public class FlightPlanning extends AppCompatActivity {
             AirMap.setAuthToken(getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.auth_preference_file_key), Context.MODE_PRIVATE).getString("auth_token", ""));
         }
 
-        // If we don't get any information from the previous activity, set default values
-        if(bundle.getString("polygon") == null) {
+        Log.i("From Last Intent", bundle.get("path").toString());
+
+        Log.i("Here is my test", "test");
+
+        // If we don't get any information from the previous activity, set default values (should not happen)
+        if(bundle.get("path") == null) {
             ArrayList<Coordinate> coordinates = new ArrayList<>();
             coordinates.add(new Coordinate(42.355802283858,-71.0643620966118));
             coordinates.add(new Coordinate(42.354402695082804,-71.06639529452146));
@@ -83,8 +88,25 @@ public class FlightPlanning extends AppCompatActivity {
             polygon = new AirMapPolygon(coordinates);
 
             takeoffCoordinate = new Coordinate(42.355402695082804,-71.06539529452146);
+            Log.e("DEFAULT", "Setting Default Values!");
         } else {
-            // Import values from bundle/saved instance state
+            // We receive a list of Lat Lon coordinates from the flight path picker activity
+            ArrayList<LatLng> path = (ArrayList<LatLng>) bundle.get("path");
+
+            ArrayList<Coordinate> coordinates = new ArrayList<>();
+
+            for(LatLng latlng : path) {
+                coordinates.add(new Coordinate(latlng));
+            }
+
+            // We need to readd the first pin at the end to close the polygon
+            Coordinate startCoord = new Coordinate(path.get(0));
+
+            coordinates.add(startCoord);
+
+            polygon = new AirMapPolygon(coordinates);
+
+            takeoffCoordinate = startCoord;
         }
     }
 
@@ -139,6 +161,7 @@ public class FlightPlanning extends AppCompatActivity {
                                 // Now that our flight plan has been registered with AirMap, we want to get a briefing to see if we are in compliance with the regulations of the area
                                 Intent goToBriefing = new Intent(getApplicationContext(), FlightBriefing.class);
                                 goToBriefing.putExtra("PlanID", response.getPlanId());
+                                goToBriefing.putExtra("Coordinate", takeoffCoordinate);
                                 goToBriefing.putExtra("AuthToken", AirMap.getAuthToken());
 
                                 pgrsPlanLoad.setVisibility(View.GONE);

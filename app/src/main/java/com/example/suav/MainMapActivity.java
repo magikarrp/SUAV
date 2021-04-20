@@ -84,8 +84,7 @@ public class MainMapActivity extends AppCompatActivity implements
         //Read from database
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference().child("Pins").child("Pins");
-<<<<<<< HEAD
-=======
+
         // Read from the database
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
@@ -146,16 +145,9 @@ public class MainMapActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         MainMapActivity.this.mapboxMap = mapboxMap;
-
-
-<<<<<<< HEAD
-
-
-        pinLat = 37.42083003104637;
-        pinLong = -122.08400000000002;
+        
        // symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong,pinLat)));
-//        symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-122.08400000000002,37.42083003104637)));
-=======
+
 //          test cases
 //        symbolLayerIconFeatureList.add(Feature.fromGeometry(
 //                Point.fromLngLat(-57.225365, -33.213144)));
@@ -170,7 +162,7 @@ public class MainMapActivity extends AppCompatActivity implements
 //                Object pinLong = dataSnapshot.child("longitude").getValue(Object.class);
 //                Double finalLat = Double.parseDouble(pinLat.toString());
 //                Double finalLon = Double.parseDouble(pinLong.toString());
->>>>>>> 34f689dc2bc1b5aa800e011db634a54889db7d1c
+
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 

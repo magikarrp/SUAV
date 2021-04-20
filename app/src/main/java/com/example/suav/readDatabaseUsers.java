@@ -37,16 +37,18 @@ public class readDatabaseUsers extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference().child("Pins").child("Events");
+
 
         // create listView and array adapter for display
         ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<>(readDatabaseUsers.this, android.R.layout.simple_expandable_list_item_1, myArrayList);
         myListView = (ListView) findViewById(R.id.listview1);
         myListView.setAdapter(myArrayAdapter);
 
+        //Read data from EVENTS branch
+        reference = rootNode.getReference().child("Pins").child("Events");
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
-            // for loop to grab each parent node and the look at the child details
+            // for loop to grab each child node
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 reference = rootNode.getReference().child("Pins").child("Events");
                 for(DataSnapshot ss : snapshot.getChildren()) {
@@ -67,17 +69,17 @@ public class readDatabaseUsers extends AppCompatActivity {
             }
         };reference.addListenerForSingleValueEvent(eventListener);
 
+        //Read data from Personal Branch
         reference = rootNode.getReference().child("Pins").child("Personal");
         ValueEventListener personalListener = new ValueEventListener() {
             @Override
-            // for loop to grab each parent node and the look at the child details
+            // for loop to grab each child node
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot personal : snapshot.getChildren()) {
-                    String maxAltitude = personal.child("maxAltitude").getValue(String.class);
-                    String startDate = personal.child("startDate").getValue(String.class);
-                    String endDate = personal.child("endDate").getValue(String.class);
                     String takeOffCoordinate = personal.child("takeOffCoordinate").getValue(String.class);
-                    flightDetails = "Latitude, Longitude: \n" + takeOffCoordinate + " \n Max Altitude: " + maxAltitude + " \n Date: " + startDate + " | " + endDate;
+                    String message = personal.child("message").getValue(String.class);
+                    String message1 = personal.child("message1").getValue(String.class);
+                    flightDetails = "Personal Event: " + message + "\nMessage: " + message1 + ", \n" + "Latitude, Longitude: \n" + takeOffCoordinate;
                     myArrayList.add(flightDetails);
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(readDatabaseUsers.this, android.R.layout.simple_list_item_1, myArrayList);
                     myListView.setAdapter(arrayAdapter);
@@ -87,7 +89,7 @@ public class readDatabaseUsers extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+            }// Add database listener
         };reference.addListenerForSingleValueEvent(personalListener);
 
     }

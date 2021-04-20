@@ -51,8 +51,6 @@ public class EventDetails extends AppCompatActivity {
                 //Convert data to string for easier database storage
                 String pinName = edtEventName.getText().toString();
                 String pinComment = "Description: " + edtDescription.getText().toString();
-                message = (EditText) findViewById(R.id.eventMessage);
-                message1 = (EditText) findViewById(R.id.eventMessage1);
                 dateString = dataGrab.getDate();
                 startDateString = dataGrab.getStartDate();
                 endDateString = dataGrab.getEndDate();

@@ -85,40 +85,7 @@ public class MainMapActivity extends AppCompatActivity implements
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference().child("Pins").child("Pins");
 
-        // Read from the database
-        ValueEventListener eventListener = new ValueEventListener() {
-            @Override
-            // for loop to grab each parent node and the look at the child details
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990533, -30.583266)));
-                for (DataSnapshot ss : snapshot.getChildren()) {
-                    String name = ss.child("pinName").getValue(String.class);
-                    String pinRating = ss.child("pinRating").getValue(String.class);
-                    String pinComment = ss.child("pinComment").getValue(String.class);
-                    Log.d(name, "helloxx");
-                    //double pinLat = ss.child("latitude").getValue(double.class);
-                    //double pinLong = ss.child("longitude").getValue(double.class);
-                    //symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
-                    //symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(-56.990550, -30.583250)));
 
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        reference.addListenerForSingleValueEvent(eventListener);
-
-        Button btnDropMark = (Button) findViewById(R.id.btnDropMark);
-        btnDropMark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainMapActivity.this, PinPickerActivity.class);
-                startActivity(intent);
-            }
-        });
 
         Button btnEvents = (Button) findViewById(R.id.btnEvents);
         btnEvents.setOnClickListener(new View.OnClickListener() {
@@ -200,8 +167,8 @@ public class MainMapActivity extends AppCompatActivity implements
                             String name = reference.getKey();
                             pinRating = ss.child("pinRating").getValue(String.class);
                             pinComment = ss.child("pinComment").getValue(String.class);
-//                            pinLat = ss.child("latitude").getValue(double.class);
-//                            pinLong = ss.child("longitude").getValue(double.class);
+                            pinLat = ss.child("latitude").getValue(double.class);
+                            pinLong = ss.child("longitude").getValue(double.class);
                             String test = String.valueOf(pinLat);
                             String test1 = String.valueOf(pinLong);
                             addPin(pinLong, pinLat);

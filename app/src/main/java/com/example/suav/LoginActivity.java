@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
                     setEnabled(false);
 
                     // start main
-                    Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
+                    Intent goToPlanning = new Intent(getApplication(), MainMapActivity.class);
                     goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
                     startActivity(goToPlanning);
                     finish();
@@ -245,7 +245,7 @@ public class LoginActivity extends AppCompatActivity {
                         setEnabled(false);
 
                         // start main
-                        Intent goToPlanning = new Intent(getApplication(), FlightPlanning.class);
+                        Intent goToPlanning = new Intent(getApplication(), MainMapActivity.class);
                         goToPlanning.putExtra("AuthToken", AirMap.getAuthToken());
                         startActivity(goToPlanning);
                         finish();

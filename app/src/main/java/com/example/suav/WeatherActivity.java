@@ -42,8 +42,6 @@ public class WeatherActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
 
-        initMenu(); // sets up the menu for this activity
-
         txtNumPlanes = (TextView) findViewById(R.id.txtNumPlanes);
         txtCondition = (TextView) findViewById(R.id.txtCondition);
         txtTemperature = (TextView) findViewById(R.id.txtTemperature);
@@ -53,6 +51,9 @@ public class WeatherActivity extends Activity {
         txtHumidity = (TextView) findViewById(R.id.txtHumidity);
         pgrsWeatherLoad = (ProgressBar) findViewById(R.id.pgrsPlanLoad);
         pgrsWeatherLoad.setVisibility(View.GONE);
+
+        initMenu();
+        setPlaneCount();
 
         // Get a start and end time for the user's flight
         Date startTime = new Date();
@@ -214,9 +215,7 @@ public class WeatherActivity extends Activity {
                         findViewById(R.id.icPlane).setVisibility(View.VISIBLE);
                         txtNumPlanes.setText(String.valueOf(count));
 
-
                     } catch (JSONException e) {
-
                         // there was an error parsing the json data
                         e.printStackTrace();
                     }

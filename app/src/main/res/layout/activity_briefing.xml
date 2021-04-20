@@ -5,31 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="81dp"
-        android:layout_height="81dp"
-        app:layout_constraintBottom_toTopOf="@+id/lstRules"
-        app:layout_constraintEnd_toStartOf="@+id/txtNumPlanes3"
-        app:layout_constraintHorizontal_bias="0.822"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/briefing_toolbar"
-        app:layout_constraintVertical_bias="0.358"
-        app:srcCompat="@drawable/airplane_black" />
-
-    <TextView
-        android:id="@+id/txtNumPlanes3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:text="0"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/lstRules"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/briefing_toolbar" />
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/briefing_toolbar"
         android:layout_width="match_parent"
@@ -40,6 +15,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/lstRules"
+        app:layout_constraintTop_toBottomOf="@+id/briefing_toolbar">
+
+        <ImageView
+            android:id="@+id/icPlane1"
+            android:layout_width="81dp"
+            android:layout_height="81dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/airplane_black" />
+
+        <TextView
+            android:id="@+id/txtNumPlanes1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/lstRules"

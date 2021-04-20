@@ -34,6 +34,9 @@ public class EventDetails extends AppCompatActivity {
         TextView txtAdd = (TextView) findViewById(R.id.txtAdd);
 
         initMenu();
+        edtEventName = (EditText) findViewById(R.id.edtEventDetailsName);
+        TextView txtDisc = (TextView) findViewById(R.id.txtDisc);
+
 
         txtAdd.setText(getIntent().getExtras().getString("address"));
 

@@ -29,6 +29,8 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
@@ -82,7 +84,14 @@ public class MainMapActivity extends AppCompatActivity implements
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference().child("Pins").child("Pins");
 
-
+        Button btnDropMark = (Button) findViewById(R.id.btnDropMark);
+        btnDropMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainMapActivity.this, PinPickerActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Button btnEvents = (Button) findViewById(R.id.btnEvents);
         btnEvents.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +206,25 @@ public class MainMapActivity extends AppCompatActivity implements
                 symbolManager.setIconAllowOverlap(true);
                 symbolManager.setIconTranslate(new Float[]{-4f, 5f});
                 symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
+                symbolManager.addClickListener(new OnSymbolClickListener() {
+                    @Override
+                    public boolean onAnnotationClick(Symbol symbol) {
+                        if(symbol.getIconImage()=="red_marker") {
+                            Toast.makeText(MainMapActivity.this,
+                                    getString(R.string.clicked_symbol_toast), Toast.LENGTH_SHORT).show();
+                            symbol.setIconImage("blue_marker");
+                            symbolManager.update(symbol);
+                        }
+                        else {
+                            Toast.makeText(MainMapActivity.this,
+                                    getString(R.string.clicked_symbol_toast), Toast.LENGTH_SHORT).show();
+                            symbol.setIconImage("blue_marker");
+                            symbolManager.update(symbol);
+                        }
+
+                        return false;
+                    }
+                });
 
             }
         });

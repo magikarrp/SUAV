@@ -8,9 +8,9 @@ import java.util.Date;
 
 public class writeDatabaseHelper {
 
-    Double longitude;
-    Double latitude;
-    String pinComment, pinRating, message, message1, startDate, endDate, date, takeOffCoordinate, maxAltitude;
+    private Double longitude;
+    private Double latitude;
+    private String pinComment, pinRating, message, message1, startDate, endDate, date, takeOffCoordinate, maxAltitude;
 
     public writeDatabaseHelper(String startDateString, String endDateString, String takeOffCoordinate, String maxAltitude, String message, String message1) {
         this.startDate = startDateString;

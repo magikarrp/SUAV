@@ -211,7 +211,7 @@ public class FlightBriefing extends Activity {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.briefing_submission), Toast.LENGTH_SHORT).show();
 
                     // Go back to main page
-                    Intent goToMainActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                    Intent goToMainActivity = new Intent(getApplicationContext(), MainMapActivity.class);
                     goToMainActivity.putExtra("AuthToken", AirMap.getAuthToken());
                     startActivity(goToMainActivity);
                 }

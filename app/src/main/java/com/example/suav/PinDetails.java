@@ -2,7 +2,6 @@ package com.example.suav;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -10,11 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.w3c.dom.Text;
 
 public class PinDetails extends AppCompatActivity {
 
@@ -32,14 +30,12 @@ public class PinDetails extends AppCompatActivity {
         EditText edtPinName = (EditText) findViewById(R.id.edtPinName);             //not null
         EditText edtPinRating = (EditText) findViewById(R.id.edtPinRating);         //not null
         EditText edtComment = (EditText) findViewById(R.id.edtComment);             //not null
-        TextView txtLat = (TextView) findViewById(R.id.txtLat);
-        TextView txtLong = (TextView) findViewById(R.id.txtLong);
+        TextView txtAdd = (TextView) findViewById(R.id.txtAdd);
         CheckBox checkPublic = (CheckBox) findViewById(R.id.checkPublic);
 
+        initMenu();
 
-
-        txtLat.setText(getIntent().getExtras().getString("lat"));
-        txtLong.setText(getIntent().getExtras().getString("lon"));
+        txtAdd.setText(getIntent().getExtras().getString("address"));
 
         this.lat = getIntent().getExtras().getDouble("lat");
         this.lon = getIntent().getExtras().getDouble("lon");
@@ -76,5 +72,11 @@ public class PinDetails extends AppCompatActivity {
 
     public void setLon(double lon) {
         this.lon = lon;
+    }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.pd_toolbar);
+        t.setTitle(getString(R.string.pd_menu_title));
+        t.inflateMenu(R.menu.default_menu);
     }
 }

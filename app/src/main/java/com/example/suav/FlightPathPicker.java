@@ -2,6 +2,7 @@ package com.example.suav;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
@@ -22,8 +24,12 @@ import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
@@ -33,9 +39,17 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.FillManager;
+import com.mapbox.mapboxsdk.plugins.annotation.FillOptions;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +59,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ROTATION_ALIGNMENT_VIEWPORT;
 import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
 import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
@@ -63,13 +79,19 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
     private static final String DROPPED_MARKER_LAYER_ID = "DROPPED_MARKER_LAYER_ID";
     private MapView mapView;
     private MapboxMap mapboxMap;
-    private Button btnDropMark, btnMenu, btnConfirm, btnRemoveMark;
+    private Button btnDropMark, btnMenu, btnConfirm, btnRemoveMark, btnEdtPath, btnFlightPlan;
 
     private PermissionsManager permissionsManager;
     private ImageView hoveringMarker;
-    private Layer droppedMarkerLayer;
-    private LatLng pin;
     private ArrayList<LatLng> path;
+    private List<Feature> symbolLayer;
+
+    private static final List<List<Point>> POINTS = new ArrayList<>();
+    private static final List<Point> OUTER_POINTS = new ArrayList<>();
+
+    private static final String SOURCE_ID = "SOURCE_ID";
+    private static final String ICON_ID = "ICON_ID";
+    private static final String LAYER_ID = "LAYER_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +104,72 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
         // This contains the MapView in XML and needs to be called after the access token is configured.
         setContentView(R.layout.flight_path_picker);
 
+        initMenu();
+
         // Initialize the mapboxMap view
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+
+        btnDropMark = (Button) findViewById(R.id.btnDropMark);
+        btnRemoveMark = (Button) findViewById(R.id.btnRemoveMark);
+        btnRemoveMark.setVisibility(View.GONE);
+        btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        btnConfirm.setVisibility(View.GONE);
+        btnFlightPlan = (Button) findViewById(R.id.btnFlightPlan);
+        btnFlightPlan.setVisibility(View.GONE);
+        btnEdtPath = (Button) findViewById(R.id.btnEditPath);
+        btnEdtPath.setVisibility(View.GONE);
+
+        path = new ArrayList<>();
+        symbolLayer = new ArrayList<>();
+
+        btnFlightPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Use the map camera target's coordinates to make a reverse geocoding search
+                //reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+
+                Intent intent = new Intent(FlightPathPicker.this, FlightPlanning.class);
+                intent.putExtra("path", path);
+                startActivity(intent);
+            }
+        });
+
+
+
+        btnEdtPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnEdtPath.setVisibility(View.GONE);
+                btnConfirm.setVisibility(View.VISIBLE);
+                btnFlightPlan.setVisibility(View.GONE);
+                btnDropMark.setVisibility(View.VISIBLE);
+                btnRemoveMark.setVisibility(View.VISIBLE);
+                hoveringMarker.setVisibility(View.VISIBLE);
+
+                POINTS.remove(POINTS.size()-1);
+
+
+                mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
+                        .withImage(ICON_ID, BitmapFactory.decodeResource(
+                                FlightPathPicker.this.getResources(), R.drawable.mapbox_marker_icon_default))
+                        .withSource(new GeoJsonSource(SOURCE_ID,
+                                FeatureCollection.fromFeatures(symbolLayer)))
+                        .withLayer(new SymbolLayer(LAYER_ID, SOURCE_ID)
+                                .withProperties(
+                                        iconImage(ICON_ID),
+                                        iconAllowOverlap(true),
+                                        iconIgnorePlacement(true)
+                                )
+                        ), new Style.OnStyleLoaded() {
+                    @Override
+                    public void onStyleLoaded(@NonNull Style style) {    ///reload map
+                    }});
+            }
+        });
     }
 
     @Override
@@ -95,17 +178,20 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull final Style style) {
+                //view user location
                 enableLocationPlugin(style);
                 enableLocationComponent(style);
 
-                // Toast instructing user to tap on the mapboxMap
-                Toast.makeText(
-                        FlightPathPicker.this,
-                        getString(R.string.move_map_instruction), Toast.LENGTH_SHORT).show();
+                //symbol manager to display multiple pins
+                SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
+                symbolManager.setIconAllowOverlap(true);
+                symbolManager.setIconTranslate(new Float[]{-4f,5f});
+                symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
 
-                // When user is still picking a location, we hover a marker above the mapboxMap in the center.
-                // This is done by using an image view with the default marker found in the SDK. You can
-                // swap out for your own marker image, just make sure it matches up with the dropped marker.
+                // Toast instructing user to tap on the mapboxMap
+                Toast.makeText(FlightPathPicker.this, getString(R.string.move_map_instruction), Toast.LENGTH_SHORT).show();
+
+                //location selection market
                 hoveringMarker = new ImageView(FlightPathPicker.this);
                 hoveringMarker.setImageResource(R.drawable.red_marker);
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
@@ -114,89 +200,136 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                 hoveringMarker.setLayoutParams(params);
                 mapView.addView(hoveringMarker);
 
-                // Initialize, but don't show, a SymbolLayer for the marker icon which will represent a selected location.
-                initDroppedMarker(style);
-
-                // Button for user to drop marker or to pick marker back up.
-                btnDropMark = (Button) findViewById(R.id.btnDropMark);
-                btnRemoveMark = (Button) findViewById(R.id.btnRemoveMark);
-                btnConfirm = (Button) findViewById(R.id.btnConfirm);
-                btnConfirm.setVisibility(View.GONE);
-
-                if (path.size()>=2) {
-                    btnConfirm.setVisibility(View.VISIBLE);
-                    btnConfirm.setClickable(true);
-                }
-                else {
-                    btnConfirm.setVisibility(View.GONE);
-                    btnConfirm.setClickable(false);
-                }
-
+                //allows user to drop a mark aka flight path boundary, adds to a symbol layer and checks to see if minimum is met
                 btnDropMark.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (hoveringMarker.getVisibility() == View.VISIBLE) {
-                            // Use the map target's coordinates to make a reverse geocoding search
-                            final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
 
-                            path.add(mapTargetLatLng);
+                        // Use the map target's coordinates to make a reverse geocoding search
+                        final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+                        symbolLayer.add(Feature.fromGeometry((Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()))));
+                        OUTER_POINTS.add(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+                        path.add(mapTargetLatLng);
 
-                            // Hide the hovering red hovering ImageView marker
-                            //hoveringMarker.setVisibility(View.INVISIBLE);
+                        mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
+                                .withImage(ICON_ID, BitmapFactory.decodeResource(
+                                        FlightPathPicker.this.getResources(), R.drawable.mapbox_marker_icon_default))
+                                .withSource(new GeoJsonSource(SOURCE_ID,
+                                        FeatureCollection.fromFeatures(symbolLayer)))
+                                .withLayer(new SymbolLayer(LAYER_ID, SOURCE_ID)
+                                        .withProperties(
+                                                iconImage(ICON_ID),
+                                                iconAllowOverlap(true),
+                                                iconIgnorePlacement(true)
+                                        )
+                                ), new Style.OnStyleLoaded() {
+                            @Override
+                            public void onStyleLoaded(@NonNull Style style) {    ///reload map
+                            }});
 
-                            // Transform the appearance of the button to become the cancel button
-                            //btnDropMark.setBackgroundColor(ContextCompat.getColor(FlightPathPicker.this, R.color.mapbox_blue));
-                            //btnDropMark.setText(getString(R.string.location_picker_select_location_button_cancel));
+                        if (path.size() > 2) {
+                            btnConfirm.setVisibility(View.VISIBLE);
+                            btnConfirm.setClickable(true);
+                        } else {
+                            btnConfirm.setVisibility(View.GONE);
+                            btnConfirm.setClickable(false);
+                        }
 
-                            // Show the SymbolLayer icon to represent the selected map location
-                            if (style.getLayer(DROPPED_MARKER_LAYER_ID) != null) {
-                                GeoJsonSource source = style.getSourceAs("dropped-marker-source-id");
-                                if (source != null) {
-                                    source.setGeoJson(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
-                                }
-                                droppedMarkerLayer = style.getLayer(DROPPED_MARKER_LAYER_ID);
-                                if (droppedMarkerLayer != null) {
-                                    droppedMarkerLayer.setProperties(visibility(VISIBLE));
-                                }
-                            }
-
-                            // Use the map camera target's coordinates to make a reverse geocoding search
-                            reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
-
+                        if (path.size() > 0) {
+                            btnRemoveMark.setVisibility(View.VISIBLE);
+                            btnRemoveMark.setClickable(true);
+                        } else {
+                            btnRemoveMark.setVisibility(View.GONE);
+                            btnRemoveMark.setClickable(false);
                         }
                     }
                 });
 
+                btnRemoveMark.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+                        symbolLayer.remove(symbolLayer.size()-1);
+                        path.remove(path.size()-1);
+                        OUTER_POINTS.remove(OUTER_POINTS.size()-1);
+
+
+                        mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
+                                .withImage(ICON_ID, BitmapFactory.decodeResource(
+                                        FlightPathPicker.this.getResources(), R.drawable.mapbox_marker_icon_default))
+                                .withSource(new GeoJsonSource(SOURCE_ID,
+                                        FeatureCollection.fromFeatures(symbolLayer)))
+                                .withLayer(new SymbolLayer(LAYER_ID, SOURCE_ID)
+                                        .withProperties(
+                                                iconImage(ICON_ID),
+                                                iconAllowOverlap(true),
+                                                iconIgnorePlacement(true)
+                                        )
+                                ), new Style.OnStyleLoaded() {
+                            @Override
+                            public void onStyleLoaded(@NonNull Style style) {    ///reload map
+                            }});
+
+                        if (path.size() > 2) {
+                            btnConfirm.setVisibility(View.VISIBLE);
+                            btnConfirm.setClickable(true);
+                        } else {
+                            btnConfirm.setVisibility(View.GONE);
+                            btnConfirm.setClickable(false);
+                        }
+
+                        if (path.size() > 0) {
+                            btnRemoveMark.setVisibility(View.VISIBLE);
+                            btnRemoveMark.setClickable(true);
+                        } else {
+                            btnRemoveMark.setVisibility(View.GONE);
+                            btnRemoveMark.setClickable(false);
+                        }
+
+                    }
+                });
 
                 btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(FlightPathPicker.this, FlightPlanning.class);
+                        btnEdtPath.setVisibility(View.VISIBLE);
+                        btnConfirm.setVisibility(View.GONE);
+                        btnFlightPlan.setVisibility(View.VISIBLE);
+                        btnDropMark.setVisibility(View.GONE);
+                        btnRemoveMark.setVisibility(View.GONE);
+                        hoveringMarker.setVisibility(View.GONE);
 
+                        //display flight path outline
 
-                        intent.putExtra("path", path);
-                        startActivity(intent);
+// create a fixed fill
+                        //List<LatLng> innerLatLngs = new ArrayList<>();
+                        //innerLatLngs.add(new LatLng(-10.733102, -3.363937));
+                        //innerLatLngs.add(new LatLng(-19.716317, 1.754703));
+                        //innerLatLngs.add(new LatLng(-21.085074, -15.747196));
+
+                        //List<List<LatLng>> latLngs = new ArrayList<>();
+                        //FillManager fillManager = new FillManager(mapView, mapboxMap, style);
+                        //FillOptions fillOptions = new FillOptions()
+                        //        .withLatLngs(latLngs)
+                        //        .withFillColor(String.valueOf(Color.RED));
+                        //fillManager.create(fillOptions);
+                        POINTS.add(OUTER_POINTS);
+
+                        mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+                            @Override
+                            public void onStyleLoaded(@NonNull Style style) {
+                                style.addSource(new GeoJsonSource("source-id", Polygon.fromLngLats(POINTS)));
+                                style.addLayerBelow(new FillLayer("layer-id", "source-id").withProperties(
+                                        fillColor(Color.parseColor("#3bb2d0"))), "settlement-label"
+                                );
+                            }
+                            });
                     }
                 });
-
             }
         });
     }
 
-    private void initDroppedMarker(@NonNull Style loadedMapStyle) {
-        // Add the marker image to map
-        loadedMapStyle.addImage("dropped-icon-image", BitmapFactory.decodeResource(
-                getResources(), R.drawable.blue_marker));
-        loadedMapStyle.addSource(new GeoJsonSource("dropped-marker-source-id"));
-        loadedMapStyle.addLayer(new SymbolLayer(DROPPED_MARKER_LAYER_ID,
-                "dropped-marker-source-id").withProperties(
-                iconImage("dropped-icon-image"),
-                visibility(NONE),
-                iconAllowOverlap(true),
-                iconIgnorePlacement(true)
-        ));
-    }
 
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
@@ -368,6 +501,12 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
         }
+    }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.fpp_toolbar);
+        t.setTitle(getString(R.string.fp_menu_title));
+        t.inflateMenu(R.menu.default_menu);
     }
 }
 

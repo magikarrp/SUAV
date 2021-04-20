@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
@@ -69,6 +70,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
     private LatLng pin;
+    private String address = "";
 
     //Has setter method for coordinates
     private PinDetails coordinates;
@@ -83,6 +85,8 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
 
         // This contains the MapView in XML and needs to be called after the access token is configured.
         setContentView(R.layout.pin_picker_activity);
+
+        initMenu();
 
         // Initialize the mapboxMap view
         mapView = findViewById(R.id.mapView);
@@ -99,9 +103,6 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
             public void onStyleLoaded(@NonNull final Style style) {
                 enableLocationPlugin(style);
                 enableLocationComponent(style);
-
-
-
 
                 // Toast instructing user to tap on the mapboxMap
                 Toast.makeText(
@@ -157,6 +158,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                                 }
                             }
 
+
                             // Use the map camera target's coordinates to make a reverse geocoding search
                             reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
 
@@ -168,9 +170,9 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                                     double lat = mapTargetLatLng.getLatitude();
                                     double lon = mapTargetLatLng.getLongitude();
 
-
                                     intent.putExtra("lat", lat);
                                     intent.putExtra("lon", lon);
+                                    intent.putExtra("address", address);
                                     startActivity(intent);
                                 }
                             });
@@ -330,7 +332,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                         List<CarmenFeature> results = response.body().features();
                         if (results.size() > 0) {
                             CarmenFeature feature = results.get(0);
-
+                            address = feature.placeName();
                             // If the geocoder returns a result, we take the first in the list and show a Toast with the place name.
                             mapboxMap.getStyle(new Style.OnStyleLoaded() {
                                 @Override
@@ -339,9 +341,11 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                                         Toast.makeText(PinPickerActivity.this,
                                                 String.format(getString(R.string.location_picker_place_name_result),
                                                         feature.placeName()), Toast.LENGTH_SHORT).show();
+
                                     }
                                 }
                             });
+
 
                         } else {
                             Toast.makeText(PinPickerActivity.this,
@@ -381,6 +385,12 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
         }
+    }
+
+    private void initMenu() {
+        Toolbar t = (Toolbar) findViewById(R.id.fpp_toolbar);
+        t.setTitle(getString(R.string.fp_menu_title));
+        t.inflateMenu(R.menu.default_menu);
     }
 }
 

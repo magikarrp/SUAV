@@ -21,6 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Map;
 
+//returns list view of flight plans aka EVENTS "Flights" <---------
+//are all flight plans public
+
 public class readDatabaseUsers extends AppCompatActivity {
 
     private FirebaseDatabase rootNode;

@@ -27,10 +27,11 @@ public class EventDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pin_details);
+        setContentView(R.layout.activity_event_details);
 
         edtEventName = (EditText) findViewById(R.id.edtEventDetailsName);
         edtEventDescription = (EditText) findViewById(R.id.edtEventDescription);
+        btnCreatePlan = (Button) findViewById(R.id.btnCreatePlan);
 
         flightID = getIntent().getExtras().getString("PlanID");
 

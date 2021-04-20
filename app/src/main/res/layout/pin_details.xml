@@ -43,24 +43,14 @@
         app:layout_constraintTop_toBottomOf="@+id/edtPinRating" />
 
     <TextView
-        android:id="@+id/txtLat"
+        android:id="@+id/txtAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="59dp"
-        android:text="Latitude"
-        app:layout_constraintStart_toStartOf="@+id/edtComment"
-        app:layout_constraintTop_toBottomOf="@+id/edtComment" />
-
-    <TextView
-        android:id="@+id/txtLong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="40dp"
-        android:text="Longitutde"
-        app:layout_constraintStart_toStartOf="@+id/txtLat"
-        app:layout_constraintTop_toBottomOf="@+id/txtLat" />
+        android:layout_marginStart="10dp"
+        android:text="Address"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/checkPublic"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/checkPublic"

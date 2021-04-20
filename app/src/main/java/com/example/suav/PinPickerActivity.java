@@ -69,6 +69,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
     private LatLng pin;
+    private String address = "";
 
     //Has setter method for coordinates
     private PinDetails coordinates;
@@ -154,6 +155,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                                 }
                             }
 
+
                             // Use the map camera target's coordinates to make a reverse geocoding search
                             reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
 
@@ -165,9 +167,9 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                                     double lat = mapTargetLatLng.getLatitude();
                                     double lon = mapTargetLatLng.getLongitude();
 
-
                                     intent.putExtra("lat", lat);
                                     intent.putExtra("lon", lon);
+                                    intent.putExtra("address", address);
                                     startActivity(intent);
                                 }
                             });
@@ -327,7 +329,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                         List<CarmenFeature> results = response.body().features();
                         if (results.size() > 0) {
                             CarmenFeature feature = results.get(0);
-
+                            address = feature.placeName();
                             // If the geocoder returns a result, we take the first in the list and show a Toast with the place name.
                             mapboxMap.getStyle(new Style.OnStyleLoaded() {
                                 @Override
@@ -336,9 +338,11 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                                         Toast.makeText(PinPickerActivity.this,
                                                 String.format(getString(R.string.location_picker_place_name_result),
                                                         feature.placeName()), Toast.LENGTH_SHORT).show();
+
                                     }
                                 }
                             });
+
 
                         } else {
                             Toast.makeText(PinPickerActivity.this,

@@ -53,5 +53,25 @@
         android:text="Drop Marker"
         android:textColor="@android:color/white" />
 
+    <Button
+        android:id="@+id/btnEditPath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="8dp"
+        android:background="@color/mapbox_blue"
+        android:text="Edit Path"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/btnFlightPlan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="8dp"
+        android:background="@color/mapbox_blue"
+        android:text="Flight Details"
+        android:textColor="@android:color/white" />
+
 
 </FrameLayout>

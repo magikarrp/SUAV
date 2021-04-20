@@ -2,7 +2,6 @@ package com.example.suav;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.w3c.dom.Text;
 
 public class PinDetails extends AppCompatActivity {
 
@@ -32,14 +29,12 @@ public class PinDetails extends AppCompatActivity {
         EditText edtPinName = (EditText) findViewById(R.id.edtPinName);             //not null
         EditText edtPinRating = (EditText) findViewById(R.id.edtPinRating);         //not null
         EditText edtComment = (EditText) findViewById(R.id.edtComment);             //not null
-        TextView txtLat = (TextView) findViewById(R.id.txtLat);
-        TextView txtLong = (TextView) findViewById(R.id.txtLong);
+        TextView txtAdd = (TextView) findViewById(R.id.txtAdd);
         CheckBox checkPublic = (CheckBox) findViewById(R.id.checkPublic);
 
 
 
-        txtLat.setText(getIntent().getExtras().getString("lat"));
-        txtLong.setText(getIntent().getExtras().getString("lon"));
+        txtAdd.setText(getIntent().getExtras().getString("address"));
 
         this.lat = getIntent().getExtras().getDouble("lat");
         this.lon = getIntent().getExtras().getDouble("lon");

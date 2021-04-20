@@ -30,7 +30,7 @@
         android:layout_gravity="bottom|left"
         android:layout_margin="8dp"
         android:background="@color/mapbox_blue"
-        android:text="Drop Pin"
+        android:text="@string/location_picker_select_location_button_select"
         android:textColor="@android:color/white"
         mapbox:layout_constraintBottom_toBottomOf="@+id/mapView"
         mapbox:layout_constraintEnd_toEndOf="@+id/mapView" />
@@ -42,7 +42,19 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="8dp"
         android:background="@color/mapbox_blue"
-        android:text="Add Info"
+        android:text="@string/location_picker_create_pin_button"
+        android:textColor="@android:color/white"
+        mapbox:layout_constraintBottom_toTopOf="@+id/btnWeather"
+        mapbox:layout_constraintStart_toStartOf="@+id/mapView" />
+
+    <Button
+        android:id="@+id/btnWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="8dp"
+        android:background="@color/mapbox_blue"
+        android:text="@string/location_picker_weather_button"
         android:textColor="@android:color/white"
         mapbox:layout_constraintBottom_toBottomOf="@+id/mapView"
         mapbox:layout_constraintStart_toStartOf="@+id/mapView" />

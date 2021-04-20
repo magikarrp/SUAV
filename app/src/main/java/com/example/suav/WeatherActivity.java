@@ -2,6 +2,7 @@ package com.example.suav;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -134,6 +135,18 @@ public class WeatherActivity extends Activity {
         Toolbar t = (Toolbar) findViewById(R.id.weather_toolbar);
         t.setTitle(getString(R.string.weather_menu_title));
         t.inflateMenu(R.menu.default_menu);
+        t.setOnMenuItemClickListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.menu_profile:
+                    // GO TO PROFILE
+                    Intent toProfile = new Intent(WeatherActivity.this, ProfileActivity.class);
+                    startActivity(toProfile);
+                    return true;
+                default:
+                    // Should not happen
+                    return true;
+            }
+        });
     }
 
 }

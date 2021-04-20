@@ -273,6 +273,18 @@ public class FlightBriefing extends Activity {
         Toolbar t = (Toolbar) findViewById(R.id.briefing_toolbar);
         t.setTitle(getString(R.string.briefing_menu_title));
         t.inflateMenu(R.menu.default_menu);
+        t.setOnMenuItemClickListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.menu_profile:
+                    // GO TO PROFILE
+                    Intent toProfile = new Intent(FlightBriefing.this, ProfileActivity.class);
+                    startActivity(toProfile);
+                    return true;
+                default:
+                    // Should not happen
+                    return true;
+            }
+        });
     }
 
     @Override

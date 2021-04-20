@@ -3,7 +3,6 @@ package com.example.suav;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +52,6 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacem
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
-//import com.mapbox.mapboxandroiddemo.R;
-
 /**
  * Drop a marker at a specific location and then perform
  * reverse geocoding to retrieve and display the location's address
@@ -64,16 +61,12 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
     private static final String DROPPED_MARKER_LAYER_ID = "DROPPED_MARKER_LAYER_ID";
     private MapView mapView;
     private MapboxMap mapboxMap;
-    private Button selectLocationButton, btnMenu, confirm_location;
+    private Button btnSelect, btnConfirm, btnWeather;
 
     private PermissionsManager permissionsManager;
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
-    private LatLng pin;
     private String address = "";
-
-    //Has setter method for coordinates
-    private PinDetails coordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +86,9 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        btnSelect = (Button) findViewById(R.id.btnDropMark);
+        btnWeather = (Button) findViewById(R.id.btnWeather);
     }
 
     @Override
@@ -121,14 +117,10 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                 // Initialize, but don't show, a SymbolLayer for the marker icon which will represent a selected location.
                 initDroppedMarker(style);
 
-                // Button for user to drop marker or to pick marker back up.
-                btnMenu = findViewById(R.id.btnDropMark);
+                btnConfirm.setVisibility(View.GONE);
+                btnWeather.setVisibility(View.GONE);
 
-                confirm_location = (Button) findViewById(R.id.btnConfirm);
-                confirm_location.setVisibility(View.GONE);
-
-                selectLocationButton = findViewById(R.id.btnDropMark);
-                selectLocationButton.setOnClickListener(new View.OnClickListener() {
+                btnSelect.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (hoveringMarker.getVisibility() == View.VISIBLE) {
@@ -140,9 +132,8 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                             hoveringMarker.setVisibility(View.INVISIBLE);
 
                             // Transform the appearance of the button to become the cancel button
-                            selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
-                            selectLocationButton.setText(getString(R.string.location_picker_select_location_button_cancel));
+                            btnSelect.setBackgroundColor(ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
+                            btnSelect.setText(getString(R.string.location_picker_select_location_button_cancel));
 
                             // Show the SymbolLayer icon to represent the selected map location
                             if (style.getLayer(DROPPED_MARKER_LAYER_ID) != null) {
@@ -156,31 +147,44 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
                                 }
                             }
 
-
                             // Use the map camera target's coordinates to make a reverse geocoding search
                             reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
 
-                            confirm_location.setVisibility(View.VISIBLE);
-                            confirm_location.setOnClickListener (new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent = new Intent(PinPickerActivity.this, PinDetails.class);
-                                    double lat = mapTargetLatLng.getLatitude();
-                                    double lon = mapTargetLatLng.getLongitude();
+                            btnConfirm.setVisibility(View.VISIBLE);
+                            btnConfirm.setOnClickListener (view1 -> {
 
-                                    intent.putExtra("lat", lat);
-                                    intent.putExtra("lon", lon);
-                                    intent.putExtra("address", address);
-                                    startActivity(intent);
-                                }
+                                Intent intent = new Intent(PinPickerActivity.this, PinDetails.class);
+
+                                double lat = mapTargetLatLng.getLatitude();
+                                double lon = mapTargetLatLng.getLongitude();
+
+                                intent.putExtra("lat", lat);
+                                intent.putExtra("lon", lon);
+                                intent.putExtra("address", address);
+                                startActivity(intent);
+                            });
+
+                            btnWeather.setVisibility(View.VISIBLE);
+                            btnWeather.setOnClickListener (v -> {
+
+                                Intent intent = new Intent(PinPickerActivity.this, WeatherActivity.class);
+
+                                double lat = mapTargetLatLng.getLatitude();
+                                double lon = mapTargetLatLng.getLongitude();
+
+                                intent.putExtra("lat", lat);
+                                intent.putExtra("lon", lon);
+                                intent.putExtra("address", address);
+                                startActivity(intent);
                             });
 
                         } else {
 
                             // Switch the button appearance back to select a location.
-                            selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
-                            selectLocationButton.setText(getString(R.string.location_picker_select_location_button_select));
+                            btnSelect.setBackgroundColor(ContextCompat.getColor(PinPickerActivity.this, R.color.mapbox_blue));
+                            btnSelect.setText(getString(R.string.location_picker_select_location_button_select));
+                            btnConfirm.setVisibility(View.GONE);
+                            btnWeather.setVisibility(View.GONE);
 
                             // Show the red hovering ImageView marker
                             hoveringMarker.setVisibility(View.VISIBLE);
@@ -387,8 +391,20 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
 
     private void initMenu() {
         Toolbar t = (Toolbar) findViewById(R.id.ppa_toolbar);
-        t.setTitle(getString(R.string.fp_menu_title));
+        t.setTitle(getString(R.string.ppa_menu_title));
         t.inflateMenu(R.menu.default_menu);
+        t.setOnMenuItemClickListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.menu_profile:
+                    // GO TO PROFILE
+                    Intent toProfile = new Intent(PinPickerActivity.this, ProfileActivity.class);
+                    startActivity(toProfile);
+                    return true;
+                default:
+                    // Should not happen
+                    return true;
+            }
+        });
     }
 }
 

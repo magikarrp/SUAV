@@ -160,14 +160,38 @@
                 android:timePickerMode="spinner" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnCreatePlan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginBottom="4dp"
-            android:onClick="createPlan"
-            android:text="@string/planning_submit" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="onCreatePlan"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCreateEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="1"
+                android:onClick="onCreateEvent"
+                android:text="@string/planning_new_event" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+
+            <Button
+                android:id="@+id/btnCreatePlan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="1"
+                android:onClick="onCreatePlan"
+                android:text="@string/planning_submit" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

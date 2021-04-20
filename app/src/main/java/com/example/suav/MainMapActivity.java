@@ -38,7 +38,6 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,15 +120,6 @@ public class MainMapActivity extends AppCompatActivity implements
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         MainMapActivity.this.mapboxMap = mapboxMap;
 
-       // symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong,pinLat)));
-
-//          test cases
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-57.225365, -33.213144)));
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-54.14164, -33.981818)));
-        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-                Point.fromLngLat(-56.990533, -30.583266)));
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 

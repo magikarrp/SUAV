@@ -110,8 +110,16 @@ public class FlightPlanning extends AppCompatActivity {
         }
     }
 
-    /* Sends a plan to Airmap API to receive a plan briefing */
-    public void createPlan(View v) {
+    public void onCreatePlan(View v) {
+        createPlan(false);
+    }
+
+    public void onCreateEvent(View v) {
+        createPlan(true);
+    }
+
+    /* Sends a plan to Airmap API to receive a plan briefing, takes in newEvent which tells it which activity to go to next */
+    private void createPlan(boolean newEvent) {
         // Make loading circle visible
         pgrsPlanLoad.setVisibility(View.VISIBLE);
 
@@ -158,11 +166,20 @@ public class FlightPlanning extends AppCompatActivity {
                         AirMap.createFlightPlan(flightPlan, new AirMapCallback<AirMapFlightPlan>() {
                             @Override
                             protected void onSuccess(AirMapFlightPlan response) {
-                                // Now that our flight plan has been registered with AirMap, we want to get a briefing to see if we are in compliance with the regulations of the area
-                                Intent goToBriefing = new Intent(getApplicationContext(), FlightBriefing.class);
-                                goToBriefing.putExtra("PlanID", response.getPlanId());
-                                goToBriefing.putExtra("Coordinate", takeoffCoordinate);
-                                goToBriefing.putExtra("AuthToken", AirMap.getAuthToken());
+                                // Now that our flight plan has been registered with AirMap, we want to go to our next activity
+
+                                // Either we get a briefing to see if we are in compliance with the regulations of the area
+                                // Or we go to an event planner activity and go to briefing after
+                                Intent intent;
+                                if(!newEvent) {
+                                    intent = new Intent(getApplicationContext(), FlightBriefing.class);
+                                    intent.putExtra("PlanID", response.getPlanId());
+                                } else {
+                                    intent = new Intent(getApplicationContext(), EventDetails.class);
+                                    intent.putExtra("PlanID", response.getPlanId());
+                                    intent.putExtra("Coordinate", takeoffCoordinate);
+                                }
+
 
                                 pgrsPlanLoad.setVisibility(View.GONE);
 
@@ -186,7 +203,7 @@ public class FlightPlanning extends AppCompatActivity {
                                 writeHelper.setDate(dateString);
                                 writeHelper.setFlightID(flightID);
                                 reference.child(flightID).setValue(writeHelper);
-                                startActivity(goToBriefing);
+                                startActivity(intent);
                             }
 
                             @Override

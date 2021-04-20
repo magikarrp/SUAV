@@ -27,6 +27,14 @@ import com.airmap.airmapsdk.networking.services.AirMap;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The FlightBriefing Activity takes a flight plan and requests a briefing for that plan from the
+ * AirMap API. Here we display the various rulesets required for the area specified by the flight
+ * plan and the number of violations that this plan incurs against these rulesets. The user can
+ * select a ruleset to see further details on the rules they may be violating.
+ */
+
 public class FlightBriefing extends Activity {
 
     private ListView lstRules;

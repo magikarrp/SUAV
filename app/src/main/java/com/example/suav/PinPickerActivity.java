@@ -386,7 +386,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
     }
 
     private void initMenu() {
-        Toolbar t = (Toolbar) findViewById(R.id.fpp_toolbar);
+        Toolbar t = (Toolbar) findViewById(R.id.ppa_toolbar);
         t.setTitle(getString(R.string.fp_menu_title));
         t.inflateMenu(R.menu.default_menu);
     }

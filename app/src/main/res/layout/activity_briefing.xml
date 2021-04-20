@@ -5,6 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="81dp"
+        android:layout_height="81dp"
+        app:layout_constraintBottom_toTopOf="@+id/lstRules"
+        app:layout_constraintEnd_toStartOf="@+id/txtNumPlanes3"
+        app:layout_constraintHorizontal_bias="0.822"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/briefing_toolbar"
+        app:layout_constraintVertical_bias="0.358"
+        app:srcCompat="@drawable/airplane_black" />
+
+    <TextView
+        android:id="@+id/txtNumPlanes3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="0"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/lstRules"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/briefing_toolbar" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/briefing_toolbar"
         android:layout_width="match_parent"
@@ -18,13 +43,14 @@
 
     <ListView
         android:id="@+id/lstRules"
-        android:layout_width="330dp"
-        android:layout_height="510dp"
+        android:layout_width="321dp"
+        android:layout_height="464dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/btnSubmit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/briefing_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/briefing_toolbar"
+        app:layout_constraintVertical_bias="0.85" />
 
     <ProgressBar
         android:id="@+id/pgrsPlanLoad"
@@ -41,7 +67,7 @@
         android:id="@+id/btnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="24dp"
         android:clickable="true"
         android:onClick="submitPlan"
         android:text="@string/briefing_submit"

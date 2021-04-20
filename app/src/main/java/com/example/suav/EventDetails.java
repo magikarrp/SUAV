@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class EventDetails extends AppCompatActivity {
-    private writeDatabaseHelper dataGrab;
+    private writeDatabaseHelper dataGrab = new writeDatabaseHelper();
     private String dateString, startDateString, endDateString, takeOffCoordinate, flightID, maxAltitude;
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
@@ -52,7 +52,6 @@ public class EventDetails extends AppCompatActivity {
                 //Convert data to string for easier database storage
                 String pinName = edtEventName.getText().toString();
                 String pinComment = "Description: " + edtDescription.getText().toString();
-                dateString = dataGrab.getDate();
                 startDateString = dataGrab.getStartDate();
                 endDateString = dataGrab.getEndDate();
                 takeOffCoordinate = dataGrab.getTakeOffCoordinate();

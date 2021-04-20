@@ -168,17 +168,7 @@ public class FlightPlanning extends AppCompatActivity {
                             protected void onSuccess(AirMapFlightPlan response) {
                                 // Now that our flight plan has been registered with AirMap, we want to go to our next activity
 
-                                // Either we get a briefing to see if we are in compliance with the regulations of the area
-                                // Or we go to an event planner activity and go to briefing after
-                                Intent intent;
-                                if(!newEvent) {
-                                    intent = new Intent(getApplicationContext(), FlightBriefing.class);
-                                    intent.putExtra("PlanID", response.getPlanId());
-                                } else {
-                                    intent = new Intent(getApplicationContext(), EventDetails.class);
-                                    intent.putExtra("PlanID", response.getPlanId());
-                                    intent.putExtra("Coordinate", takeoffCoordinate);
-                                }
+
 
 
                                 pgrsPlanLoad.setVisibility(View.GONE);
@@ -203,6 +193,25 @@ public class FlightPlanning extends AppCompatActivity {
                                 writeHelper.setDate(dateString);
                                 writeHelper.setFlightID(flightID);
                                 reference.child(flightID).setValue(writeHelper);
+
+                                // Either we get a briefing to see if we are in compliance with the regulations of the area
+                                // Or we go to an event planner activity and go to briefing after
+                                Intent intent;
+                                if(!newEvent) {
+                                    intent = new Intent(getApplicationContext(), FlightBriefing.class);
+                                    intent.putExtra("PlanID", response.getPlanId());
+                                    intent.putExtra("Coordinate", takeoffCoordinate);
+                                } else {
+                                    intent = new Intent(getApplicationContext(), EventDetails.class);
+                                    intent.putExtra("PlanID", response.getPlanId());
+                                    intent.putExtra("Coordinate", takeoffCoordinate);
+                                    intent.putExtra("startDate", startDateString);
+                                    intent.putExtra("endDate", endDateString);
+                                    intent.putExtra("takeoffcoord", takeOffCoordinateString);
+                                    intent.putExtra("dateString", dateString);
+                                    intent.putExtra("altitude", "" + maxAltitude);
+                                }
+
                                 startActivity(intent);
                             }
 

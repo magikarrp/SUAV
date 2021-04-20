@@ -106,10 +106,6 @@ public class MainMapActivity extends AppCompatActivity implements
         };
         reference.addListenerForSingleValueEvent(eventListener);
 
-
-    ;
-
-
         Button btnDropMark = (Button) findViewById(R.id.btnDropMark);
         btnDropMark.setOnClickListener(new View.OnClickListener() {
             @Override

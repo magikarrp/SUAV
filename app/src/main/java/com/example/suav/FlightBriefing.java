@@ -161,6 +161,9 @@ public class FlightBriefing extends Activity {
                 }
             }
 
+            // Make sure first letter is capitalized
+            ruleString = Character.toUpperCase(ruleString.charAt(0)) + ruleString.substring(1);
+
             // Counts the number of rules that user's plan violates in each ruleset and displays them to the user
             int violationCount = 0;
             for(AirMapRule rule : ruleset.getRules()) {

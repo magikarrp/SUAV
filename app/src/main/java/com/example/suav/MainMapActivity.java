@@ -159,6 +159,31 @@ public class MainMapActivity extends AppCompatActivity implements
 
                 // create symbol manager object
                 SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
+                // set non-data-driven properties, such as:
+                symbolManager.setIconAllowOverlap(true);
+                symbolManager.setIconTranslate(new Float[]{-4f, 5f});
+                symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
+                symbolManager.addClickListener(new OnSymbolClickListener() {
+                    @Override
+                    public boolean onAnnotationClick(Symbol symbol) {
+                        if(symbol.getIconImage()=="red_marker") {
+                            Toast.makeText(MainMapActivity.this,
+                                    "selected", Toast.LENGTH_SHORT).show();
+                            symbol.setIconImage("blue_marker");
+                            symbolManager.update(symbol);
+                            return true;
+                        }
+                        else {
+                            Toast.makeText(MainMapActivity.this,
+                                    "unselected", Toast.LENGTH_SHORT).show();
+                            symbol.setIconImage("blue_marker");
+                            symbolManager.update(symbol);
+                            return true;
+                        }
+
+
+                    }
+                });
 
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -208,29 +233,7 @@ public class MainMapActivity extends AppCompatActivity implements
                 });
 
 
-// set non-data-driven properties, such as:
-                symbolManager.setIconAllowOverlap(true);
-                symbolManager.setIconTranslate(new Float[]{-4f, 5f});
-                symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
-                symbolManager.addClickListener(new OnSymbolClickListener() {
-                    @Override
-                    public boolean onAnnotationClick(Symbol symbol) {
-                        if(symbol.getIconImage()=="red_marker") {
-                            Toast.makeText(MainMapActivity.this,
-                                    getString(R.string.clicked_symbol_toast), Toast.LENGTH_SHORT).show();
-                            symbol.setIconImage("blue_marker");
-                            symbolManager.update(symbol);
-                        }
-                        else {
-                            Toast.makeText(MainMapActivity.this,
-                                    getString(R.string.clicked_symbol_toast), Toast.LENGTH_SHORT).show();
-                            symbol.setIconImage("blue_marker");
-                            symbolManager.update(symbol);
-                        }
 
-                        return false;
-                    }
-                });
 
             }
         });

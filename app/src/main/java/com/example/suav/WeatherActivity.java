@@ -53,7 +53,7 @@ public class WeatherActivity extends Activity {
         Coordinate coordinate;
         if(bundle != null && bundle.getDouble("lon") != 0) {
             try {
-                coordinate = new Coordinate(bundle.getDouble("lon"), bundle.getDouble("lat"));
+                coordinate = new Coordinate(bundle.getDouble("lat"),bundle.getDouble("lon"));
             } catch (Exception e) {
                 coordinate = new Coordinate(42.35534150531174,-71.06617418626098);
             }

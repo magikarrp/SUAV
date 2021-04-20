@@ -49,7 +49,6 @@ public class EventDetails extends AppCompatActivity {
                 //Convert data to string for easier database storage
                 String pinName = edtEventName.getText().toString();
                 String pinComment = "Description: " + edtDescription.getText().toString();
-                dateString = dataGrab.getDate();
                 startDateString = dataGrab.getStartDate();
                 endDateString = dataGrab.getEndDate();
                 takeOffCoordinate = dataGrab.getTakeOffCoordinate();

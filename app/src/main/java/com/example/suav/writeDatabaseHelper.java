@@ -12,6 +12,34 @@ public class writeDatabaseHelper {
     private Double latitude;
     private String pinComment, pinRating, message, message1, startDate, endDate, date, takeOffCoordinate, maxAltitude, flightID;
 
+    public writeDatabaseHelper() {
+    }
+
+    public writeDatabaseHelper(String startDate, String endDate, String takeoffCoordinate, String maxAltitude) {
+
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.takeOffCoordinate = takeoffCoordinate;
+        this.maxAltitude = maxAltitude;
+
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessage1() {
+        return message1;
+    }
+
+    public void setMessage1(String message1) {
+        this.message1 = message1;
+    }
+
     public writeDatabaseHelper(String startDateString, String endDateString, String takeOffCoordinate, String maxAltitude, String message, String message1) {
         this.startDate = startDateString;
         this.endDate = endDateString;
@@ -36,18 +64,6 @@ public class writeDatabaseHelper {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public writeDatabaseHelper() {
-    }
-
-    public writeDatabaseHelper(String startDate, String endDate, String takeoffCoordinate, String maxAltitude) {
-
-        this.endDate = endDate;
-        this.startDate = startDate;
-        this.takeOffCoordinate = takeoffCoordinate;
-        this.maxAltitude = maxAltitude;
-
     }
 
     public Double getLongitude() {

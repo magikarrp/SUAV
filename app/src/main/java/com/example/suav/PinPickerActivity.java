@@ -152,7 +152,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
 
                             btnConfirm.setVisibility(View.VISIBLE);
                             btnConfirm.setOnClickListener (view1 -> {
-
+                                //sends pin information to pin details page
                                 Intent intent = new Intent(PinPickerActivity.this, PinDetails.class);
 
                                 double lat = mapTargetLatLng.getLatitude();
@@ -166,7 +166,7 @@ public class PinPickerActivity extends AppCompatActivity implements PermissionsL
 
                             btnWeather.setVisibility(View.VISIBLE);
                             btnWeather.setOnClickListener (v -> {
-
+                                //sends pin information to weather page
                                 Intent intent = new Intent(PinPickerActivity.this, WeatherActivity.class);
 
                                 double lat = mapTargetLatLng.getLatitude();

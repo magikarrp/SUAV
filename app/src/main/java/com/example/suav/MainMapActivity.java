@@ -66,8 +66,6 @@ public class MainMapActivity extends AppCompatActivity implements
     private DatabaseReference reference;
     private String pinName, pinRating, pinComment;
     private double pinLong, pinLat;
-    private Symbol symbol;
-    private SymbolLayer symLay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,18 +122,6 @@ public class MainMapActivity extends AppCompatActivity implements
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         MainMapActivity.this.mapboxMap = mapboxMap;
 
-       // symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong,pinLat)));
-
-//          test cases
-//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-//                Point.fromLngLat(-57.225365, -33.213144)));
-//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-//                Point.fromLngLat(-54.14164, -33.981818)));
-//        symbolLayerIconFeatureList.add(Feature.fromGeometry(
-//                Point.fromLngLat(-56.990533, -30.583266)));
-
-
-
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 
 // Add the SymbolLayer icon image to the map style
@@ -145,7 +131,6 @@ public class MainMapActivity extends AppCompatActivity implements
 // Adding a GeoJson source for the SymbolLayer icons.
                 .withSource(new GeoJsonSource(SOURCE_ID,
                         FeatureCollection.fromFeatures(symbolLayerIconFeatureList)))
-
 // Adding the actual SymbolLayer to the map style. An offset is added that the bottom of the red
 // marker icon gets fixed to the coordinate, rather than the middle of the icon being fixed to
 // the coordinate point. This is offset is not always needed and is dependent on the image
@@ -170,9 +155,8 @@ public class MainMapActivity extends AppCompatActivity implements
                 symbolManager.setIconTranslate(new Float[]{-4f, 5f});
                 symbolManager.setIconRotationAlignment(ICON_ROTATION_ALIGNMENT_VIEWPORT);
 
-                symLay = new SymbolLayer("LAYER_ID", "SOURCE_ID");
-                symLay.setProperties(PropertyFactory.iconImage("blue marker"));
 
+                //supposed to display a toast when markers are clicked on the map, but still troubleshooting
                 symbolManager.addClickListener(new OnSymbolClickListener() {
                     @Override
                     public boolean onAnnotationClick(Symbol symbol) {
@@ -191,11 +175,10 @@ public class MainMapActivity extends AppCompatActivity implements
                             symbolManager.update(symbol);
                         }
                         return true;
-
                     }
                 });
 
-
+                //keeps track of any new added pins
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     // For loop grabs children of branch and then drops pin by reverse geo-caching w/ symbolLayerIconFeatureList
@@ -213,7 +196,7 @@ public class MainMapActivity extends AppCompatActivity implements
                                 Toast.makeText(MainMapActivity.this, "Cannot target pin", Toast.LENGTH_LONG).show();
                             }
 
-
+                            //adds new symbols to the map to new pin coordinates
                             symbolLayerIconFeatureList.add(Feature.fromGeometry(Point.fromLngLat(pinLong, pinLat)));
 
                             mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
@@ -242,14 +225,9 @@ public class MainMapActivity extends AppCompatActivity implements
                         Log.w("FAILED", "Failed to read value.", error.toException());
                     }
                 });
-
-
-
-
             }
         });
     }
-
 
 
     @SuppressWarnings( {"MissingPermission"})

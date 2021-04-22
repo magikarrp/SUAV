@@ -28,6 +28,7 @@ public class PinDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pin_details);
 
+        //initialize objects
         Button btnSubPin = (Button) findViewById(R.id.btnSubPin);
         EditText edtPinName = (EditText) findViewById(R.id.edtPinName);             //not null
         EditText edtPinRating = (EditText) findViewById(R.id.edtPinRating);         //not null
@@ -39,7 +40,7 @@ public class PinDetails extends AppCompatActivity {
         initMenu();
 
         txtAdd.setText(getIntent().getExtras().getString("address"));
-
+        //data based from pin picker activity
         this.lat = getIntent().getExtras().getDouble("lat");
         this.lon = getIntent().getExtras().getDouble("lon");
 

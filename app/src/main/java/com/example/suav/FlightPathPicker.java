@@ -79,7 +79,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
     private static final String DROPPED_MARKER_LAYER_ID = "DROPPED_MARKER_LAYER_ID";
     private MapView mapView;
     private MapboxMap mapboxMap;
-    private Button btnDropMark, btnMenu, btnConfirm, btnRemoveMark, btnEdtPath, btnFlightPlan;
+    private Button btnDropMark, btnConfirm, btnRemoveMark, btnEdtPath, btnFlightPlan;
 
     private PermissionsManager permissionsManager;
     private ImageView hoveringMarker;
@@ -111,7 +111,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-
+        //initialize button visibility
         btnDropMark = (Button) findViewById(R.id.btnDropMark);
         btnRemoveMark = (Button) findViewById(R.id.btnRemoveMark);
         btnRemoveMark.setVisibility(View.GONE);
@@ -127,6 +127,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
         path = new ArrayList<>();
         symbolLayer = new ArrayList<>();
 
+        //proceed to flight details only after 3 pins placed
         btnFlightPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,8 +141,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
             }
         });
 
-
-
+        //destroys polygon and allows user to place new markers
         btnEdtPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,7 +154,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
 
                 POINTS.remove(POINTS.size()-1);
 
-
+                //displays dropped markers
                 mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
                         .withImage(ICON_ID, BitmapFactory.decodeResource(
                                 FlightPathPicker.this.getResources(), R.drawable.mapbox_marker_icon_default))
@@ -213,7 +213,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                         OUTER_POINTS.add(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
                         path.add(mapTargetLatLng);
 
-
+                        //update view
                         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
                                 .withImage(ICON_ID, BitmapFactory.decodeResource(
                                         FlightPathPicker.this.getResources(), R.drawable.mapbox_marker_icon_default))
@@ -230,6 +230,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                             public void onStyleLoaded(@NonNull Style style) {    ///reload map
                             }});
 
+                        //conditions for button visibility
                         if (path.size() > 2) {
                             btnConfirm.setVisibility(View.VISIBLE);
                             btnConfirm.setClickable(true);
@@ -248,6 +249,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                     }
                 });
 
+                //remove dropped mark
                 btnRemoveMark.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -256,7 +258,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                         path.remove(path.size()-1);
                         OUTER_POINTS.remove(OUTER_POINTS.size()-1);
 
-
+                        //update view
                         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
                                 .withImage(ICON_ID, BitmapFactory.decodeResource(
                                         FlightPathPicker.this.getResources(), R.drawable.mapbox_marker_icon_default))
@@ -292,6 +294,7 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                     }
                 });
 
+                //overlays a polygon over flight path before sending to flight plan
                 btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -302,22 +305,9 @@ public class FlightPathPicker extends AppCompatActivity implements PermissionsLi
                         btnRemoveMark.setVisibility(View.GONE);
                         hoveringMarker.setVisibility(View.GONE);
 
-                        //display flight path outline
-
-// create a fixed fill
-                        //List<LatLng> innerLatLngs = new ArrayList<>();
-                        //innerLatLngs.add(new LatLng(-10.733102, -3.363937));
-                        //innerLatLngs.add(new LatLng(-19.716317, 1.754703));
-                        //innerLatLngs.add(new LatLng(-21.085074, -15.747196));
-
-                        //List<List<LatLng>> latLngs = new ArrayList<>();
-                        //FillManager fillManager = new FillManager(mapView, mapboxMap, style);
-                        //FillOptions fillOptions = new FillOptions()
-                        //        .withLatLngs(latLngs)
-                        //        .withFillColor(String.valueOf(Color.RED));
-                        //fillManager.create(fillOptions);
                         POINTS.add(OUTER_POINTS);
 
+                        //display flight path outline
                         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
                             @Override
                             public void onStyleLoaded(@NonNull Style style) {

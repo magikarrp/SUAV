@@ -44,6 +44,7 @@ public class EventDetails extends AppCompatActivity {
 
         initMenu();
 
+        //submits event to database
         btnSubEvent.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View view) {

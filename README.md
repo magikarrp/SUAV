@@ -13,12 +13,12 @@ Libraries:
 
 
 Compiling and Running the App:
-    * SUAV should run as is in android studio
-    * Please give it permission to access your location
-    * In order to use the app, you must have an AirMap account
-    * You can use our test account with the following information
-        * Email: jamespel@bu.edu
-        * PW: CS501airmap*
+  * SUAV should run as is in android studio
+  * Please give it permission to access your location
+  * In order to use the app, you must have an AirMap account
+  * You can use our test account with the following information
+      * Email: jamespel@bu.edu
+      * PW: CS501airmap*
     
 Basic Testing:
 * Pinning a Location

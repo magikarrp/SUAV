@@ -17,6 +17,12 @@ import com.airmap.airmapsdk.models.Coordinate;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * The EventDetails activity presents a form to the user to gather information about a flight plan
+ * they have marked to be a public event. Here the user inputs the name of and details about the
+ * given event before being sent to the flight briefing page for their event's flight plan.
+ */
+
 public class EventDetails extends AppCompatActivity {
     private writeDatabaseHelper dataGrab;
     private String dateString, startDateString, endDateString, takeOffCoordinate, flightID, maxAltitude;
@@ -61,10 +67,6 @@ public class EventDetails extends AppCompatActivity {
                 takeOffCoordinate = dataGrab.getTakeOffCoordinate();
                 maxAltitude = dataGrab.getMaxAltitude();
 
-
-               // writeDatabaseHelper writeHelper = new writeDatabaseHelper(pinComment, lat, lon);
-               // reference.child(pinName).setValue(writeHelper);'
-                //Write to database.
                 writeDatabaseHelper writeHelper = new writeDatabaseHelper(startDateString, endDateString, takeOffCoordinate, maxAltitude, pinName, pinComment);
                 reference.child(flightID).setValue(writeHelper);
 

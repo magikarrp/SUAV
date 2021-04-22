@@ -35,6 +35,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * The WeatherActivity uses the AirMap Weather API and OpenSky API to present information to the
+ * user about flight safety in the area of a coordinate. Here we display the weather conditions as
+ * well as nearby aircraft to the specified location to let them know whether or not it is a good
+ * idea to fly in the area.
+ */
+
 public class WeatherActivity extends Activity {
 
     private TextView txtCondition, txtTemperature, txtPrecip, txtVisibility, txtWind, txtHumidity, txtNumPlanes;

@@ -87,7 +87,7 @@ public class EventDetails extends AppCompatActivity {
 
     private void initMenu() {
         Toolbar t = (Toolbar) findViewById(R.id.pd_toolbar);
-        t.setTitle(getString(R.string.pd_menu_title));
+        t.setTitle(getString(R.string.ed_menu_title));
         t.inflateMenu(R.menu.default_menu);
     }
 }
